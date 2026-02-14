@@ -38,6 +38,11 @@ metadata:
 - `allowed-tools` — Scoped tool permissions (e.g., `Bash(git status)` for specific commands, `Read` for full tool access)
 - `metadata.model` — Model preference (typically `sonnet` for cost efficiency)
 
+## GitHub Actions
+
+- `actions/*` (GitHub-owned): use version tags (e.g., `@v4`)
+- Third-party actions: pin to full commit hash with version comment (e.g., `@9fd676a...  # v4.2.0`)
+
 ## Conventions
 
 - Skills infer and match the target project's language variant (US/UK English) from existing commits, docs, and code
