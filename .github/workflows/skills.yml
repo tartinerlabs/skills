@@ -1,0 +1,27 @@
+name: Skills
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - skills/**
+
+jobs:
+  install:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: pnpm/action-setup@9fd676a19091d4595eefd76e4bd31c97133911f1 # v4.2.0
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: lts/*
+          cache: pnpm
+
+      - name: Install via skills.sh
+        run: pnpm dlx skills add tartinerlabs/skills
+
+      - name: Install via Context7
+        run: pnpm dlx ctx7 skills install /tartinerlabs/skills --all
