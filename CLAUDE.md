@@ -16,7 +16,6 @@ skills/
 ├── create-issue/    # GitHub issue creation
 ├── create-pr/       # Pull request creation with commit analysis
 ├── folder-org/      # Project structure guidance
-├── heroui/          # HeroUI v3 component development
 ├── security/        # Security audit with GitLeaks
 ├── sync-docs/       # Documentation sync
 ├── tailwind/        # Tailwind CSS optimization

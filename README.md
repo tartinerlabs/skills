@@ -1,6 +1,6 @@
 # @tartinerlabs/skills
 
-Powertools for Claude Code: git workflows, security audits, UI development, and code organization.
+Powertools for Claude Code: git workflows, security audits, and code organization.
 
 ## Skills
 
@@ -11,7 +11,6 @@ Powertools for Claude Code: git workflows, security audits, UI development, and 
 | [create-issue](skills/create-issue) | Create a GitHub issue with title and description (auto-assigned) |
 | [create-pr](skills/create-pr) | Push branch and create GitHub pull request (auto-assigned) |
 | [folder-org](skills/folder-org) | Project code structure and file organization guidance |
-| [heroui](skills/heroui) | Build accessible UIs using HeroUI v3 components (React + Tailwind CSS v4 + React Aria) |
 | [security](skills/security) | Run security audit with GitLeaks pre-commit hook setup and code analysis |
 | [sync-docs](skills/sync-docs) | Update and maintain CLAUDE.md and README.md documentation |
 | [tailwind](skills/tailwind) | Audit and fix Tailwind CSS anti-patterns (spacing, size-*, gap, 8px grid) |
@@ -37,7 +36,6 @@ Invoke any skill with `/skill-name` in Claude Code:
 - `/create-issue` — Create a GitHub issue
 - `/create-pr` — Create a pull request
 - `/folder-org` — Get project structure guidance
-- `/heroui` — Build UIs with HeroUI v3
 - `/security` — Run a security audit
 - `/sync-docs` — Sync project documentation
 - `/tailwind` — Audit Tailwind CSS usage
