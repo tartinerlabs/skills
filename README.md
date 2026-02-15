@@ -1,8 +1,15 @@
-# @tartinerlabs/skills
+# Skills
+
+[![Release](https://img.shields.io/github/actions/workflow/status/tartinerlabs/skills/release.yml?style=for-the-badge&logo=github&label=release)](https://github.com/tartinerlabs/skills/actions/workflows/release.yml)
+[![Skills](https://img.shields.io/github/actions/workflow/status/tartinerlabs/skills/skills.yml?style=for-the-badge&logo=github&label=skills)](https://github.com/tartinerlabs/skills/actions/workflows/skills.yml)
+[![Version](https://img.shields.io/github/v/release/tartinerlabs/skills?style=for-the-badge)](https://github.com/tartinerlabs/skills/releases)
+[![License](https://img.shields.io/github/license/tartinerlabs/skills?style=for-the-badge)](LICENSE)
 
 Powertools for [Claude Code](https://docs.anthropic.com/en/docs/claude-code): git workflows, GitHub automation, code quality, and project tooling.
 
 ## Skills
+
+Invoke any skill with `/skill-name` in Claude Code.
 
 ### Git
 
@@ -38,43 +45,24 @@ Powertools for [Claude Code](https://docs.anthropic.com/en/docs/claude-code): gi
 
 ## Installation
 
+### [Skills](https://skills.sh)
+
 Install all skills:
 
 ```bash
-npx skills add tartinerlabs/skills
+pnpm dlx skills add tartinerlabs/skills
 ```
 
 Install a single skill:
 
 ```bash
-npx skills add tartinerlabs/skills/commit
+pnpm dlx skills add tartinerlabs/skills/commit
 ```
 
-### Context7
-
-Also available via [Context7](https://context7.com):
+### [Context7](https://context7.com)
 
 ```bash
 pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal
-```
-
-## Usage
-
-Invoke any skill with `/skill-name` in Claude Code:
-
-```
-/commit          Smart git commit
-/create-branch   Create a branch linked to an issue
-/create-pr       Push and open a pull request
-/create-issue    File a new GitHub issue
-/update-issue    Edit an existing issue
-/ci-cd           Create or audit CI/CD workflows
-/refactor        Refactor code for quality
-/security        Run a security audit
-/tailwind        Audit Tailwind CSS usage
-/setup           Add linting, formatting, hooks
-/folder-org      Get project structure guidance
-/sync-docs       Sync project documentation
 ```
 
 ## Skill Format
