@@ -1,56 +1,28 @@
 ---
 name: create-issue
-description: Create a GitHub issue with title and description (auto-assigned)
+description: Create a GitHub issue with title and description. Use when the user wants to file a bug, request a feature, or create a tracking issue.
 allowed-tools: Bash(gh repo view) mcp__github__list_issue_types mcp__github__issue_write mcp__github__get_me
 metadata:
   model: sonnet
 ---
 
-## Language Conventions
+You create GitHub issues. Infer the project's language variant (US/UK English) from existing issues, docs, and code, and match it in all output.
 
-**Infer language style from the project:**
-- Analyze existing issues, documentation, and commit messages to detect the project's language variant (US English, UK English, etc.)
-- Match the spelling conventions found in the project (e.g., "initialize" vs "initialise", "behavior" vs "behaviour")
-- Maintain consistency with the project's established language style throughout issue titles and descriptions
+Read individual rule files in `rules/` for detailed requirements and examples.
 
----
+## Rules Overview
 
-Create a GitHub issue with the following workflow:
+| Rule | Impact | File |
+|------|--------|------|
+| Issue title | HIGH | `rules/issue-title.md` |
+| Template adherence | MEDIUM | `rules/template-adherence.md` |
+
+## Workflow
 
 1. Check if we're in a GitHub repository and get owner/repo info
-2. **Check for organization issue types:**
-   - Use `github/list_issue_types` MCP tool with the repository owner
-   - If issue types exist, select the most appropriate type based on the issue context (e.g., "Bug", "Feature", "Task")
-   - Note: This will fail for user-owned repositories (not organizations) - this is expected, proceed without issue type
-3. **Check for ISSUE_TEMPLATE format:**
-   - Look for issue templates in `.github/ISSUE_TEMPLATE/` or `.github/` directories
-   - If templates exist, use the most appropriate template format (bug report, feature request, etc.)
-   - Parse template structure and fill in the required sections
-4. **If no ISSUE_TEMPLATE exists, use custom format:**
-   - Infer issue title from user's request context
-   - Generate appropriate issue description based on the context
-5. **Get current user for assignment:**
-   - Use `github/get_me` MCP tool to get the current authenticated user's login
-6. **Create issue using `github/issue_write` MCP tool:**
-   - Set `method: "create"`
-   - Include `owner`, `repo`, `title`, `body`
-   - Include `type` parameter if organization issue types are available (from step 2)
-   - Include `assignees` array with current user's login for self-assignment
-   - If assignment fails (user not a collaborator), the issue will still be created without assignment
-7. Optionally add existing labels or milestone (only use labels that already exist in the repository)
-   - Additional assignees can be added to the `assignees` array
-
-For the issue title:
-- Use natural, descriptive language (NOT conventional commits format like "feat:", "fix:", "chore:")
-- Make it clear and specific to the problem or feature
-- Keep it concise but informative
-
-For the issue description (when using custom format):
-- Include clear problem statement or feature request
-- Add steps to reproduce (if bug report)
-- Keep it structured and actionable
-
-For ISSUE_TEMPLATE format:
-- Follow the exact template structure and required fields
-- Fill in template placeholders with relevant information from user context
-- Maintain template formatting and sections
+2. Check for organisation issue types via `github/list_issue_types` (fails for user-owned repos — expected, proceed without)
+3. Check for issue templates in `.github/ISSUE_TEMPLATE/` or `.github/`
+4. Generate title following `rules/issue-title.md`
+5. Generate body following template if found (see `rules/template-adherence.md`), otherwise use clear structured format
+6. Get current user via `github/get_me` for self-assignment
+7. Create issue via `github/issue_write` with `method: "create"`, including `assignees` array with current user's login

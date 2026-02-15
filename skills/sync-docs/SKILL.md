@@ -1,45 +1,38 @@
 ---
 name: sync-docs
-description: Update and maintain CLAUDE.md and README.md documentation
+description: Update and maintain CLAUDE.md and README.md documentation. Use when docs are stale, the project structure changed, or the user asks to sync documentation.
 allowed-tools: Read(*) Write(*) Edit(*) MultiEdit(*) Glob(*) Grep(*) Bash(npm*) Bash(yarn*) Bash(find*) Bash(ls*) WebFetch(*)
 metadata:
   model: sonnet
 ---
 
-Update and maintain project documentation for CLAUDE.md and README.md:
+You update and maintain project documentation. Infer the project's language variant (US/UK English) from existing docs, commits, and code, and match it in all output.
 
-## 1. CLAUDE.md Management
-**Purpose:** Keep Claude's project instructions current and accurate
+Read individual rule files in `rules/` for detailed requirements.
 
-- **Scan project structure:** Check for new tools, scripts, build systems
-- **Update build commands:** Sync with package.json, Makefile, or build configs
-- **Add new patterns:** Document coding conventions, file organization
-- **Refresh tool commands:** Update linting, testing, deployment instructions
-- **Check environment setup:** Verify installation and setup steps
+## Rules Overview
 
-## 2. README.md Maintenance
-**Purpose:** Keep public project documentation up-to-date
+| Rule | Impact | File |
+|------|--------|------|
+| CLAUDE.md | HIGH | `rules/claude-md.md` |
+| README.md | HIGH | `rules/readme-md.md` |
 
-- **Update installation:** Check dependencies, requirements, setup steps
-- **Refresh usage examples:** Verify code samples and API documentation
-- **Validate links:** Test external links, badges, and references
-- **Update project status:** Current features, roadmap, version info
-- **Check screenshots/demos:** Ensure visual examples are current
+## Workflow
 
-## 3. Smart Detection Process
+### Step 1: Detect
 
-1. **File existence:** Create CLAUDE.md or README.md if missing
-2. **Project analysis:** Scan codebase for changes since last update
-3. **Cross-reference:** Compare project structure with documented instructions
-4. **Outdated sections:** Identify stale information automatically
-5. **Consistency check:** Ensure both files complement each other
+- Check if CLAUDE.md and README.md exist (create if missing)
+- Scan project structure for changes since last update
+- Cross-reference documented instructions with actual project state
 
-## 4. Validation Steps
+### Step 2: Update
+
+Read the relevant rule file for each document and apply updates:
+- `rules/claude-md.md` for CLAUDE.md changes
+- `rules/readme-md.md` for README.md changes
+
+### Step 3: Validate
 
 - Run project commands mentioned in docs to verify they work
-- Test installation steps from scratch perspective
-- Validate all external links and references
-- Check that CLAUDE.md instructions match current project setup
-- Ensure README.md accurately represents current project state
-
-Focus on keeping both files synchronized with the actual project state and useful for their respective audiences: Claude for CLAUDE.md, users/developers for README.md.
+- Check that instructions match current project setup
+- Ensure both files complement each other

@@ -1,80 +1,40 @@
 ---
 name: folder-org
-description: Project code structure and file organization. Use when creating files, organizing components, or deciding where code should live. (project)
+description: Project code structure and file organization. Use when creating files, organizing components, or deciding where code should live.
+allowed-tools: Read Glob Grep
+metadata:
+  model: sonnet
 ---
 
-# Folder Structure
+You are a project structure expert. Infer the project's language variant (US/UK English) from existing commits, docs, and code, and match it in all output.
 
-## Core Principle: Colocation
+Read individual rule files in `rules/` for detailed explanations and examples.
 
-> Place code as close to where it's relevant as possible. Things that change together should be located together.
+## Rules Overview
 
-## Organization Approaches
+| Rule | Impact | File |
+|------|--------|------|
+| Colocation | HIGH | `rules/colocation.md` |
+| Anti-patterns | HIGH | `rules/anti-patterns.md` |
+| Feature-based grouping | MEDIUM | `rules/feature-based.md` |
+| Layer-based grouping | MEDIUM | `rules/layer-based.md` |
+| Naming conventions | MEDIUM | `rules/naming-conventions.md` |
 
-### Feature-Based (Recommended for Frontend)
+## Workflow
 
-Group by domain - all related code in one place:
+### Step 1: Detect Project Type
 
-```
-src/features/
-├── auth/
-│   ├── components/
-│   ├── hooks/
-│   ├── auth.service.ts
-│   └── auth.test.ts
-├── users/
-└── products/
-```
+Scan for project indicators to determine the appropriate organisation approach:
 
-### Layer-Based (Common for Backend)
+- Frontend SPA / Next.js / React → feature-based
+- Backend API / Express / Fastify → layer-based
+- Monorepo (apps/ + packages/) → hybrid
+- Existing structure → respect and extend current patterns
 
-Group by technical layer:
+### Step 2: Recommend Structure
 
-```
-src/
-├── controllers/
-├── services/
-├── models/
-├── routes/
-└── middleware/
-```
+Based on project type and existing patterns, recommend where new code should live. Always prioritise colocation.
 
-### Monorepo
+### Step 3: Validate
 
-```
-apps/           # Applications
-├── web/
-├── api/
-packages/       # Shared libraries (by domain, not language)
-├── types/
-├── utils/
-└── ui/
-```
-
-## Where to Put Things
-
-| Type | Location |
-|------|----------|
-| Shared types | `types/` or `packages/types/` |
-| Utilities | `lib/` or `utils/` (split by domain) |
-| Config | `config/` or root |
-| Unit tests | Colocate: `foo.test.ts` next to `foo.ts` |
-| E2E tests | `e2e/` or `tests/e2e/` |
-| Mocks/fixtures | `__mocks__/` or `test/mocks/` |
-
-## Naming Conventions
-
-| Type | Convention |
-|------|------------|
-| Files | `kebab-case.ts` |
-| Unit tests | `*.test.ts` |
-| E2E tests | `*.e2e.ts` |
-| Schemas | `*.schema.ts` |
-
-## Anti-Patterns
-
-- **Catch-all files**: Avoid `utils.ts`, `helpers.ts` - split by domain
-- **Deep nesting**: Keep < 4 levels, use descriptive names instead
-- **Separated unit tests**: Don't put all in `__tests__/` - colocate instead
-- **Language grouping**: In monorepos, group by domain not language
-- **Bloated barrels**: Avoid `index.ts` with 50+ re-exports
+Check the existing structure against anti-patterns and naming conventions. Report violations.

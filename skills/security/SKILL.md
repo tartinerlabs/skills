@@ -1,112 +1,66 @@
 ---
 name: security
-description: Run security audit with GitLeaks pre-commit hook setup and code analysis
+description: Run security audit with GitLeaks setup and code analysis. Use when checking for vulnerabilities, setting up secret detection, or auditing code security.
 allowed-tools: Bash Read Write Edit Glob Grep
+metadata:
+  model: sonnet
 ---
 
-You are a security engineer setting up GitLeaks and running security audits.
+You are a security engineer running audits and setting up GitLeaks. Infer the project's language variant (US/UK English) from existing commits, docs, and code, and match it in all output.
+
+Read individual rule files in `rules/` for detailed explanations and examples.
+
+## Rules Overview
+
+| Rule | Impact | File |
+|------|--------|------|
+| OWASP Top 10 | HIGH | `rules/owasp-top-10.md` |
+| Hardcoded secrets | HIGH | `rules/hardcoded-secrets.md` |
+| Auth & access control | HIGH | `rules/auth-access-control.md` |
+| Insecure dependencies | MEDIUM | `rules/insecure-dependencies.md` |
+| Data protection | MEDIUM | `rules/data-protection.md` |
 
 ## Workflow
 
-### 1. Setup GitLeaks in Husky Pre-commit Hook
+### Step 1: GitLeaks Setup
 
-Check if GitLeaks is configured in the project's pre-commit hook. If not, set it up.
+Ensure GitLeaks is configured in the project's pre-commit hook:
 
-#### Detection Steps
+1. Check if `.husky/pre-commit` exists and contains `gitleaks`
+2. If missing, set up Husky and add `gitleaks protect --staged --verbose` before any `lint-staged` command
 
-1. Check if `.husky/` directory exists
-2. Check if `.husky/pre-commit` contains `gitleaks`
+### Step 2: Code Security Audit
 
-#### Setup Steps (if GitLeaks is missing)
+Scan the codebase against every rule in `rules/`. Use Grep and Glob to find vulnerability patterns.
 
-If `.husky/` does not exist:
-```bash
-npx husky init
+### Step 3: Report
+
+```
+## Security Audit Results
+
+### HIGH Severity
+- `src/api/users.ts:23` - Unsanitised user input in SQL query
+
+### MEDIUM Severity
+- `package.json` - 3 packages with known vulnerabilities
+
+### Summary
+| Category | Findings |
+|----------|----------|
+| OWASP Top 10 | X |
+| Hardcoded secrets | Y |
+| **Total** | **Z** |
 ```
 
-Add GitLeaks to `.husky/pre-commit` BEFORE any lint-staged command:
-```bash
-gitleaks protect --staged --verbose
-```
+### Step 4: Retrospective History Scan (Optional)
 
-Example `.husky/pre-commit` with lint-staged:
-```bash
-#!/usr/bin/env sh
-. "$(dirname -- "$0")/_/husky.sh"
-
-# Secrets detection - fail fast if secrets found
-gitleaks protect --staged --verbose
-
-# Lint staged files
-npx lint-staged
-```
-
-If the pre-commit file already exists, insert the gitleaks line before `npx lint-staged`.
-
-### 2. Code Security Audit
-
-After ensuring GitLeaks is configured, perform a comprehensive security audit of the codebase:
-
-#### What to Analyze
-
-1. **OWASP Top 10 Vulnerabilities**
-   - SQL injection (parameterized queries, ORM misuse)
-   - XSS (unsanitized user input rendered in HTML/JSX)
-   - Command injection (shell commands with user input)
-   - Path traversal (user input in file paths)
-   - SSRF (user-controlled URLs in server-side requests)
-
-2. **Hardcoded Secrets & Credentials**
-   - API keys, tokens, passwords in source code
-   - Private keys or certificates committed to repo
-   - Database connection strings with embedded credentials
-   - `.env` files or config files with secrets not in `.gitignore`
-
-3. **Authentication & Authorization**
-   - Missing or weak authentication checks
-   - Broken access control (missing authorization on endpoints)
-   - Insecure session management
-   - JWT misconfigurations (weak algorithms, missing expiry)
-
-4. **Insecure Dependencies**
-   - Run `npm audit` or `pnpm audit` to check for known vulnerabilities
-   - Check for outdated packages with known CVEs
-
-5. **Data Protection**
-   - Sensitive data logged or exposed in error messages
-   - Missing input validation at system boundaries
-   - Insecure data storage or transmission
-
-#### How to Audit
-
-Use Grep and Glob to scan the codebase for common vulnerability patterns:
-- Unsafe HTML rendering, raw innerHTML usage
-- Hardcoded strings matching API key patterns, passwords, secrets, tokens
-- Missing CSRF protection in form handlers
-- Authentication middleware and route guard coverage
-- `.gitignore` entries for sensitive files
-
-### 3. Retrospective Git History Scan (Optional)
-
-Only run this step if the user passes `--scan-history` argument. This is for legacy projects being onboarded to GitLeaks.
+Only when user passes `--scan-history`:
 
 ```bash
 gitleaks detect --source . --verbose
 ```
 
-Report any secrets found in git history with:
-- File path and line number
-- Commit where the secret was introduced
-- Type of secret detected
-- Remediation steps (rotate the secret, use git-filter-repo to remove from history)
-
-## Output Format
-
-1. **GitLeaks Setup Status**: Whether hooks were already configured or newly set up
-2. **Security Audit Findings**: Vulnerabilities found, organized by severity
-3. **History Scan Results** (if --scan-history): Any secrets found in git history
-
 ## Assumptions
 
-- GitLeaks is already installed on the system (`brew install gitleaks` or equivalent)
+- GitLeaks is installed on the system
 - Target projects use Husky + lint-staged (JS/TS stack)
