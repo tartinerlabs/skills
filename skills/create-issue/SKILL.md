@@ -1,6 +1,6 @@
 ---
 name: create-issue
-description: Create a GitHub issue with title and description. Use when the user wants to file a bug, request a feature, or create a tracking issue.
+description: Create a GitHub issue with template detection and auto-assignment. Use when the user wants to file a bug, request a feature, or create a tracking issue.
 allowed-tools: Bash(gh repo view) mcp__github__list_issue_types mcp__github__issue_write mcp__github__get_me
 metadata:
   model: sonnet

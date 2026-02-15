@@ -1,9 +1,17 @@
 {
 	"name": "@tartinerlabs/skills",
 	"version": "1.0.3",
-	"description": "A collection of Claude Code skills distributed via skills.sh and Context7",
+	"description": "Claude Code skills for git workflows, GitHub automation, security audits, code refactoring, and project tooling",
 	"author": "ruchern.chong@tartinerlabs.com",
 	"license": "MIT",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/tartinerlabs/skills.git"
+	},
+	"homepage": "https://github.com/tartinerlabs/skills#readme",
+	"bugs": {
+		"url": "https://github.com/tartinerlabs/skills/issues"
+	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"prepare": "husky"

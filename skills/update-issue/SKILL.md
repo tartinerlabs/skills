@@ -1,6 +1,6 @@
 ---
 name: update-issue
-description: Update a GitHub issue with new title, body, labels, or assignees. Use when the user wants to edit an issue, change labels, or update issue details.
+description: Update a GitHub issue's title, body, labels, assignees, or state with template preservation. Use when the user wants to edit an issue, change labels, or update issue details.
 allowed-tools: Bash(gh issue view) Bash(gh issue edit) Bash(gh repo view)
 metadata:
   model: sonnet

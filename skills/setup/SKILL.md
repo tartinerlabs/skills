@@ -1,6 +1,6 @@
 ---
 name: setup
-description: Add development tooling to existing JS/TS projects. Use when setting up a new project, adding linting, formatting, git hooks, or TypeScript.
+description: Add Biome, Husky, commitlint, lint-staged, GitLeaks, and TypeScript to JS/TS projects. Use when setting up a new project, adding linting, formatting, git hooks, or TypeScript.
 allowed-tools: Read Write Edit Glob Grep Bash
 metadata:
   model: sonnet

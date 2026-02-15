@@ -1,6 +1,6 @@
 ---
 name: sync-docs
-description: Update and maintain CLAUDE.md and README.md documentation. Use when docs are stale, the project structure changed, or the user asks to sync documentation.
+description: Update and maintain CLAUDE.md and README.md to match current project state. Use when docs are stale, the project structure changed, or the user asks to sync documentation.
 allowed-tools: Read(*) Write(*) Edit(*) MultiEdit(*) Glob(*) Grep(*) Bash(npm*) Bash(yarn*) Bash(find*) Bash(ls*) WebFetch(*)
 metadata:
   model: sonnet

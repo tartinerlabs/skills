@@ -1,6 +1,6 @@
 ---
 name: security
-description: Run security audit with GitLeaks setup and code analysis. Use when checking for vulnerabilities, setting up secret detection, or auditing code security.
+description: OWASP Top 10 security audit with GitLeaks secret detection and dependency vulnerability scanning. Use when checking for vulnerabilities, setting up secret detection, or auditing code security.
 allowed-tools: Bash Read Write Edit Glob Grep
 metadata:
   model: sonnet

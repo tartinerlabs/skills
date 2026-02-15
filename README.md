@@ -5,7 +5,14 @@
 [![Version](https://img.shields.io/github/v/release/tartinerlabs/skills?style=for-the-badge)](https://github.com/tartinerlabs/skills/releases)
 [![License](https://img.shields.io/github/license/tartinerlabs/skills?style=for-the-badge)](LICENSE)
 
-Powertools for [Claude Code](https://docs.anthropic.com/en/docs/claude-code): git workflows, GitHub automation, code quality, and project tooling.
+Powertools for [Claude Code](https://docs.anthropic.com/en/docs/claude-code): git workflows, GitHub automation, code quality, and project tooling. Each skill ships with modular, independently editable rules for deep, opinionated guidance.
+
+## Why These Skills
+
+- **Modular rules architecture** &mdash; Each skill ships with standalone rule files in `rules/` directories. Rules can be added, removed, or edited independently without touching the main skill logic.
+- **Opinionated audit workflows** &mdash; Skills like `security`, `ci-cd`, `tailwind`, and `refactor` produce structured severity-graded reports, then auto-fix issues.
+- **GitLeaks built in** &mdash; The `commit`, `security`, and `setup` skills all enforce GitLeaks secret detection as a first-class concern.
+- **Convention-aware** &mdash; Skills detect your project's existing conventions (language variant, commit format, package manager, project structure) and adapt automatically.
 
 ## Skills
 
@@ -15,33 +22,33 @@ Invoke any skill with `/skill-name` in Claude Code.
 
 | Skill | Description |
 |-------|-------------|
-| [commit](skills/commit) | Smart git commit with short, concise messages |
-| [create-branch](skills/create-branch) | Create and checkout a new branch with validation and GitHub issue linking |
+| [commit](skills/commit) | Clean git commits with conventional commit detection and GitLeaks secret scanning |
+| [create-branch](skills/create-branch) | Create and checkout a branch with naming validation and GitHub issue linking |
 
 ### GitHub
 
 | Skill | Description |
 |-------|-------------|
-| [create-pr](skills/create-pr) | Push branch and create a pull request (auto-assigned) |
-| [create-issue](skills/create-issue) | Create an issue with title and description (auto-assigned) |
-| [update-issue](skills/update-issue) | Update an issue's title, body, labels, or assignees |
-| [ci-cd](skills/ci-cd) | Create and audit GitHub Actions workflows |
+| [create-pr](skills/create-pr) | Push branch and create a pull request with structured description and auto-assignment |
+| [create-issue](skills/create-issue) | Create an issue with template detection and auto-assignment |
+| [update-issue](skills/update-issue) | Update an issue's title, body, labels, assignees, or state with template preservation |
+| [ci-cd](skills/ci-cd) | Create and audit GitHub Actions workflows with SHA pinning, permissions, and caching checks |
 
 ### Code Quality
 
 | Skill | Description |
 |-------|-------------|
-| [refactor](skills/refactor) | Audit and refactor code for clarity, maintainability, and correctness |
-| [security](skills/security) | Run security audit with GitLeaks setup and code analysis |
-| [tailwind](skills/tailwind) | Audit and fix Tailwind CSS v4 anti-patterns |
+| [refactor](skills/refactor) | Audit and refactor TypeScript/JavaScript code for dead code, deep nesting, type assertions, and design patterns |
+| [security](skills/security) | OWASP Top 10 security audit with GitLeaks secret detection and dependency vulnerability scanning |
+| [tailwind](skills/tailwind) | Audit and fix Tailwind CSS v4 anti-patterns for spacing, 8px grid, mobile-first, and GPU animations |
 
 ### Project
 
 | Skill | Description |
 |-------|-------------|
-| [setup](skills/setup) | Add dev tooling to JS/TS projects (linting, formatting, git hooks, TypeScript) |
-| [folder-org](skills/folder-org) | Project code structure and file organization guidance |
-| [sync-docs](skills/sync-docs) | Update and maintain CLAUDE.md and README.md documentation |
+| [setup](skills/setup) | Add Biome, Husky, commitlint, lint-staged, GitLeaks, and TypeScript to JS/TS projects |
+| [folder-org](skills/folder-org) | Project structure guidance with colocation, feature-based grouping, and anti-pattern detection |
+| [sync-docs](skills/sync-docs) | Update and maintain CLAUDE.md and README.md to match current project state |
 
 ## Installation
 
@@ -64,6 +71,22 @@ pnpm dlx skills add tartinerlabs/skills/commit
 ```bash
 pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal
 ```
+
+## Architecture
+
+Skills use a modular rules pattern. Each skill directory contains:
+
+```
+skills/<name>/
+  SKILL.md          # Skill definition with frontmatter
+  rules/            # Independent, editable rule files
+    some-rule.md    # Severity, examples, fix instructions
+```
+
+This means you can:
+- **Customise** a rule's severity or examples without forking the skill
+- **Add** project-specific rules by dropping a new `.md` file in `rules/`
+- **Remove** rules you disagree with
 
 ## Skill Format
 

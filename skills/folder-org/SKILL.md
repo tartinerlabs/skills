@@ -1,6 +1,6 @@
 ---
 name: folder-org
-description: Project code structure and file organization. Use when creating files, organizing components, or deciding where code should live.
+description: Project structure guidance with colocation, feature-based grouping, and anti-pattern detection. Use when creating files, organizing components, or deciding where code should live.
 allowed-tools: Read Glob Grep
 metadata:
   model: sonnet
