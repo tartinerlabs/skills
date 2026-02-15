@@ -1,3 +1,10 @@
+# [1.2.0](https://github.com/tartinerlabs/skills/compare/v1.1.0...v1.2.0) (2026-02-15)
+
+
+### Features
+
+* add naming-format skill ([d4a7e80](https://github.com/tartinerlabs/skills/commit/d4a7e80c2d2ff7a8c160d7df6fc9581a594144a9))
+
 # [1.1.0](https://github.com/tartinerlabs/skills/compare/v1.0.3...v1.1.0) (2026-02-15)
 
 
