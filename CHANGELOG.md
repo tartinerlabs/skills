@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/tartinerlabs/skills/compare/v1.0.1...v1.0.2) (2026-02-15)
+
+
+### Bug Fixes
+
+* detect commitlint for message format ([b6aecf4](https://github.com/tartinerlabs/skills/commit/b6aecf4a2a3b7c92561e17e5cbc9ddd59893a8ae))
+
 ## [1.0.1](https://github.com/tartinerlabs/skills/compare/v1.0.0...v1.0.1) (2026-02-15)
 
 
