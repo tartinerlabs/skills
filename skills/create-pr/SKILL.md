@@ -17,6 +17,29 @@ Read individual rule files in `rules/` for detailed requirements and examples.
 | PR title | HIGH | `rules/pr-title.md` |
 | PR description | MEDIUM | `rules/pr-description.md` |
 
+## Key Rules Summary
+
+### PR Title
+
+- Use natural, descriptive language — **NO conventional commit prefixes** (`feat:`, `fix:`, etc.)
+- Sentence case (capitalise first word only)
+- Clear and specific to the changes
+
+Correct: `Add user authentication`, `Fix login timeout on expired sessions`
+Incorrect: `feat: add user authentication`, `fix: resolve login timeout`
+
+### PR Description
+
+- Maximum 1-2 bullet points summarising key changes
+- Focus on what changed and why
+- No test plan, acceptance criteria, or additional sections
+
+Example:
+```markdown
+- Add OAuth2 login and signup endpoints with session middleware
+- Update database schema with users and sessions tables
+```
+
 ## Workflow
 
 1. Check current git status and branch
@@ -25,3 +48,7 @@ Read individual rule files in `rules/` for detailed requirements and examples.
 4. Create GitHub PR: `gh pr create --assignee @me`
 
 Auto-assign to current user via `--assignee @me`. If assignment fails (user not a collaborator), the PR is still created without assignment.
+
+## Related Skills
+
+- `/commit` — create clean, well-formatted commits before opening a PR

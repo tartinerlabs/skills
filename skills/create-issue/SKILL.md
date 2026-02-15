@@ -17,6 +17,30 @@ Read individual rule files in `rules/` for detailed requirements and examples.
 | Issue title | HIGH | `rules/issue-title.md` |
 | Template adherence | MEDIUM | `rules/template-adherence.md` |
 
+## Key Rules Summary
+
+### Issue Title
+
+- Use natural, descriptive language — **NO conventional commit prefixes** (`feat:`, `fix:`, etc.)
+- Clear and specific to the problem or feature
+- Match the style of existing issue titles in the repository
+
+Correct: `Add dark mode support`, `Login redirect fails after token expiry`
+Incorrect: `feat: add dark mode support`, `fix: broken login redirect`
+
+### Template Adherence
+
+- When issue templates exist in `.github/ISSUE_TEMPLATE/`, follow and preserve the template structure
+- Fill in all required fields with relevant information from user context
+- When no template exists, use a structured fallback:
+  ```markdown
+  ## Problem
+  [Clear problem statement or feature description]
+
+  ## Context
+  [Steps to reproduce (bugs) or additional details (features)]
+  ```
+
 ## Workflow
 
 1. Check if we're in a GitHub repository and get owner/repo info
@@ -26,3 +50,7 @@ Read individual rule files in `rules/` for detailed requirements and examples.
 5. Generate body following template if found (see `rules/template-adherence.md`), otherwise use clear structured format
 6. Get current user via `github/get_me` for self-assignment
 7. Create issue via `github/issue_write` with `method: "create"`, including `assignees` array with current user's login
+
+## Related Skills
+
+- `/create-branch` — after creating an issue, use `gh issue develop <number> -c` to create a linked branch
