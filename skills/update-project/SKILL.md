@@ -6,7 +6,9 @@ metadata:
   model: sonnet
 ---
 
-You update and maintain project documentation. Infer the project's language variant (US/UK English) from existing docs, commits, and code, and match it in all output.
+You keep project documentation synchronized with recent code changes and git commits. Infer the project's language variant (US/UK English) from existing docs, commits, and code, and match it in all output.
+
+Invoke with `/update-project` in Claude Code after significant code changes, before a release, or whenever docs may be stale.
 
 Read individual rule files in `rules/` for detailed requirements.
 
@@ -24,10 +26,11 @@ Read individual rule files in `rules/` for detailed requirements.
 
 ### Step 1: Detect
 
+- Run `git log --oneline -20` and `git diff` to identify recent changes
 - Check if CLAUDE.md and README.md exist (create if missing)
 - Scan for `.claude/agents/*.md`, `.claude/skills/*/SKILL.md`, and `.claude/rules/*.md` files
-- Scan project structure for changes since last update
-- Cross-reference documented instructions with actual project state
+- Compare documented instructions against actual project state to find stale sections
+- Flag any new tools, removed dependencies, changed paths, or renamed commands
 
 ### Step 2: Update
 

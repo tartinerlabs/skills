@@ -41,6 +41,7 @@ Invoke any skill with `/skill-name` in Claude Code.
 | [refactor](skills/refactor) | Audit and refactor TypeScript/JavaScript code for dead code, deep nesting, type assertions, and design patterns |
 | [security](skills/security) | OWASP Top 10 security audit with GitLeaks secret detection and dependency vulnerability scanning |
 | [tailwind](skills/tailwind) | Audit and fix Tailwind CSS v4 anti-patterns for spacing, 8px grid, mobile-first, and GPU animations |
+| [testing](skills/testing) | Write and run tests with Vitest and React Testing Library for JS/TS projects |
 
 ### Project
 
@@ -49,7 +50,7 @@ Invoke any skill with `/skill-name` in Claude Code.
 | [setup](skills/setup) | Add Biome, Husky, commitlint, lint-staged, GitLeaks, and TypeScript to JS/TS projects |
 | [project-structure](skills/project-structure) | Audit project directory structure for colocation, grouping, and anti-pattern detection |
 | [naming-format](skills/naming-format) | Audit and fix filename and export naming conventions for consistency |
-| [sync-docs](skills/sync-docs) | Update and maintain CLAUDE.md and README.md to match current project state |
+| [update-project](skills/update-project) | Update and maintain CLAUDE.md, README.md, agents, skills, and rules to match current project state |
 
 ## Installation
 
@@ -65,6 +66,21 @@ Install a single skill:
 
 ```bash
 pnpm dlx skills add tartinerlabs/skills/commit
+```
+
+Install a subset for specific workflows:
+
+```bash
+# Git and GitHub workflow skills only
+pnpm dlx skills add tartinerlabs/skills/commit
+pnpm dlx skills add tartinerlabs/skills/create-branch
+pnpm dlx skills add tartinerlabs/skills/create-pr
+pnpm dlx skills add tartinerlabs/skills/create-issue
+
+# Security-focused subset
+pnpm dlx skills add tartinerlabs/skills/security
+pnpm dlx skills add tartinerlabs/skills/commit
+pnpm dlx skills add tartinerlabs/skills/setup
 ```
 
 ### [Context7](https://context7.com)
