@@ -1,3 +1,10 @@
+# [1.1.0](https://github.com/tartinerlabs/skills/compare/v1.0.3...v1.1.0) (2026-02-15)
+
+
+### Features
+
+* enrich skill descriptions with actual features ([003c1c9](https://github.com/tartinerlabs/skills/commit/003c1c924dc36488ea7f918ac06e56e10cf5604a)), closes [#4](https://github.com/tartinerlabs/skills/issues/4)
+
 ## [1.0.3](https://github.com/tartinerlabs/skills/compare/v1.0.2...v1.0.3) (2026-02-15)
 
 
