@@ -10,7 +10,7 @@ Powertools for [Claude Code](https://docs.anthropic.com/en/docs/claude-code): gi
 ## Why These Skills
 
 - **Modular rules architecture** &mdash; Each skill ships with standalone rule files in `rules/` directories. Rules can be added, removed, or edited independently without touching the main skill logic.
-- **Opinionated audit workflows** &mdash; Skills like `security`, `ci-cd`, `tailwind`, and `refactor` produce structured severity-graded reports, then auto-fix issues.
+- **Opinionated audit workflows** &mdash; Skills like `security`, `github-actions`, `tailwind`, and `refactor` produce structured severity-graded reports, then auto-fix issues.
 - **GitLeaks built in** &mdash; The `commit`, `security`, and `setup` skills all enforce GitLeaks secret detection as a first-class concern.
 - **Convention-aware** &mdash; Skills detect your project's existing conventions (language variant, commit format, package manager, project structure) and adapt automatically.
 
@@ -32,7 +32,7 @@ Invoke any skill with `/skill-name` in Claude Code.
 | [create-pr](skills/create-pr) | Push branch and create a pull request with structured description and auto-assignment |
 | [create-issue](skills/create-issue) | Create an issue with template detection and auto-assignment |
 | [update-issue](skills/update-issue) | Update an issue's title, body, labels, assignees, or state with template preservation |
-| [ci-cd](skills/ci-cd) | Create and audit GitHub Actions workflows with SHA pinning, permissions, and caching checks |
+| [github-actions](skills/github-actions) | Create and audit GitHub Actions workflows with SHA pinning, permissions, and caching checks |
 
 ### Code Quality
 
