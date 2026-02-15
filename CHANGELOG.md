@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/tartinerlabs/skills/compare/v1.2.0...v1.3.0) (2026-02-15)
+
+
+### Features
+
+* add testing skill ([addb3e2](https://github.com/tartinerlabs/skills/commit/addb3e223351bf1a7c0461ea4e4421d18f12a5b0))
+
 # [1.2.0](https://github.com/tartinerlabs/skills/compare/v1.1.0...v1.2.0) (2026-02-15)
 
 
