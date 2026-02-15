@@ -14,8 +14,8 @@ Read individual rule files in `rules/` for detailed requirements and examples.
 
 | Rule | Impact | File |
 |------|--------|------|
-| Title format | HIGH | `rules/title-format.md` |
-| Template preservation | MEDIUM | `rules/template-preservation.md` |
+| Issue title | HIGH | `rules/issue-title.md` |
+| Template adherence | MEDIUM | `rules/template-adherence.md` |
 
 ## Workflow
 
@@ -28,7 +28,7 @@ Read individual rule files in `rules/` for detailed requirements and examples.
 
 ## Validation
 
-- For titles: follow `rules/title-format.md`
-- For body with template: follow `rules/template-preservation.md`
+- For titles: follow `rules/issue-title.md`
+- For body with template: follow `rules/template-adherence.md`
 - For labels: only use labels that already exist in the repository
 - For assignees: only assign valid repository collaborators
