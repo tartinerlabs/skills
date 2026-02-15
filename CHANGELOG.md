@@ -1,3 +1,10 @@
+## [1.0.1](https://github.com/tartinerlabs/skills/compare/v1.0.0...v1.0.1) (2026-02-15)
+
+
+### Bug Fixes
+
+* nest model under metadata in refactor skill ([c7103a1](https://github.com/tartinerlabs/skills/commit/c7103a123b2021936308101019c52a7ed71f7ea5))
+
 # 1.0.0 (2026-02-15)
 
 Initial release of `@tartinerlabs/skills` — a collection of Claude Code skills distributed via [skills.sh](https://skills.sh).
