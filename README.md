@@ -50,6 +50,14 @@ Install a single skill:
 npx skills add tartinerlabs/skills/commit
 ```
 
+### Context7
+
+Also available via [Context7](https://context7.com):
+
+```bash
+pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal
+```
+
 ## Usage
 
 Invoke any skill with `/skill-name` in Claude Code:
