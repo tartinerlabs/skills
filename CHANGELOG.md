@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/tartinerlabs/skills/compare/v1.0.2...v1.0.3) (2026-02-15)
+
+
+### Bug Fixes
+
+* correct package.json metadata ([4947bdd](https://github.com/tartinerlabs/skills/commit/4947bddfd930cd2fc9b55d81dade9951a677e4ef))
+
 ## [1.0.2](https://github.com/tartinerlabs/skills/compare/v1.0.1...v1.0.2) (2026-02-15)
 
 

@@ -1,6 +1,6 @@
 {
 	"name": "@tartinerlabs/skills",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "A collection of Claude Code skills distributed via skills.sh and Context7",
 	"author": "ruchern.chong@tartinerlabs.com",
 	"license": "MIT",
