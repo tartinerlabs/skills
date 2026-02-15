@@ -1,5 +1,5 @@
 ---
-name: ci-cd
+name: github-actions
 description: Create and audit GitHub Actions workflows with SHA pinning, permissions, and caching checks. Use when adding CI/CD, reviewing workflow files, or fixing action pinning.
 allowed-tools: Read Glob Grep Edit Write Bash(gh) Bash(git)
 metadata:
