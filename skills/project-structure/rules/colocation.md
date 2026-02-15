@@ -11,23 +11,35 @@ tags: colocation, proximity, organisation
 ```
 src/
 ├── components/
-│   └── UserProfile.tsx
+│   └── user-profile.tsx
 ├── hooks/
-│   └── useUser.ts
+│   └── use-user.ts
 ├── types/
 │   └── user.ts
 └── tests/
-    └── UserProfile.test.tsx
+    └── user-profile.test.tsx
 ```
 
 ### Correct
 
 ```
 src/features/users/
-├── UserProfile.tsx
-├── UserProfile.test.tsx
-├── useUser.ts
+├── user-profile.tsx
+├── user-profile.test.tsx
+├── use-user.ts
 └── user.types.ts
+```
+
+### Next.js App Router
+
+Colocate components with the route that uses them:
+
+```
+app/dashboard/
+├── page.tsx
+├── dashboard-chart.tsx
+├── dashboard-stats.tsx
+└── use-dashboard-data.ts
 ```
 
 ### Where to Put Things
