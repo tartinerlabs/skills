@@ -1,5 +1,5 @@
 ---
-name: workflows
+name: ci-cd
 description: Create and audit GitHub Actions workflows. Use when adding CI/CD, reviewing workflow files, or fixing action pinning.
 allowed-tools: Read Glob Grep Edit Write Bash(gh) Bash(git)
 metadata:
