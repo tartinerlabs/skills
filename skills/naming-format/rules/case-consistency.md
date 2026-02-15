@@ -1,21 +1,42 @@
 ---
-title: Naming Conventions
-impact: MEDIUM
-tags: naming, kebab-case, files, conventions
+title: Case Consistency
+impact: HIGH
+tags: naming, kebab-case, files, directories, casing
 ---
 
-**Rule**: Use consistent naming conventions for files and directories.
+**Rule**: Use `kebab-case` for all files and directories. Detect the project's dominant convention first and flag outliers.
+
+### Files
 
 | Type | Convention | Example |
 |------|------------|---------|
-| Files | `kebab-case.ts` | `user-profile.ts` |
-| Unit tests | `*.test.ts` | `user-profile.test.ts` |
-| E2E tests | `*.e2e.ts` | `checkout.e2e.ts` |
-| Schemas | `*.schema.ts` | `user.schema.ts` |
-| Types | `*.types.ts` | `user.types.ts` |
+| All files | `kebab-case.ts` | `user-profile.ts` |
+| Components | `kebab-case.tsx` | `user-profile.tsx` |
+| Hooks | `use-*.ts` | `use-user.ts` |
+| Directories | `kebab-case` | `user-profile/` |
 
-### Directories
+### Incorrect
 
-- Use `kebab-case` for directory names
-- Exception: React component directories may use `PascalCase` if the project convention requires it
-- Match the existing project convention before introducing a new one
+```
+src/
+├── UserProfile.tsx
+├── useAuth.ts
+├── APIClient.ts
+├── userTypes.ts
+└── MyComponent/
+```
+
+### Correct
+
+```
+src/
+├── user-profile.tsx
+├── use-auth.ts
+├── api-client.ts
+├── user.types.ts
+└── my-component/
+```
+
+### Detection
+
+Before flagging violations, count existing files to identify the dominant convention. If the project consistently uses a different convention (e.g., PascalCase for components), respect it and flag files that break *that* convention instead.

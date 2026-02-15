@@ -47,7 +47,8 @@ Invoke any skill with `/skill-name` in Claude Code.
 | Skill | Description |
 |-------|-------------|
 | [setup](skills/setup) | Add Biome, Husky, commitlint, lint-staged, GitLeaks, and TypeScript to JS/TS projects |
-| [folder-org](skills/folder-org) | Project structure guidance with colocation, feature-based grouping, and anti-pattern detection |
+| [project-structure](skills/project-structure) | Audit project directory structure for colocation, grouping, and anti-pattern detection |
+| [naming-format](skills/naming-format) | Audit and fix filename and export naming conventions for consistency |
 | [sync-docs](skills/sync-docs) | Update and maintain CLAUDE.md and README.md to match current project state |
 
 ## Installation
