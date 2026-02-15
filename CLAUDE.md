@@ -54,19 +54,10 @@ Skills are distributed through two channels, validated by the `Skills` CI workfl
 - `actions/*` (GitHub-owned): use version tags (e.g., `@v4`)
 - Third-party actions: pin to full commit hash with version comment (e.g., `@9fd676a...  # v4.2.0`)
 
-## Agentic Workflows
-
-The repo uses [GitHub Agentic Workflows](https://github.com/github/gh-aw) (`gh-aw`) for automation:
-
-- **Skill Validation** (`skill-validation.md`) — Runs on PRs touching `skills/**`, validates frontmatter fields and format
-- **Issue Triage** (`issue-triage.md`) — Auto-labels new issues (`skill-request`, `bug`, `rule-update`, `ci`, `docs`, `question`)
-
-Workflow `.md` files compile to `.lock.yml` files via `gh aw compile`. Lock files are marked `linguist-generated=true merge=ours` in `.gitattributes` — do not edit them manually.
-
 ## Conventions
 
 - Skills infer and match the target project's language variant (US/UK English) from existing commits, docs, and code
 - GitHub-related skills auto-assign to current user via `@me` or `get_me`
 - PR and issue titles use natural language, NOT conventional commit prefixes
-- The `/commit` skill enforces max 50-character commit messages and ensures GitLeaks is configured before committing
+- The `/commit` skill enforces max 50-character commit messages, detects commitlint to choose conventional vs plain format, and ensures GitLeaks is configured before committing
 - Skills can use both CLI tools (`gh`, `git`) and MCP tools (`mcp__github__*`) depending on the operation

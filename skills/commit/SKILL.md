@@ -30,6 +30,7 @@ Before committing, ensure GitLeaks is configured:
 
 1. Pull latest changes from remote (`git pull`)
 2. Show current `git status` and analyse all changes
-3. Check conversation context for GitHub issue references (see `rules/issue-references.md`)
-4. Assess scope of changes (see `rules/change-scope.md`)
-5. Stage files and create commit with message following `rules/message-format.md`
+3. Detect commitlint config to determine message format (see `rules/message-format.md`)
+4. Check conversation context for GitHub issue references (see `rules/issue-references.md`)
+5. Assess scope of changes (see `rules/change-scope.md`)
+6. Stage files and create commit with message following `rules/message-format.md`
