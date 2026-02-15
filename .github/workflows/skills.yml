@@ -21,7 +21,7 @@ jobs:
           cache: pnpm
 
       - name: Install via skills.sh
-        run: pnpm dlx skills add tartinerlabs/skills
+        run: pnpm dlx skills add tartinerlabs/skills --yes
 
       - name: Install via Context7
-        run: pnpm dlx ctx7 skills install /tartinerlabs/skills --all
+        run: pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal
