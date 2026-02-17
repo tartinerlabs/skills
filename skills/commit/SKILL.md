@@ -28,7 +28,7 @@ Before committing, ensure GitLeaks is configured:
 
 ## Workflow
 
-1. Pull latest changes from remote (`git pull --rebase`)
+1. Stash any uncommitted changes (`git stash`) if the working tree is dirty, then pull (`git pull --rebase`), then restore (`git stash pop`)
 2. Show current `git status` and analyse all changes
 3. Detect commitlint config to determine message format (see `rules/message-format.md`)
 4. Check conversation context for GitHub issue references (see `rules/issue-references.md`)
