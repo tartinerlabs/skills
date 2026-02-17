@@ -1,3 +1,15 @@
+# [1.4.0](https://github.com/tartinerlabs/skills/compare/v1.3.0...v1.4.0) (2026-02-17)
+
+
+### Bug Fixes
+
+* **commit:** stash changes before git pull --rebase ([2f7bc6d](https://github.com/tartinerlabs/skills/commit/2f7bc6d7acedfc52eab11dd8475fff35f1c2dd9c))
+
+
+### Features
+
+* **commit:** align rules with industry best practices ([5478d30](https://github.com/tartinerlabs/skills/commit/5478d3065864eed284d606b80f6f164420423e1f))
+
 # [1.3.0](https://github.com/tartinerlabs/skills/compare/v1.2.0...v1.3.0) (2026-02-15)
 
 
