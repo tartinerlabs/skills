@@ -28,7 +28,7 @@ Before committing, ensure GitLeaks is configured:
 
 ## Workflow
 
-1. Pull latest changes from remote (`git pull`)
+1. Pull latest changes from remote (`git pull --rebase`)
 2. Show current `git status` and analyse all changes
 3. Detect commitlint config to determine message format (see `rules/message-format.md`)
 4. Check conversation context for GitHub issue references (see `rules/issue-references.md`)

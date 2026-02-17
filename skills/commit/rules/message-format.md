@@ -4,7 +4,7 @@ impact: HIGH
 tags: commit, message, format, 50-char
 ---
 
-**Rule**: Maximum 50 characters. Use present tense verbs. Be specific but concise.
+**Rule**: Subject line maximum 72 characters. Use present tense verbs. Be specific but concise.
 
 ### Detect commitlint
 
@@ -30,7 +30,7 @@ docs: update API usage examples
 
 **Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
 
-- The 50-character limit includes the `type: ` prefix
+- The 72-character limit includes the `type: ` prefix
 - Use scope only when it adds clarity: `fix(auth): handle expired token redirect`
 - Description starts with lowercase verb
 
@@ -53,8 +53,27 @@ add user search endpoint
 Updated the authentication flow to handle edge cases with expired tokens and added retry logic
 ```
 
+### Commit Body
+
+Add a body when the *why* isn't obvious from the diff:
+
+```
+feat(payments): switch from Stripe v2 to v3 SDK
+
+v2 is deprecated and loses security patches in Q3.
+The new SDK uses a promise-based API and removes the
+manual webhook signature workaround in utils/stripe.ts.
+
+Closes #412
+```
+
+- Separate subject from body with a blank line
+- Wrap body at 72 characters
+- Explain *why*, not *how* — the diff shows the how
+- One-liners are fine for obvious changes (dep bumps, config tweaks, small fixes)
+
 ### Guidelines
 
 - No trailing period
-- Describe the "what", not the "how"
+- Subject describes the *what*; body explains the *why*
 - Present tense: "add" not "added", "fix" not "fixed"
