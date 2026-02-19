@@ -30,8 +30,7 @@ Invoke any skill with `/skill-name` in Claude Code.
 | Skill | Description |
 |-------|-------------|
 | [create-pr](skills/create-pr) | Push branch and create a pull request with structured description and auto-assignment |
-| [create-issue](skills/create-issue) | Create an issue with template detection and auto-assignment |
-| [update-issue](skills/update-issue) | Update an issue's title, body, labels, assignees, or state with template preservation |
+| [github-issues](skills/github-issues) | Create, update, query, and comment on GitHub issues with MCP |
 | [github-actions](skills/github-actions) | Create and audit GitHub Actions workflows with SHA pinning, permissions, and caching checks |
 
 ### Code Quality
@@ -75,7 +74,7 @@ Install a subset for specific workflows:
 pnpm dlx skills add tartinerlabs/skills/commit
 pnpm dlx skills add tartinerlabs/skills/create-branch
 pnpm dlx skills add tartinerlabs/skills/create-pr
-pnpm dlx skills add tartinerlabs/skills/create-issue
+pnpm dlx skills add tartinerlabs/skills/github-issues
 
 # Security-focused subset
 pnpm dlx skills add tartinerlabs/skills/security
