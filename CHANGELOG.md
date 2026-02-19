@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/tartinerlabs/skills/compare/v1.4.1...v1.4.2) (2026-02-19)
+
+
+### Bug Fixes
+
+* disallow commit scopes in this repo ([8a937ab](https://github.com/tartinerlabs/skills/commit/8a937abe2ca519d70bfc258db79ad48787f81983))
+
 ## [1.4.1](https://github.com/tartinerlabs/skills/compare/v1.4.0...v1.4.1) (2026-02-19)
 
 
