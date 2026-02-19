@@ -1,7 +1,7 @@
 ---
 title: Insecure Dependencies
 impact: MEDIUM
-tags: dependencies, audit, npm, vulnerabilities
+tags: dependencies, audit, npm, pnpm, yarn, bun, vulnerabilities
 ---
 
 **Rule**: Check for known vulnerabilities in project dependencies.
@@ -15,8 +15,17 @@ npm audit
 # pnpm
 pnpm audit
 
+# yarn
+yarn audit
+
+# bun
+bun audit
+
 # Check for outdated packages
 npm outdated
+pnpm outdated
+yarn outdated
+bun outdated
 ```
 
 ### What to Check
@@ -27,6 +36,6 @@ npm outdated
 
 ### Remediation
 
-- Update vulnerable packages: `npm audit fix` or manual version bumps
+- Update vulnerable packages: `npm audit fix` / `pnpm audit --fix` or manual version bumps
 - Replace abandoned packages with actively maintained alternatives
 - Pin dependency versions to avoid unexpected updates
