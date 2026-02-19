@@ -35,7 +35,7 @@ Scan the target scope (specific files, directory, or full codebase) for violatio
 - `as` type assertions (excluding test files)
 - Chained `&&` for null checks where `?.` applies
 - `||` used for defaults where `??` is safer
-- Barrel `index.ts` files with trivial re-exports
+- Barrel `index.ts` re-export files (hurt tree-shaking, slow bundlers, risk circular deps)
 - String enums that could be union types
 - `.then()` chains in async code
 
