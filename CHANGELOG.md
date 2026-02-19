@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/tartinerlabs/skills/compare/v1.4.0...v1.4.1) (2026-02-19)
+
+
+### Bug Fixes
+
+* scope Bash permissions to reduce Gen risk ([3da548a](https://github.com/tartinerlabs/skills/commit/3da548a0259d7a63215cc547362b391925bf14bc))
+
 # [1.4.0](https://github.com/tartinerlabs/skills/compare/v1.3.0...v1.4.0) (2026-02-17)
 
 
