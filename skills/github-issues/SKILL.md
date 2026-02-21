@@ -16,6 +16,7 @@ Read individual rule files in `rules/` for detailed requirements and examples.
 |------|--------|------|
 | Issue title | HIGH | `rules/issue-title.md` |
 | Template adherence | MEDIUM | `rules/template-adherence.md` |
+| No checklists | MEDIUM | `rules/no-checklists.md` |
 
 ## Workflow
 
