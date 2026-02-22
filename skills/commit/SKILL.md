@@ -1,7 +1,7 @@
 ---
 name: commit
 description: Clean git commits with conventional commit detection and GitLeaks secret scanning. Use when the user wants to commit changes, stage files, or create git commits.
-allowed-tools: Bash(git status) Bash(git add) Bash(git diff) Bash(git commit) Bash(git log) Bash(git pull) Bash(gitleaks) Read Edit Glob
+allowed-tools: Bash(git status) Bash(git add) Bash(git diff) Bash(git commit) Bash(git log) Bash(git pull) Bash(git stash) Bash(gitleaks) Read Edit Glob
 metadata:
   model: sonnet
 ---
@@ -28,7 +28,11 @@ Before committing, ensure GitLeaks is configured:
 
 ## Workflow
 
-1. Stash any uncommitted changes (`git stash`) if the working tree is dirty, then pull (`git pull --rebase`), then restore (`git stash pop`)
+1. **Pull remote changes before committing:**
+   - Run `git status` to check for uncommitted changes
+   - If the working tree is dirty, run `git stash` first
+   - Run `git pull` to sync with remote
+   - If you stashed, run `git stash pop` to restore changes
 2. Show current `git status` and analyse all changes
 3. Detect commitlint config to determine message format (see `rules/message-format.md`)
 4. Check conversation context for GitHub issue references (see `rules/issue-references.md`)
