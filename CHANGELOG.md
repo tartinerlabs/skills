@@ -1,3 +1,10 @@
+# [1.5.0](https://github.com/tartinerlabs/skills/compare/v1.4.7...v1.5.0) (2026-02-22)
+
+
+### Features
+
+* add issue types, parent/sub-issues to github-issues skill ([03fc154](https://github.com/tartinerlabs/skills/commit/03fc1546d11cd1a4fdb0fe6526e38a041677fab3))
+
 ## [1.4.7](https://github.com/tartinerlabs/skills/compare/v1.4.6...v1.4.7) (2026-02-22)
 
 
