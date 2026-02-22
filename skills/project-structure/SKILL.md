@@ -1,6 +1,6 @@
 ---
 name: project-structure
-description: Audit project directory structure for colocation, grouping, and anti-patterns. Use when creating files, organising components, or deciding where code should live.
+description: Use when deciding where code should live, organising files, or auditing project structure. Checks colocation, grouping, and directory anti-patterns.
 allowed-tools: Read Glob Grep
 metadata:
   model: sonnet

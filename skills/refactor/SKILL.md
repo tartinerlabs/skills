@@ -1,6 +1,6 @@
 ---
 name: refactor
-description: Audit and refactor TypeScript/JavaScript code for dead code, deep nesting, type assertions, and design patterns. Use when the user asks to refactor, clean up code, reduce complexity, fix code smells, or improve code quality.
+description: Use when refactoring, cleaning up code, reducing complexity, fixing code smells, or improving code quality. Audits TS/JS for dead code, nesting, and patterns.
 allowed-tools: Read Grep Glob Edit
 metadata:
   model: sonnet

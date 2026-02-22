@@ -1,6 +1,6 @@
 ---
 name: naming-format
-description: Audit and fix filename and naming conventions for consistency. Use when reviewing file names, component names, or export naming across the codebase.
+description: Use when reviewing file names, renaming files, fixing naming conventions, or auditing exports. Enforces consistent casing and suffix patterns.
 allowed-tools: Read Glob Grep Bash(git mv) Edit
 metadata:
   model: sonnet

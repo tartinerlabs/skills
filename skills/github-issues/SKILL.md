@@ -1,6 +1,6 @@
 ---
 name: github-issues
-description: Create or update GitHub issues with template detection, title formatting, and assignment/label safeguards. Use when the user wants to file a bug, request a feature, create a tracking issue, or edit issue details.
+description: Use when filing a bug, requesting a feature, creating an issue, or updating issue details. Manages GitHub issues with templates, formatting, and auto-assignment.
 allowed-tools: Read Bash(gh repo view) mcp__github__list_issue_types mcp__github__issue_write mcp__github__get_me mcp__github__get_issue mcp__github__search_issues mcp__github__list_issues mcp__github__add_issue_comment
 metadata:
   model: sonnet

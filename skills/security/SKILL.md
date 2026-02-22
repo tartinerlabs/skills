@@ -1,6 +1,6 @@
 ---
 name: security
-description: OWASP Top 10 security audit with GitLeaks secret detection and dependency vulnerability scanning. Use when checking for vulnerabilities, setting up secret detection, or auditing code security.
+description: Use when auditing security, checking for vulnerabilities, scanning for secrets, or reviewing dependencies. OWASP Top 10 audit with GitLeaks and dependency checks.
 allowed-tools: Read Write Edit Glob Grep Bash(gitleaks *) Bash(npm audit*) Bash(npm outdated*) Bash(pnpm audit*) Bash(pnpm outdated*) Bash(yarn audit*) Bash(yarn outdated*) Bash(bun audit*) Bash(bun outdated*)
 metadata:
   model: sonnet

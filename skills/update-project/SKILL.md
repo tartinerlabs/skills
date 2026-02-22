@@ -1,6 +1,6 @@
 ---
 name: update-project
-description: Update and maintain CLAUDE.md, README.md, agents, skills, and rules to match current project state. Use when docs are stale, the project structure changed, agents, skills, or rules reference outdated paths, or the user asks to update project documentation.
+description: Use when updating docs, syncing CLAUDE.md or README.md, fixing stale documentation, or refreshing project rules and skills. Keeps docs aligned with code changes.
 allowed-tools: Read Write Edit Glob Grep Bash(git log*) Bash(git diff*) Bash(npm *) Bash(yarn *) Bash(pnpm *) Bash(bun *) WebFetch
 metadata:
   model: sonnet

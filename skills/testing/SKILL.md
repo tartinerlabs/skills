@@ -1,6 +1,6 @@
 ---
 name: testing
-description: Write and run tests for JS/TS projects. Handles unit tests with Vitest and React Testing Library directly. Delegates E2E and browser testing to /webapp-testing. Use when writing tests, adding coverage, debugging test failures, or running test suites.
+description: Use when writing tests, running tests, adding test coverage, or debugging test failures. Unit and component testing with Vitest and React Testing Library.
 allowed-tools: Read Write Edit Glob Grep Bash(vitest) Bash(npx vitest) Bash(pnpm vitest) Bash(bunx vitest) Bash(pnpm run test) Bash(npm run test) Bash(bun run test) Bash(yarn test)
 metadata:
   model: sonnet

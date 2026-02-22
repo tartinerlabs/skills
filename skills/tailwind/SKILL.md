@@ -1,6 +1,6 @@
 ---
 name: tailwind
-description: Audit and fix Tailwind CSS v4 anti-patterns for spacing, 8px grid, mobile-first, and GPU animations. Use when reviewing or writing Tailwind classes, fixing spacing issues, or enforcing CSS best practices.
+description: Use when writing Tailwind classes, fixing spacing issues, reviewing CSS, or auditing Tailwind patterns. Enforces v4 best practices for grid and responsive.
 allowed-tools: Read Grep Glob Edit
 metadata:
   model: sonnet
