@@ -1,3 +1,10 @@
+## [1.4.7](https://github.com/tartinerlabs/skills/compare/v1.4.6...v1.4.7) (2026-02-22)
+
+
+### Bug Fixes
+
+* front-load triggers in skill descriptions ([2bc2e20](https://github.com/tartinerlabs/skills/commit/2bc2e20c273dd048f280059b8707ad5867b3ff3e))
+
 ## [1.4.6](https://github.com/tartinerlabs/skills/compare/v1.4.5...v1.4.6) (2026-02-22)
 
 
