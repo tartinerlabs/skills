@@ -1,3 +1,10 @@
+## [1.4.4](https://github.com/tartinerlabs/skills/compare/v1.4.3...v1.4.4) (2026-02-22)
+
+
+### Bug Fixes
+
+* prohibit heading sections in create-pr body ([5c8484b](https://github.com/tartinerlabs/skills/commit/5c8484b72352fd482b4d4260c4472d9c5cbc21a5))
+
 ## [1.4.3](https://github.com/tartinerlabs/skills/compare/v1.4.2...v1.4.3) (2026-02-21)
 
 
