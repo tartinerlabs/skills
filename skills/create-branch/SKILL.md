@@ -1,7 +1,7 @@
 ---
 name: create-branch
 description: Create and checkout a git branch with naming validation and GitHub issue linking. Use when the user wants to create a branch, start work on an issue, or set up a feature branch.
-allowed-tools: Bash(git status) Bash(git branch) Bash(git checkout) Bash(git push) Bash(git rev-parse) Bash(git ls-remote) Bash(gh issue develop) Bash(gh issue list) Bash(gh issue view)
+allowed-tools: Read Bash(git status) Bash(git branch) Bash(git checkout) Bash(git push) Bash(git rev-parse) Bash(git ls-remote) Bash(gh issue develop) Bash(gh issue list) Bash(gh issue view)
 metadata:
   model: sonnet
 ---

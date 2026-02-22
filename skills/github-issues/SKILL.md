@@ -1,7 +1,7 @@
 ---
 name: github-issues
 description: Create or update GitHub issues with template detection, title formatting, and assignment/label safeguards. Use when the user wants to file a bug, request a feature, create a tracking issue, or edit issue details.
-allowed-tools: Bash(gh repo view) mcp__github__list_issue_types mcp__github__issue_write mcp__github__get_me mcp__github__get_issue mcp__github__search_issues mcp__github__list_issues mcp__github__add_issue_comment
+allowed-tools: Read Bash(gh repo view) mcp__github__list_issue_types mcp__github__issue_write mcp__github__get_me mcp__github__get_issue mcp__github__search_issues mcp__github__list_issues mcp__github__add_issue_comment
 metadata:
   model: sonnet
 ---
@@ -25,10 +25,11 @@ Read individual rule files in `rules/` for detailed requirements and examples.
 3. Check for issue templates in `.github/ISSUE_TEMPLATE/` or `.github/`
 4. For creation:
    - Check for organisation issue types via `github/list_issue_types` (fails for user-owned repos — expected, proceed without)
+   - When issue types are available, select the most appropriate type based on user intent (e.g. Bug for defects, Feature for new functionality, Task for general work) and pass it as `type` in the `issue_write` call
    - Generate title following `rules/issue-title.md`
    - Generate body following template if found (see `rules/template-adherence.md`), otherwise use clear structured format
    - Get current user via `github/get_me` for self-assignment
-   - Create issue via `github/issue_write` with `method: "create"`, including `assignees` array with current user's login
+   - Create issue via `github/issue_write` with `method: "create"`, including `assignees` array with current user's login and `type` if issue types are available
 5. For updates:
    - Identify issue number from user input
    - Fetch current issue details via `mcp__github__get_issue`
