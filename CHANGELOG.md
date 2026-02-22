@@ -1,3 +1,10 @@
+## [1.4.6](https://github.com/tartinerlabs/skills/compare/v1.4.5...v1.4.6) (2026-02-22)
+
+
+### Bug Fixes
+
+* clarify git pull workflow in commit skill ([1cc729b](https://github.com/tartinerlabs/skills/commit/1cc729b21062b4e1686db846adba37c369cebce1))
+
 ## [1.4.5](https://github.com/tartinerlabs/skills/compare/v1.4.4...v1.4.5) (2026-02-22)
 
 
