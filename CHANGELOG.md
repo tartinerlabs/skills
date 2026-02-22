@@ -1,3 +1,10 @@
+## [1.4.3](https://github.com/tartinerlabs/skills/compare/v1.4.2...v1.4.3) (2026-02-21)
+
+
+### Bug Fixes
+
+* prohibit checklists in github-issues body ([2e0aa42](https://github.com/tartinerlabs/skills/commit/2e0aa42827020aaeea8f2f07710e135e50b35ad7))
+
 ## [1.4.2](https://github.com/tartinerlabs/skills/compare/v1.4.1...v1.4.2) (2026-02-19)
 
 
