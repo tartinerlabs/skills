@@ -4,7 +4,7 @@ impact: MEDIUM
 tags: pr, description, concise
 ---
 
-**Rule**: Maximum 1-2 bullet points summarising key changes. No verbose sections.
+**Rule**: Concise bullet points summarising key changes. No verbose sections or heading templates.
 
 ### Incorrect
 

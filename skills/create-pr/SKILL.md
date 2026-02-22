@@ -22,6 +22,6 @@ Read individual rule files in `rules/` for detailed requirements and examples.
 1. Check current git status and branch
 2. Push current branch to remote (with `-u` flag if needed)
 3. Analyse recent commits to generate PR title and description
-4. Create GitHub PR: `gh pr create --assignee @me`
+4. Create GitHub PR: `gh pr create --assignee @me` — body is concise bullet points only (no `## Summary`, `## Test Plan`, checklists, or other heading sections)
 
 Auto-assign to current user via `--assignee @me`. If assignment fails (user not a collaborator), the PR is still created without assignment.
