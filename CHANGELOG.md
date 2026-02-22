@@ -1,3 +1,10 @@
+## [1.4.5](https://github.com/tartinerlabs/skills/compare/v1.4.4...v1.4.5) (2026-02-22)
+
+
+### Bug Fixes
+
+* add Read to allowed-tools for skills with rules ([4485bd7](https://github.com/tartinerlabs/skills/commit/4485bd75835b3b49159297ec9612d33e2a31aaab))
+
 ## [1.4.4](https://github.com/tartinerlabs/skills/compare/v1.4.3...v1.4.4) (2026-02-22)
 
 
