@@ -1,3 +1,10 @@
+# [1.6.0](https://github.com/tartinerlabs/skills/compare/v1.5.0...v1.6.0) (2026-02-23)
+
+
+### Features
+
+* add recharts skill for HeroUI integration ([f6826d3](https://github.com/tartinerlabs/skills/commit/f6826d338fb90ab5f0968f8f8f2e0dcf79df60eb))
+
 # [1.5.0](https://github.com/tartinerlabs/skills/compare/v1.4.7...v1.5.0) (2026-02-22)
 
 

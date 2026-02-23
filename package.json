@@ -1,6 +1,6 @@
 {
 	"name": "@tartinerlabs/skills",
-	"version": "1.5.0",
+	"version": "1.6.0",
 	"description": "Claude Code skills for git workflows, GitHub automation, security audits, code refactoring, and project tooling",
 	"author": "ruchern.chong@tartinerlabs.com",
 	"license": "MIT",
