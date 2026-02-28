@@ -1,7 +1,6 @@
 ---
 name: github-actions
 description: Use when adding CI/CD, creating workflows, auditing GitHub Actions, or fixing action pinning. Creates and audits workflows for SHA pinning and permissions.
-allowed-tools: Read Glob Grep Edit Write Bash(gh api *)
 metadata:
   model: sonnet
 ---
@@ -108,7 +107,7 @@ Read all files in `.github/workflows/*.yml` and audit against every rule in the 
 
 ### 3. Auto-Fix
 
-After reporting, apply fixes using the Edit tool. Look up commit SHAs for pinning using `gh api`.
+After reporting, apply fixes. Look up commit SHAs for pinning using `gh api`.
 
 ---
 

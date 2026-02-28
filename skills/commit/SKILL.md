@@ -1,7 +1,6 @@
 ---
 name: commit
 description: Use when committing changes, staging files, saving work, or making a git commit. Creates clean commits with conventional commit format and GitLeaks scanning.
-allowed-tools: Bash(git status) Bash(git add) Bash(git diff) Bash(git commit) Bash(git log) Bash(git pull) Bash(git stash) Bash(gitleaks) Read Edit Glob
 metadata:
   model: sonnet
 ---

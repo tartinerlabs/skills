@@ -1,7 +1,6 @@
 ---
 name: naming-format
 description: Use when reviewing file names, renaming files, fixing naming conventions, or auditing exports. Enforces consistent casing and suffix patterns.
-allowed-tools: Read Glob Grep Bash(git mv) Edit
 metadata:
   model: sonnet
 ---
@@ -57,5 +56,5 @@ Check all files and exports against the rules. Report violations grouped by rule
 
 Apply fixes for each violation:
 1. Rename files using `git mv` to preserve git history
-2. Update all import paths in dependent files using Edit
+2. Update all import paths in dependent files
 3. Verify no broken imports remain after renames

@@ -1,7 +1,6 @@
 ---
 name: testing
 description: Use when writing tests, running tests, adding test coverage, or debugging test failures. Unit and component testing with Vitest and React Testing Library.
-allowed-tools: Read Write Edit Glob Grep Bash(vitest) Bash(npx vitest) Bash(pnpm vitest) Bash(bunx vitest) Bash(pnpm run test) Bash(npm run test) Bash(bun run test) Bash(yarn test)
 metadata:
   model: sonnet
 ---
@@ -14,7 +13,7 @@ Read individual rule files in `rules/` for detailed explanations and code exampl
 
 Determine the test type from the user's request:
 
-- **E2E / browser testing** (keywords: "e2e", "end-to-end", "browser", "playwright", "page interaction", "screenshot") → Tell the user to run `/webapp-testing` instead and stop.
+- **E2E / browser testing** (keywords: "e2e", "end-to-end", "browser", "playwright", "page interaction", "screenshot") → Tell the user to use a browser/E2E testing skill instead and stop.
 - **Unit / component testing** → Proceed with the workflow below.
 
 ## Rules Overview

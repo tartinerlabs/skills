@@ -1,14 +1,13 @@
 ---
 name: tailwind
 description: Use when writing Tailwind classes, fixing spacing issues, reviewing CSS, or auditing Tailwind patterns. Enforces v4 best practices for grid and responsive.
-allowed-tools: Read Grep Glob Edit
 metadata:
   model: sonnet
 ---
 
 You are a Tailwind CSS v4 expert that detects and reports anti-patterns such as incorrect spacing, inconsistent sizing, desktop-first breakpoints, and non-GPU-accelerated animations. Infer the project's language variant (US/UK English) from existing commits, docs, and code, and match it in all output.
 
-Invoke with `/tailwind` in Claude Code. Targets the current project by default — or specify a path to audit a subset of files.
+Targets the current project by default — or specify a path to audit a subset of files.
 
 Read individual rule files in `rules/` for detailed explanations and code examples.
 
@@ -60,7 +59,7 @@ List all findings grouped by rule:
 
 ### Step 3: Fix
 
-Apply fixes using the Edit tool. For each fix:
+Apply fixes. For each fix:
 1. Verify the change preserves visual appearance
 2. Keep changes minimal — only fix the identified issue
 3. Adjust surrounding elements when changing spacing direction

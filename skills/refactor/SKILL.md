@@ -1,7 +1,6 @@
 ---
 name: refactor
 description: Use when refactoring, cleaning up code, reducing complexity, fixing code smells, or improving code quality. Audits TS/JS for dead code, nesting, and patterns.
-allowed-tools: Read Grep Glob Edit
 metadata:
   model: sonnet
 ---
@@ -73,7 +72,7 @@ List all findings grouped by category:
 
 ### Step 3: Fix
 
-Apply refactorings using the Edit tool. For each fix:
+Apply refactorings. For each fix:
 1. Verify the change preserves existing behaviour
 2. Keep changes minimal — only fix the identified issue
 3. Do not introduce new abstractions unless clearly warranted

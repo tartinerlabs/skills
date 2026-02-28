@@ -5,7 +5,6 @@ description: >-
   Also use when integrating Recharts with HeroUI, reviewing chart components,
   or creating responsive chart containers. Generates Recharts charts styled
   with HeroUI v3 design tokens and Tailwind CSS v4.
-allowed-tools: Read Write Edit Glob Grep mcp__heroui-react__get_theme_variables
 metadata:
   model: sonnet
 ---
@@ -28,7 +27,7 @@ Read individual rule files in `rules/` for detailed patterns and code examples.
 
 1. **Detect setup** — Confirm `recharts` is in `package.json`. Check if HeroUI v3 is installed (`@heroui/react` or individual packages). Detect Tailwind CSS v4 (`@tailwindcss/*`).
 2. **Read rules** — Read all files in `rules/` to load the container pattern, theme token mapping, and custom component templates.
-3. **Fetch theme tokens** — Use `mcp__heroui-react__get_theme_variables` to confirm the current HeroUI token names available in the project.
+3. **Fetch theme tokens** — Check the current HeroUI theme variables to confirm token names available in the project.
 4. **Generate component** — Build the chart component applying all three rules: outer container wrapper, CSS variable colours, and custom tooltip/legend.
 5. **Verify** — Check the generated code against each rule. Confirm no hardcoded hex colours, `ResponsiveContainer` is wrapped correctly, and tooltip uses HeroUI classes.
 
@@ -36,7 +35,7 @@ Read individual rule files in `rules/` for detailed patterns and code examples.
 
 1. **Scan** — Glob for files importing from `recharts`. Read each file and check against every rule in `rules/`.
 2. **Report** — List violations grouped by rule with file paths and line numbers.
-3. **Fix** — Apply corrections using the Edit tool, one violation at a time.
+3. **Fix** — Apply corrections one violation at a time.
 
 ## Quick Reminders
 

@@ -1,7 +1,6 @@
 ---
 name: project-structure
 description: Use when deciding where code should live, organising files, or auditing project structure. Checks colocation, grouping, and directory anti-patterns.
-allowed-tools: Read Glob Grep
 metadata:
   model: sonnet
 ---

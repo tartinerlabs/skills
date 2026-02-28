@@ -1,7 +1,6 @@
 ---
 name: create-pr
 description: Use when opening a PR, submitting for review, pushing a branch, or creating a pull request. Pushes and creates GitHub PRs with auto-assignment and description.
-allowed-tools: Read Bash(git status) Bash(git push) Bash(git log) Bash(git diff) Bash(gh pr create) Bash(gh pr list) Bash(git branch)
 metadata:
   model: sonnet
 ---

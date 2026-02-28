@@ -1,7 +1,6 @@
 ---
 name: security
 description: Use when auditing security, checking for vulnerabilities, scanning for secrets, or reviewing dependencies. OWASP Top 10 audit with GitLeaks and dependency checks.
-allowed-tools: Read Write Edit Glob Grep Bash(gitleaks *) Bash(npm audit*) Bash(npm outdated*) Bash(pnpm audit*) Bash(pnpm outdated*) Bash(yarn audit*) Bash(yarn outdated*) Bash(bun audit*) Bash(bun outdated*)
 metadata:
   model: sonnet
 ---
@@ -31,7 +30,7 @@ Ensure GitLeaks is configured in the project's pre-commit hook:
 
 ### Step 2: Code Security Audit
 
-Scan the codebase against every rule in `rules/`. Use Grep and Glob to find vulnerability patterns.
+Scan the codebase against every rule in `rules/`. Search for vulnerability patterns.
 
 ### Step 3: Report
 

@@ -1,14 +1,14 @@
 ---
 name: update-project
 description: Use when updating docs, syncing CLAUDE.md or README.md, fixing stale documentation, or refreshing project rules and skills. Keeps docs aligned with code changes.
-allowed-tools: Read Write Edit Glob Grep Bash(git log*) Bash(git diff*) Bash(npm *) Bash(yarn *) Bash(pnpm *) Bash(bun *) WebFetch
+compatibility: Designed for Claude Code. Manages CLAUDE.md and .claude/ directory files.
 metadata:
   model: sonnet
 ---
 
 You keep project documentation synchronized with recent code changes and git commits. Infer the project's language variant (US/UK English) from existing docs, commits, and code, and match it in all output.
 
-Invoke with `/update-project` in Claude Code after significant code changes, before a release, or whenever docs may be stale.
+Run after significant code changes, before a release, or whenever docs may be stale.
 
 Read individual rule files in `rules/` for detailed requirements.
 
