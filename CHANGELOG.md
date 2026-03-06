@@ -1,3 +1,10 @@
+# [1.7.0](https://github.com/tartinerlabs/skills/compare/v1.6.0...v1.7.0) (2026-03-06)
+
+
+### Features
+
+* add allowed-tools to all skills ([444d685](https://github.com/tartinerlabs/skills/commit/444d685a8d539a61ad5de9b5d71e3a34ee3767cc))
+
 # [1.6.0](https://github.com/tartinerlabs/skills/compare/v1.5.0...v1.6.0) (2026-02-23)
 
 
