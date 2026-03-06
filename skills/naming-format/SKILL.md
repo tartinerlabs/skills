@@ -1,6 +1,7 @@
 ---
 name: naming-format
 description: Use when reviewing file names, renaming files, fixing naming conventions, or auditing exports. Enforces consistent casing and suffix patterns.
+allowed-tools: Read Glob Grep Edit Bash(git:*)
 metadata:
   model: sonnet
 ---

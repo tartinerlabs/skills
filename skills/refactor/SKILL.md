@@ -1,6 +1,7 @@
 ---
 name: refactor
 description: Use when refactoring, cleaning up code, reducing complexity, fixing code smells, or improving code quality. Audits TS/JS for dead code, nesting, and patterns.
+allowed-tools: Read Glob Grep Edit
 metadata:
   model: sonnet
 ---

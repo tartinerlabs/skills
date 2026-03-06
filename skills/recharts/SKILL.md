@@ -5,6 +5,7 @@ description: >-
   Also use when integrating Recharts with HeroUI, reviewing chart components,
   or creating responsive chart containers. Generates Recharts charts styled
   with HeroUI v3 design tokens and Tailwind CSS v4.
+allowed-tools: Read Glob Grep Edit Write
 metadata:
   model: sonnet
 ---

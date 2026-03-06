@@ -1,6 +1,7 @@
 ---
 name: github-issues
 description: Use when filing a bug, requesting a feature, creating an issue, or updating issue details. Manages GitHub issues with templates, formatting, and auto-assignment.
+allowed-tools: Read Bash(gh:*)
 metadata:
   model: sonnet
 ---
