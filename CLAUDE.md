@@ -25,8 +25,8 @@ Each skill lives in `skills/<name>/SKILL.md` with this structure:
 name: skill-name
 description: What it does and when to use it
 allowed-tools: Space-delimited list of permitted tools
-metadata:
-  model: sonnet
+model: sonnet
+effort: medium
 ---
 
 [Instructions Claude follows when the skill is active]
@@ -37,7 +37,8 @@ metadata:
 - `name` — Skill identifier, invoked as `/skill-name` in Claude Code
 - `description` — Purpose and trigger conditions
 - `allowed-tools` — Scoped tool permissions (e.g., `Bash(git status)` for specific commands, `Read` for full tool access)
-- `metadata.model` — Model preference (typically `sonnet` for cost efficiency)
+- `model` — Model preference (typically `sonnet` for cost efficiency)
+- `effort` — Reasoning effort level (`low`, `medium`, `high`, `max`). Overrides the session effort level while the skill is active
 
 ### Rules Pattern
 

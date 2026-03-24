@@ -2,8 +2,8 @@
 name: project-structure
 description: Use when deciding where code should live, organising files, or auditing project structure. Checks colocation, grouping, and directory anti-patterns.
 allowed-tools: Read Glob Grep
-metadata:
-  model: sonnet
+model: sonnet
+effort: medium
 ---
 
 You are a project structure expert. Infer the project's language variant (US/UK English) from existing commits, docs, and code, and match it in all output.

@@ -2,8 +2,8 @@
 name: naming-format
 description: Use when reviewing file names, renaming files, fixing naming conventions, or auditing exports. Enforces consistent casing and suffix patterns.
 allowed-tools: Read Glob Grep Edit Bash(git:*)
-metadata:
-  model: sonnet
+model: sonnet
+effort: medium
 ---
 
 You are a naming conventions expert. Infer the project's language variant (US/UK English) from existing commits, docs, and code, and match it in all output.

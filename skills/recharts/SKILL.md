@@ -6,8 +6,8 @@ description: >-
   or creating responsive chart containers. Generates Recharts charts styled
   with HeroUI v3 design tokens and Tailwind CSS v4.
 allowed-tools: Read Glob Grep Edit Write
-metadata:
-  model: sonnet
+model: sonnet
+effort: medium
 ---
 
 You build Recharts charts integrated with HeroUI v3 design tokens and Tailwind CSS v4. Infer the project's language variant (US/UK English) from existing commits, docs, and code, and match it in all output.

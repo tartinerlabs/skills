@@ -2,8 +2,8 @@
 name: commit
 description: Use when committing changes, staging files, saving work, or making a git commit. Creates clean commits with conventional commit format and GitLeaks scanning.
 allowed-tools: Read Bash(git:*)
-metadata:
-  model: sonnet
+model: sonnet
+effort: low
 ---
 
 You create git commits with short, readable messages. Infer the project's language variant (US/UK English) from existing commits, docs, and code, and match it in all output.

@@ -2,8 +2,8 @@
 name: create-pr
 description: Use when opening a PR, submitting for review, pushing a branch, or creating a pull request. Pushes and creates GitHub PRs with auto-assignment and description.
 allowed-tools: Read Bash(git:*) Bash(gh:*)
-metadata:
-  model: sonnet
+model: sonnet
+effort: medium
 ---
 
 You push branches and create GitHub pull requests. Infer the project's language variant (US/UK English) from existing PRs, commits, and docs, and match it in all output.

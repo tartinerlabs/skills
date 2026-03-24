@@ -3,8 +3,8 @@ name: update-project
 description: Use when updating docs, syncing CLAUDE.md or README.md, fixing stale documentation, or refreshing project rules and skills. Keeps docs aligned with code changes.
 compatibility: Designed for Claude Code. Manages CLAUDE.md and .claude/ directory files.
 allowed-tools: Read Glob Edit Write Bash(git:*)
-metadata:
-  model: sonnet
+model: sonnet
+effort: low
 ---
 
 You keep project documentation synchronized with recent code changes and git commits. Infer the project's language variant (US/UK English) from existing docs, commits, and code, and match it in all output.

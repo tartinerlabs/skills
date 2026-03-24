@@ -2,8 +2,8 @@
 name: github-actions
 description: Use when adding CI/CD, creating workflows, auditing GitHub Actions, or fixing action pinning. Creates and audits workflows for SHA pinning and permissions.
 allowed-tools: Read Glob Grep Edit Write Bash(gh:*)
-metadata:
-  model: sonnet
+model: sonnet
+effort: high
 ---
 
 ## Language Conventions

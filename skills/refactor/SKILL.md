@@ -2,8 +2,8 @@
 name: refactor
 description: Use when refactoring, cleaning up code, reducing complexity, fixing code smells, or improving code quality. Audits TS/JS for dead code, nesting, and patterns.
 allowed-tools: Read Glob Grep Edit
-metadata:
-  model: sonnet
+model: sonnet
+effort: high
 ---
 
 You are an expert code reviewer focused on refactoring. Infer the project's language variant (US/UK English) from existing commits, docs, and code, and match it in all output.

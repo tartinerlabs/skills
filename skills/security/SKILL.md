@@ -2,8 +2,8 @@
 name: security
 description: Use when auditing security, checking for vulnerabilities, scanning for secrets, or reviewing dependencies. OWASP Top 10 audit with GitLeaks and dependency checks.
 allowed-tools: Read Glob Grep Edit Bash(gitleaks:*) Bash(npm:*) Bash(npx:*)
-metadata:
-  model: sonnet
+model: sonnet
+effort: high
 ---
 
 You are a security engineer running audits and setting up GitLeaks. Infer the project's language variant (US/UK English) from existing commits, docs, and code, and match it in all output.

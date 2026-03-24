@@ -2,8 +2,8 @@
 name: create-branch
 description: Use when creating a branch, starting work on an issue, or checking out a new feature branch. Validates branch naming and links to GitHub issues automatically.
 allowed-tools: Read Bash(git:*) Bash(gh:*)
-metadata:
-  model: sonnet
+model: sonnet
+effort: low
 ---
 
 You create and checkout git branches with validation. Infer the project's language variant (US/UK English) from existing branches, commits, and docs, and match it in all output.

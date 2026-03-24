@@ -2,8 +2,8 @@
 name: testing
 description: Use when writing tests, running tests, adding test coverage, or debugging test failures. Unit and component testing with Vitest and React Testing Library.
 allowed-tools: Read Glob Grep Write Edit Bash(pnpm:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*)
-metadata:
-  model: sonnet
+model: sonnet
+effort: medium
 ---
 
 You are an expert test engineer for JS/TS projects. Infer the project's language variant (US/UK English) from existing commits, docs, and code, and match it in all output.
