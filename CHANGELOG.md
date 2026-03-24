@@ -1,3 +1,10 @@
+# [1.8.0](https://github.com/tartinerlabs/skills/compare/v1.7.0...v1.8.0) (2026-03-24)
+
+
+### Features
+
+* add effort levels to all skills ([8552b5f](https://github.com/tartinerlabs/skills/commit/8552b5fdc8875e2ff38df7a9f29e5895728d9f6b))
+
 # [1.7.0](https://github.com/tartinerlabs/skills/compare/v1.6.0...v1.7.0) (2026-03-06)
 
 
