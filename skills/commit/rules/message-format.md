@@ -55,7 +55,10 @@ Updated the authentication flow to handle edge cases with expired tokens and add
 
 ### Commit Body
 
-Add a body when the *why* isn't obvious from the diff:
+**Default to a single subject line.** Add a body only when all three are true:
+1. The change is non-trivial (not a dep bump, config tweak, rename, or small fix)
+2. The *why* cannot be inferred from the diff or issue reference
+3. Future contributors would genuinely need the context
 
 ```
 feat(payments): switch from Stripe v2 to v3 SDK
@@ -70,7 +73,6 @@ Closes #412
 - Separate subject from body with a blank line
 - Wrap body at 72 characters
 - Explain *why*, not *how* — the diff shows the how
-- One-liners are fine for obvious changes (dep bumps, config tweaks, small fixes)
 
 ### Guidelines
 
