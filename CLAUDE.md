@@ -57,6 +57,8 @@ The `Skills` CI workflow validates skills.sh and Context7 distribution on push t
 
 The `.claude-plugin/` directory contains the Claude Code plugin manifest (`plugin.json`) and marketplace metadata (`marketplace.json`). The plugin wraps all skills under the `tartinerlabs` namespace without affecting existing distribution channels.
 
+The `hooks/` directory contains a `UserPromptSubmit` hook (`prompt-skill-suggest.mjs`) that passively suggests relevant skills based on keyword matches in the user's prompt. The hook outputs suggestions via `additionalContext` — it does not auto-load skills.
+
 ## GitHub Actions
 
 - `actions/*` (GitHub-owned): use version tags (e.g., `@v4`)
