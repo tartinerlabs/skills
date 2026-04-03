@@ -1,0 +1,14 @@
+{
+  "name": "tartinerlabs",
+  "owner": {
+    "name": "Tartiner Labs",
+    "url": "https://github.com/tartinerlabs"
+  },
+  "plugins": [
+    {
+      "name": "tartinerlabs",
+      "source": "./",
+      "description": "Claude Code skills for git workflows, GitHub automation, security audits, code refactoring, and project tooling"
+    }
+  ]
+}

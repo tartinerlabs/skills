@@ -46,9 +46,16 @@ Skills with multiple checks use a `rules/` subdirectory alongside `SKILL.md`. Th
 
 ## Distribution
 
-Skills are distributed through two channels, validated by the `Skills` CI workflow on push to `main`:
-- **[skills.sh](https://skills.sh)** — `npx skills add tartinerlabs/skills`
+Skills are distributed through three channels:
+- **Claude Code plugin** — `claude plugin install tartinerlabs/skills` (plugin name: `tartinerlabs`, skills invoked as `/tartinerlabs:<skill-name>`)
+- **[skills.sh](https://skills.sh)** — `pnpm dlx skills add tartinerlabs/skills`
 - **[Context7](https://context7.com)** — `pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal`
+
+The `Skills` CI workflow validates skills.sh and Context7 distribution on push to `main`.
+
+## Plugin
+
+The `.claude-plugin/` directory contains the Claude Code plugin manifest (`plugin.json`) and marketplace metadata (`marketplace.json`). The plugin wraps all skills under the `tartinerlabs` namespace without affecting existing distribution channels.
 
 ## GitHub Actions
 

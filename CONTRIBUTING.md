@@ -88,6 +88,7 @@ This repository uses [conventional commits](https://www.conventionalcommits.org/
 - CI runs two checks on push to `main`:
   - **Skills** — validates distribution via [skills.sh](https://skills.sh) and [Context7](https://context7.com)
   - **Release** — automated via semantic-release (bumps version, updates changelog, creates GitHub release)
+- The repo is also distributed as a **Claude Code plugin** (see `.claude-plugin/`). The plugin manifest does not contain a version — versioning is handled by `package.json` via semantic-release
 
 ## Reporting Issues
 

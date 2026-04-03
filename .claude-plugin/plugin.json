@@ -1,0 +1,25 @@
+{
+  "name": "tartinerlabs",
+  "description": "Claude Code skills for git workflows, GitHub automation, security audits, code refactoring, and project tooling",
+  "author": {
+    "name": "Tartiner Labs",
+    "url": "https://github.com/tartinerlabs"
+  },
+  "homepage": "https://github.com/tartinerlabs/skills",
+  "repository": "https://github.com/tartinerlabs/skills",
+  "license": "MIT",
+  "keywords": [
+    "git",
+    "github",
+    "security",
+    "refactoring",
+    "testing",
+    "tailwind",
+    "recharts",
+    "commit",
+    "pull-request",
+    "branch",
+    "naming",
+    "project-structure"
+  ]
+}
