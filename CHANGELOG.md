@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/tartinerlabs/skills/compare/v1.9.0...v1.10.0) (2026-04-03)
+
+
+### Features
+
+* add passive skill suggestion hook ([f1952af](https://github.com/tartinerlabs/skills/commit/f1952af24e9d9fc81cea5895a3b44de3a672a154))
+
 # [1.9.0](https://github.com/tartinerlabs/skills/compare/v1.8.0...v1.9.0) (2026-04-03)
 
 
