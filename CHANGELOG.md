@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/tartinerlabs/skills/compare/v1.8.0...v1.9.0) (2026-04-03)
+
+
+### Features
+
+* add Claude Code plugin manifest ([3dbcf9c](https://github.com/tartinerlabs/skills/commit/3dbcf9c41ed1ff4a97430f883a292998c8c9ae28))
+
 # [1.8.0](https://github.com/tartinerlabs/skills/compare/v1.7.0...v1.8.0) (2026-03-24)
 
 
