@@ -9,6 +9,7 @@
   "repository": "https://github.com/tartinerlabs/skills",
   "license": "MIT",
   "agents": "./agents/",
+  "skills": "./skills/",
   "keywords": [
     "git",
     "github",
