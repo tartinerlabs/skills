@@ -1,3 +1,10 @@
+# [1.11.0](https://github.com/tartinerlabs/skills/compare/v1.10.0...v1.11.0) (2026-04-04)
+
+
+### Features
+
+* add deps skill and agent for supply chain hardening ([2abac2c](https://github.com/tartinerlabs/skills/commit/2abac2c9cc1355fb3b425842aeb70dfd446412bc))
+
 # [1.10.0](https://github.com/tartinerlabs/skills/compare/v1.9.0...v1.10.0) (2026-04-03)
 
 
