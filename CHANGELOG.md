@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/tartinerlabs/skills/compare/v1.11.0...v1.11.1) (2026-04-04)
+
+
+### Bug Fixes
+
+* add skills path to plugin manifest ([1b6f791](https://github.com/tartinerlabs/skills/commit/1b6f7912982d8dde0669c6e90cde045b62caaf40))
+
 # [1.11.0](https://github.com/tartinerlabs/skills/compare/v1.10.0...v1.11.0) (2026-04-04)
 
 
