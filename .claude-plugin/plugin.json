@@ -8,6 +8,7 @@
   "homepage": "https://github.com/tartinerlabs/skills",
   "repository": "https://github.com/tartinerlabs/skills",
   "license": "MIT",
+  "agents": "./agents/",
   "keywords": [
     "git",
     "github",
@@ -20,6 +21,8 @@
     "pull-request",
     "branch",
     "naming",
-    "project-structure"
+    "project-structure",
+    "deps",
+    "supply-chain"
   ]
 }

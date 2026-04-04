@@ -56,6 +56,11 @@ const SKILLS = [
     keywords: ["write test", "run test", "test coverage", "unit test", "component test", "vitest", "testing library", "test fail"],
     description: "unit and component testing with Vitest and React Testing Library",
   },
+  {
+    name: "deps",
+    keywords: ["supply chain", "npm harden", "dependency pin", ".npmrc", "renovate", "lockfile integrity", "audit workflow", "version pinning"],
+    description: "npm supply chain hardening with .npmrc, pinning, Renovate, and audit CI",
+  },
 ];
 
 const MIN_PROMPT_LENGTH = 15;
