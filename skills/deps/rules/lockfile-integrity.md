@@ -4,11 +4,11 @@ impact: MEDIUM
 tags: ci, github-actions, lockfile, tampering, supply-chain
 ---
 
-**Rule**: Add a CI workflow that flags PRs where the lockfile changed without a corresponding `package.json` change.
+**Rule**: Add a CI workflow that flags PRs where the lockfile changed without a corresponding `package.json` change, using the [`tartinerlabs/lockfile-integrity`](https://github.com/tartinerlabs/lockfile-integrity) action.
 
 ### Detection
 
-Skip if a `.github/workflows/*.yml` file already contains a step checking lockfile integrity or lockfile tampering.
+Skip if a `.github/workflows/*.yml` file already contains `tartinerlabs/lockfile-integrity` or a step checking lockfile integrity or lockfile tampering.
 
 ### Template
 
@@ -19,8 +19,11 @@ name: Lockfile Integrity
 
 on:
   pull_request:
-    branches:
-      - main
+    paths:
+      - pnpm-lock.yaml
+      - package-lock.json
+      - yarn.lock
+      - bun.lock
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -37,39 +40,25 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Check for lockfile tampering
-        run: |
-          BASE="${{ github.event.pull_request.base.sha }}"
-          HEAD="${{ github.event.pull_request.head.sha }}"
-
-          LOCKFILE_CHANGED=$(git diff --name-only "$BASE" "$HEAD" -- <lockfile>)
-          MANIFEST_CHANGED=$(git diff --name-only "$BASE" "$HEAD" -- '**/package.json')
-
-          if [ -n "$LOCKFILE_CHANGED" ] && [ -z "$MANIFEST_CHANGED" ]; then
-            echo "::error::Lockfile was modified without a corresponding package.json change. This may indicate lockfile tampering."
-            echo "If this is intentional (e.g., lockfile maintenance), add a package.json change or open a dedicated maintenance PR."
-            exit 1
-          fi
-
-          echo "Lockfile integrity check passed."
+      - uses: tartinerlabs/lockfile-integrity@e72908eb62a2ae8a85ae1b707a73c16469651d0f # v1.0.0
+        with:
+          base-ref: ${{ github.base_ref }}
 ```
 
 ### Adaptation
 
-- Replace `<lockfile>` with the detected lockfile name:
-  - pnpm: `pnpm-lock.yaml`
-  - npm: `package-lock.json`
-  - yarn: `yarn.lock`
-  - bun: `bun.lock`
+- Follow the project's CLAUDE.md action pinning rules:
+  - GitHub-owned actions (`actions/*`): use version tags
+  - Third-party actions: pin to full commit SHA with version comment
 - Match action versions used in the project's existing workflows
-- Replace `main` with the project's default branch if different
+- Replace `main` with the project's default branch if different (applies to `branches` trigger if used instead of `paths`)
+- To pin to a specific lockfile instead of auto-detecting: add `lockfile: pnpm-lock.yaml` (or the detected lockfile name)
+- To warn instead of failing (useful for gradual rollout): add `fail-on-warning: "false"`
 
 ### Known False Positives
 
-- **Lockfile maintenance PRs** from Renovate — these intentionally update transitive dependencies without changing `package.json`. The error message instructs the user to handle this explicitly.
+- **Lockfile maintenance PRs** from Renovate — these intentionally update transitive dependencies without changing `package.json`. The check will fail as designed; reviewers can approve manually.
 - **Deduplication runs** (`<pm> dedupe`) — these optimise the lockfile without manifest changes.
-
-For Renovate lockfile maintenance, this check will fail as designed. The Renovate PR description clearly labels these as maintenance — reviewers can approve manually.
 
 ### Why This Matters
 
