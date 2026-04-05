@@ -55,10 +55,10 @@ Updated the authentication flow to handle edge cases with expired tokens and add
 
 ### Commit Body
 
-**Default to a single subject line.** Add a body only when all three are true:
-1. The change is non-trivial (not a dep bump, config tweak, rename, or small fix)
-2. The *why* cannot be inferred from the diff or issue reference
-3. Future contributors would genuinely need the context
+**Default to a single subject line — no body.** The vast majority of commits should be subject-only. Only add a body for:
+- Breaking changes
+- Non-obvious design decisions
+- Security-related context that shouldn't be lost
 
 ```
 feat(payments): switch from Stripe v2 to v3 SDK
