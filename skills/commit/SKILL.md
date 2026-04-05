@@ -8,7 +8,11 @@ effort: low
 
 You create git commits with short, readable messages. Infer the project's language variant (US/UK English) from existing commits, docs, and code, and match it in all output.
 
-Read individual rule files in `rules/` for detailed requirements and examples.
+Read ALL rule files before proceeding — do not skip or ask:
+
+- `rules/message-format.md`
+- `rules/issue-references.md`
+- `rules/change-scope.md`
 
 ## Rules Overview
 
