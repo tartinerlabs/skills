@@ -1,3 +1,10 @@
+## [1.11.3](https://github.com/tartinerlabs/skills/compare/v1.11.2...v1.11.3) (2026-04-05)
+
+
+### Bug Fixes
+
+* reduce release quarantine from 7 to 3 days ([073190f](https://github.com/tartinerlabs/skills/commit/073190fcc78e81f7895a0c0ade976b0585523bd6))
+
 ## [1.11.2](https://github.com/tartinerlabs/skills/compare/v1.11.1...v1.11.2) (2026-04-04)
 
 
