@@ -1,3 +1,10 @@
+## [1.11.4](https://github.com/tartinerlabs/skills/compare/v1.11.3...v1.11.4) (2026-04-05)
+
+
+### Bug Fixes
+
+* upgrade pnpm/action-setup to v5 ([8a6012a](https://github.com/tartinerlabs/skills/commit/8a6012afa052155312289faff149b65b42a65afe))
+
 ## [1.11.3](https://github.com/tartinerlabs/skills/compare/v1.11.2...v1.11.3) (2026-04-05)
 
 
