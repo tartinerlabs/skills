@@ -32,11 +32,6 @@ const SKILLS = [
     description: "GitHub issues with templates and auto-assignment",
   },
   {
-    name: "recharts",
-    keywords: ["recharts", "data visuali", "bar chart", "line chart", "pie chart", "area chart"],
-    description: "Recharts charts styled for HeroUI",
-  },
-  {
     name: "refactor",
     keywords: ["refactor", "code smell", "dead code", "code quality", "clean up code", "reduce complexity"],
     description: "TS/JS audit for dead code, nesting, and patterns",

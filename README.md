@@ -38,7 +38,6 @@ Invoke any skill with `/skill-name` in Claude Code.
 | Skill | Description |
 |-------|-------------|
 | [deps](skills/deps) | Harden npm supply chain with .npmrc flags, version pinning, Renovate config, and CI audit workflows |
-| [recharts](skills/recharts) | Build Recharts charts styled with HeroUI v3 design tokens and Tailwind CSS v4 |
 | [refactor](skills/refactor) | Audit and refactor TypeScript/JavaScript code for dead code, deep nesting, type assertions, and design patterns |
 | [security](skills/security) | OWASP Top 10 security audit with GitLeaks secret detection and dependency vulnerability scanning |
 | [tailwind](skills/tailwind) | Audit and fix Tailwind CSS v4 anti-patterns for spacing, 8px grid, mobile-first, and GPU animations |
