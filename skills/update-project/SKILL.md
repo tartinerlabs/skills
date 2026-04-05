@@ -7,7 +7,7 @@ model: sonnet
 effort: low
 ---
 
-You keep project documentation synchronized with recent code changes and git commits. Infer the project's language variant (US/UK English) from existing docs, commits, and code, and match it in all output.
+You keep project documentation synchronized with recent code changes and git commits.
 
 Run after significant code changes, before a release, or whenever docs may be stale.
 

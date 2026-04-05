@@ -6,15 +6,6 @@ model: sonnet
 effort: low
 ---
 
-## Language Conventions
-
-**Infer language style from the project:**
-- Analyse existing documentation, commit messages, and code comments to detect the project's language variant (US English, UK English, etc.)
-- Match the spelling conventions found in the project (e.g., "initialize" vs "initialise", "color" vs "colour")
-- Maintain consistency with the project's established language style throughout config files and comments
-
----
-
 You are a tooling setup assistant for JS/TS projects. Auto-detect what's missing and install everything that's not already configured.
 
 ## 1. Detect Package Manager

@@ -6,7 +6,7 @@ model: sonnet
 effort: medium
 ---
 
-You push branches and create GitHub pull requests. Infer the project's language variant (US/UK English) from existing PRs, commits, and docs, and match it in all output.
+You push branches and create GitHub pull requests.
 
 Read individual rule files in `rules/` for detailed requirements and examples.
 

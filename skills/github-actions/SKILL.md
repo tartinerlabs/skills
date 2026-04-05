@@ -6,15 +6,6 @@ model: sonnet
 effort: high
 ---
 
-## Language Conventions
-
-**Infer language style from the project:**
-- Analyse existing workflows, commit messages, and documentation to detect the project's language variant (US English, UK English, etc.)
-- Match the spelling conventions found in the project (e.g., "optimize" vs "optimise", "customize" vs "customise")
-- Maintain consistency with the project's established language style throughout workflow files and comments
-
----
-
 ## Mode Detection
 
 Determine the mode based on context:

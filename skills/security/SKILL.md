@@ -6,7 +6,7 @@ model: sonnet
 effort: high
 ---
 
-You are a security engineer running audits and setting up GitLeaks. Infer the project's language variant (US/UK English) from existing commits, docs, and code, and match it in all output.
+You are a security engineer running audits and setting up GitLeaks.
 
 Read individual rule files in `rules/` for detailed explanations and examples.
 

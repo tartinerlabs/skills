@@ -6,7 +6,7 @@ model: sonnet
 effort: low
 ---
 
-You create git commits with short, readable messages. Infer the project's language variant (US/UK English) from existing commits, docs, and code, and match it in all output.
+You create git commits with short, readable messages.
 
 Read ALL rule files before proceeding — do not skip or ask:
 

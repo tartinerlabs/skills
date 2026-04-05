@@ -6,15 +6,6 @@ model: sonnet
 effort: medium
 ---
 
-## Language Conventions
-
-**Infer language style from the project:**
-- Analyse existing documentation, commit messages, and code comments to detect the project's language variant (US English, UK English, etc.)
-- Match the spelling conventions found in the project (e.g., "initialize" vs "initialise", "color" vs "colour")
-- Maintain consistency with the project's established language style throughout config files and comments
-
----
-
 You harden npm supply chain security for JS/TS projects. Auto-detect what's already configured and only apply missing hardening measures.
 
 ## 1. Detect Package Manager

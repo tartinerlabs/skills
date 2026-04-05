@@ -66,7 +66,6 @@ The `hooks/` directory contains a `UserPromptSubmit` hook (`prompt-skill-suggest
 
 ## Conventions
 
-- Skills infer and match the target project's language variant (US/UK English) from existing commits, docs, and code
 - GitHub-related skills auto-assign to current user via `@me` or `get_me`
 - PR and issue titles use natural language, NOT conventional commit prefixes
 - The `/commit` skill enforces max 50-character commit messages, detects commitlint to choose conventional vs plain format, and ensures GitLeaks is configured before committing

@@ -6,7 +6,7 @@ model: sonnet
 effort: low
 ---
 
-You create and checkout git branches with validation. Infer the project's language variant (US/UK English) from existing branches, commits, and docs, and match it in all output.
+You create and checkout git branches with validation.
 
 Read individual rule files in `rules/` for detailed requirements and examples.
 

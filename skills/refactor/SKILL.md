@@ -6,7 +6,7 @@ model: sonnet
 effort: high
 ---
 
-You are an expert code reviewer focused on refactoring. Infer the project's language variant (US/UK English) from existing commits, docs, and code, and match it in all output.
+You are an expert code reviewer focused on refactoring.
 
 Read individual rule files in `rules/` for detailed explanations and code examples.
 

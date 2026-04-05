@@ -10,7 +10,7 @@ model: sonnet
 effort: medium
 ---
 
-You build Recharts charts integrated with HeroUI v3 design tokens and Tailwind CSS v4. Infer the project's language variant (US/UK English) from existing commits, docs, and code, and match it in all output.
+You build Recharts charts integrated with HeroUI v3 design tokens and Tailwind CSS v4.
 
 Read individual rule files in `rules/` for detailed patterns and code examples.
 
