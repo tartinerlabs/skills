@@ -37,6 +37,8 @@ Invoke any skill with `/skill-name` in Claude Code.
 
 | Skill | Description |
 |-------|-------------|
+| [deps](skills/deps) | Harden npm supply chain with .npmrc flags, version pinning, Renovate config, and CI audit workflows |
+| [recharts](skills/recharts) | Build Recharts charts styled with HeroUI v3 design tokens and Tailwind CSS v4 |
 | [refactor](skills/refactor) | Audit and refactor TypeScript/JavaScript code for dead code, deep nesting, type assertions, and design patterns |
 | [security](skills/security) | OWASP Top 10 security audit with GitLeaks secret detection and dependency vulnerability scanning |
 | [tailwind](skills/tailwind) | Audit and fix Tailwind CSS v4 anti-patterns for spacing, 8px grid, mobile-first, and GPU animations |
@@ -51,7 +53,21 @@ Invoke any skill with `/skill-name` in Claude Code.
 | [naming-format](skills/naming-format) | Audit and fix filename and export naming conventions for consistency |
 | [update-project](skills/update-project) | Update and maintain CLAUDE.md, README.md, agents, skills, and rules to match current project state |
 
+## Agents
+
+Agents invoke skills autonomously with an isolated worktree. Invoke with `claude agent run <name>`.
+
+| Agent | Description |
+|-------|-------------|
+| [deps](agents/deps.md) | Autonomous supply chain hardening — runs the deps skill in an isolated worktree and outputs a structured summary |
+
 ## Installation
+
+### [Claude Code Plugin](https://docs.anthropic.com/en/docs/claude-code/plugins)
+
+```bash
+claude plugin install tartinerlabs/skills
+```
 
 ### [Skills](https://skills.sh)
 
@@ -97,6 +113,8 @@ skills/<name>/
   SKILL.md          # Skill definition with frontmatter
   rules/            # Independent, editable rule files
     some-rule.md    # Severity, examples, fix instructions
+
+agents/<name>.md    # Optional Claude Code agents that invoke skills autonomously
 ```
 
 This means you can:

@@ -68,7 +68,6 @@ For skills with multiple checks or guidelines, create a `rules/` subdirectory al
 
 ## Conventions
 
-- **Language variant** — Skills should infer and match the target project's language variant (US/UK English) from existing commits, docs, and code
 - **allowed-tools scoping** — Grant the minimum permissions a skill needs. Prefer specific commands (e.g. `Bash(git status)`) over blanket tool access
 - **Model preference** — Default to `sonnet` for cost efficiency. Only use a higher-tier model when the skill genuinely requires it
 - **GitHub skills** — Auto-assign to the current user via `@me` or `get_me`
