@@ -1,3 +1,10 @@
+# [1.12.0](https://github.com/tartinerlabs/skills/compare/v1.11.4...v1.12.0) (2026-04-06)
+
+
+### Features
+
+* invoke deps skill for supply chain hardening if installed ([17122e0](https://github.com/tartinerlabs/skills/commit/17122e0b2e797712ff73bf1db995af5e7e7dbab5))
+
 ## [1.11.4](https://github.com/tartinerlabs/skills/compare/v1.11.3...v1.11.4) (2026-04-05)
 
 
