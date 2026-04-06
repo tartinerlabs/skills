@@ -72,6 +72,10 @@ After all tools are installed, display a summary:
 - Make a test commit to verify git hooks
 ```
 
+## 5. Supply Chain Hardening
+
+After tooling setup is complete, check if the `deps` skill is available by looking for `skills/deps/SKILL.md` relative to this skill's directory. If it exists, run `/deps` to harden the npm supply chain. If it does not exist, skip this step silently.
+
 ## Assumptions
 
 - Project has a `package.json` (JS/TS project)
