@@ -59,6 +59,8 @@ jobs:
 
 - **Lockfile maintenance PRs** from Renovate — these intentionally update transitive dependencies without changing `package.json`. The check will fail as designed; reviewers can approve manually.
 - **Deduplication runs** (`<pm> dedupe`) — these optimise the lockfile without manifest changes.
+- **Monorepo workspace config changes** — pnpm uses a standalone `pnpm-workspace.yaml` (including catalogs in v9+) to define workspace membership. Editing this file changes the lockfile without any `package.json` dependency edit. Other package managers (npm, yarn, bun) define workspaces inside `package.json`, so they are already covered by the manifest check.
+- **Package manager config changes** — files like `.npmrc`, `.yarnrc.yml`, `bunfig.toml`, or `.yarnrc` control registry URLs, resolution strategies, and peer dependency behaviour. Changing these can produce a different lockfile from the same `package.json`.
 
 ### Why This Matters
 
