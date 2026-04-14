@@ -5,7 +5,7 @@
 [![Version](https://img.shields.io/github/v/release/tartinerlabs/skills?style=for-the-badge)](https://github.com/tartinerlabs/skills/releases)
 [![License](https://img.shields.io/github/license/tartinerlabs/skills?style=for-the-badge)](LICENSE)
 
-Powertools for [Claude Code](https://docs.anthropic.com/en/docs/claude-code): git workflows, GitHub automation, code quality, and project tooling. Each skill ships with modular, independently editable rules for deep, opinionated guidance.
+Powertools for Codex and [Claude Code](https://docs.anthropic.com/en/docs/claude-code): git workflows, GitHub automation, code quality, and project tooling. Each skill ships with modular, independently editable rules for deep, opinionated guidance.
 
 ## Why These Skills
 
@@ -16,7 +16,7 @@ Powertools for [Claude Code](https://docs.anthropic.com/en/docs/claude-code): gi
 
 ## Skills
 
-Invoke any skill with `/skill-name` in Claude Code.
+Invoke any skill with `/skill-name` in Claude Code. Codex support is provided through the repo-scoped plugin metadata in this repository.
 
 ### Git
 
@@ -68,6 +68,16 @@ Agents invoke skills autonomously with an isolated worktree. Invoke with `claude
 claude plugin install tartinerlabs/skills
 ```
 
+### Codex Plugin
+
+This repository includes repo-scoped Codex plugin metadata in `.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`.
+
+To use it in Codex:
+
+1. Open this repository in Codex
+2. Restart Codex if needed so it reloads the repo marketplace
+3. Open the plugin directory and install `tartinerlabs` from the repo marketplace
+
 ### [Skills](https://skills.sh)
 
 Install all skills:
@@ -102,6 +112,14 @@ pnpm dlx skills add tartinerlabs/skills/setup
 ```bash
 pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal
 ```
+
+## Plugin Metadata
+
+Plugin manifests are maintained manually on purpose.
+
+- Codex metadata lives in `.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`
+- Claude metadata lives in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
+- `package.json.version` is the only shared source of truth across plugin manifests
 
 ## Architecture
 

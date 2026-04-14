@@ -17,6 +17,8 @@ Thanks for your interest in contributing to `@tartinerlabs/skills`! This guide c
    pnpm install
    ```
 
+3. If you update plugin metadata, keep the manual Codex and Claude manifests in sync.
+
 ## Skill Structure
 
 Each skill lives in its own directory under `skills/`:
@@ -66,6 +68,22 @@ For skills with multiple checks or guidelines, create a `rules/` subdirectory al
 4. If the skill has multiple checks, add a `rules/` subdirectory with individual rule files
 5. Open a pull request
 
+## Plugin Metadata
+
+Plugin metadata is maintained manually by design.
+
+- Codex files:
+  - `.codex-plugin/plugin.json`
+  - `.agents/plugins/marketplace.json`
+- Claude files:
+  - `.claude-plugin/plugin.json`
+  - `.claude-plugin/marketplace.json`
+- `package.json.version` is the only canonical shared field
+
+When releasing a new version, update `package.json.version` first and keep `.codex-plugin/plugin.json.version` in sync.
+
+When plugin copy changes, update the Codex and Claude plugin files intentionally. There is no generator for these files.
+
 ## Conventions
 
 - **allowed-tools scoping** — Grant the minimum permissions a skill needs. Prefer specific commands (e.g. `Bash(git status)`) over blanket tool access
@@ -87,7 +105,7 @@ This repository uses [conventional commits](https://www.conventionalcommits.org/
 - CI runs two checks on push to `main`:
   - **Skills** — validates distribution via [skills.sh](https://skills.sh) and [Context7](https://context7.com)
   - **Release** — automated via semantic-release (bumps version, updates changelog, creates GitHub release)
-- The repo is also distributed as a **Claude Code plugin** (see `.claude-plugin/`). The plugin manifest does not contain a version — versioning is handled by `package.json` via semantic-release
+- The repo is also distributed as **Codex** and **Claude Code** plugins. Keep the plugin manifests aligned manually and treat `package.json.version` as the shared version source.
 
 ## Reporting Issues
 
