@@ -1,3 +1,10 @@
+# [1.13.0](https://github.com/tartinerlabs/skills/compare/v1.12.0...v1.13.0) (2026-04-14)
+
+
+### Features
+
+* add codex plugin metadata ([4d2ff4a](https://github.com/tartinerlabs/skills/commit/4d2ff4a10e0e5f23f4abede5301e4b0899913312))
+
 # [1.12.0](https://github.com/tartinerlabs/skills/compare/v1.11.4...v1.12.0) (2026-04-06)
 
 
