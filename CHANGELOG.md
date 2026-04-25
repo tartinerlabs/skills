@@ -1,3 +1,16 @@
+# [1.16.0](https://github.com/tartinerlabs/skills/compare/v1.15.1...v1.16.0) (2026-04-25)
+
+
+### Bug Fixes
+
+* avoid TOCTOU race in plugin loader ([c37167e](https://github.com/tartinerlabs/skills/commit/c37167e073d698f002df5ef81e535d5c2130c0af))
+* pre-commit fail-fast and CI workflow bugs ([018b7f8](https://github.com/tartinerlabs/skills/commit/018b7f82dd5b5a6008e89cf64ff85f749dd72b71))
+
+
+### Features
+
+* add OpenCode plugin ([f783da3](https://github.com/tartinerlabs/skills/commit/f783da3f2c386a595a8c9d9cb9869ee86a67a6a9))
+
 ## [1.15.1](https://github.com/tartinerlabs/skills/compare/v1.15.0...v1.15.1) (2026-04-25)
 
 
