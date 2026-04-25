@@ -16,7 +16,7 @@ Powertools for Codex and [Claude Code](https://docs.anthropic.com/en/docs/claude
 
 ## Skills
 
-Invoke any skill with `/skill-name` in Claude Code. Codex support is provided through the repo-scoped plugin metadata in this repository.
+In Claude Code, invoke plugin skills with `/tartiner:<skill-name>`. Codex support is provided through the repo-scoped plugin metadata in this repository.
 
 ### Git
 
@@ -67,6 +67,10 @@ Agents invoke skills autonomously with an isolated worktree. Invoke with `claude
 ```bash
 claude plugin install tartinerlabs/skills
 ```
+
+The preferred Claude Code plugin namespace is `tartiner`, so commands appear as `/tartiner:commit`, `/tartiner:deps`, and so on.
+
+The legacy `tartinerlabs` namespace remains available as a deprecated compatibility alias for existing installs. Prefer `tartiner` for new installs and documentation.
 
 ### Codex Plugin
 
@@ -131,7 +135,7 @@ Add to `opencode.json`:
 Plugin manifests are maintained manually on purpose.
 
 - Codex metadata lives in `.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`
-- Claude metadata lives in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
+- Claude metadata lives in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`; the preferred Claude plugin is `tartiner`, with `tartinerlabs` kept as a deprecated alias
 - `package.json.version` is the only shared source of truth across plugin manifests
 
 ## Architecture
