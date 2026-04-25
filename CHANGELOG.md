@@ -1,3 +1,10 @@
+## [1.17.1](https://github.com/tartinerlabs/skills/compare/v1.17.0...v1.17.1) (2026-04-25)
+
+
+### Reverts
+
+* Revert "feat: add tartiner Claude plugin namespace" ([e53af3b](https://github.com/tartinerlabs/skills/commit/e53af3be6e7fe522881273a43d676a8670f4df8c))
+
 # [1.17.0](https://github.com/tartinerlabs/skills/compare/v1.16.0...v1.17.0) (2026-04-25)
 
 
