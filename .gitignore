@@ -12,6 +12,9 @@ Thumbs.db
 # Node (if skills have scripts)
 node_modules/
 
+# Build output
+dist/
+
 # Beads / Dolt files (added by bd init)
 .dolt/
 *.db
