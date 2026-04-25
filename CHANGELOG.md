@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/tartinerlabs/skills/compare/v1.14.0...v1.15.0) (2026-04-25)
+
+
+### Features
+
+* add OpenCode skill discovery symlink ([3ce4537](https://github.com/tartinerlabs/skills/commit/3ce453723e08be0c8da1befc192cc21acc7a7435))
+
 # [1.14.0](https://github.com/tartinerlabs/skills/compare/v1.13.0...v1.14.0) (2026-04-25)
 
 
