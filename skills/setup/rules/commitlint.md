@@ -8,12 +8,38 @@ Conventional commit message enforcement via git hooks.
 <pm> add -D @commitlint/cli @commitlint/config-conventional
 ```
 
-## Config
+## Config Detection
 
-Create `commitlint.config.js`:
+Treat commitlint as already configured when any of these exist:
 
-```js
-export default { extends: ["@commitlint/config-conventional"] };
+- `commitlint.config.ts`
+- `commitlint.config.cts`
+- `commitlint.config.mts`
+- `commitlint.config.js`
+- `commitlint.config.cjs`
+- `commitlint.config.mjs`
+- `.commitlintrc.ts`
+- `.commitlintrc.cts`
+- `.commitlintrc.mts`
+- `.commitlintrc.js`
+- `.commitlintrc.cjs`
+- `.commitlintrc.mjs`
+- `.commitlintrc.json`
+- `.commitlintrc.yaml`
+- `.commitlintrc.yml`
+- `.commitlintrc`
+- `commitlint` key in `package.json` or `package.yaml`
+
+## Config Creation
+
+Create `commitlint.config.ts`:
+
+```ts
+import type { UserConfig } from "@commitlint/types";
+
+const config: UserConfig = { extends: ["@commitlint/config-conventional"] };
+
+export default config;
 ```
 
 ## Hook

@@ -75,3 +75,4 @@ The `hooks/` directory contains a `UserPromptSubmit` hook (`prompt-skill-suggest
 - PR and issue titles use natural language, NOT conventional commit prefixes
 - The `/commit` skill enforces max 50-character commit messages, detects commitlint to choose conventional vs plain format, and ensures GitLeaks is configured before committing
 - Skills can use both CLI tools (`gh`, `git`) and MCP tools (`mcp__github__*`) depending on the operation
+- **Commit type for skill content:** Skill markdown files (`skills/**/*.md`) are the product, not documentation. Changes to skill behaviour use `feat`/`fix`/`refactor` — never `docs`. Reserve `docs:` for `README.md`, `CLAUDE.md`, `CHANGELOG.md`, and similar meta-documentation

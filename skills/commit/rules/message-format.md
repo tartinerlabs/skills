@@ -10,7 +10,10 @@ tags: commit, message, format, 50-char
 
 Before formatting the message, check for commitlint in the project:
 
-1. Look for `commitlint.config.*` (`.ts`, `.js`, `.cjs`, `.mjs`) or `commitlint` key in `package.json`
+1. Look for any of the following (commitlint resolves via cosmiconfig):
+   - `commitlint.config.{ts,cts,mts,js,cjs,mjs}`
+   - `.commitlintrc` or `.commitlintrc.{ts,cts,mts,js,cjs,mjs,json,yaml,yml}`
+   - `commitlint` key in `package.json` or `package.yaml`
 2. If found, use **conventional commit** format: `type: description` (or `type(scope): description`)
 3. If not found, use **plain** format (no prefix)
 
