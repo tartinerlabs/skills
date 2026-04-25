@@ -115,6 +115,8 @@ pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal
 
 ### [OpenCode](https://opencode.ai)
 
+> **Note:** The OpenCode plugin is currently in Beta and might not work.
+
 Add to `opencode.json`:
 
 ```json
