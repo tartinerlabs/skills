@@ -1,4 +1,4 @@
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { type Plugin, tool } from "@opencode-ai/plugin";
@@ -14,13 +14,18 @@ const parseFrontmatter = (md: string): { description: string } => {
 
 const plugin: Plugin = async () => {
   const tools: Record<string, ReturnType<typeof tool>> = {};
-  for (const name of readdirSync(SKILLS_DIR)) {
-    const md = join(SKILLS_DIR, name, "SKILL.md");
-    if (!statSync(md, { throwIfNoEntry: false })?.isFile()) continue;
-    const content = readFileSync(md, "utf8");
+  for (const entry of readdirSync(SKILLS_DIR, { withFileTypes: true })) {
+    if (!entry.isDirectory()) continue;
+    const md = join(SKILLS_DIR, entry.name, "SKILL.md");
+    let content: string;
+    try {
+      content = readFileSync(md, "utf8");
+    } catch {
+      continue;
+    }
     const { description } = parseFrontmatter(content);
-    tools[`skills_${name.replace(/-/g, "_")}`] = tool({
-      description: description || name,
+    tools[`skills_${entry.name.replace(/-/g, "_")}`] = tool({
+      description: description || entry.name,
       args: {},
       execute: async () => content,
     });
