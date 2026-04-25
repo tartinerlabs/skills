@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/tartinerlabs/skills/compare/v1.16.0...v1.17.0) (2026-04-25)
+
+
+### Features
+
+* add tartiner Claude plugin namespace ([97bbe33](https://github.com/tartinerlabs/skills/commit/97bbe3384e6be0cf8489d3a926c1be2c0fc0c865))
+
 # [1.16.0](https://github.com/tartinerlabs/skills/compare/v1.15.1...v1.16.0) (2026-04-25)
 
 
