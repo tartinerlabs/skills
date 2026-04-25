@@ -8,37 +8,87 @@
 const SKILLS = [
   {
     name: "commit",
-    keywords: ["commit", "stage", "staged", "git add", "save changes", "git commit"],
+    keywords: [
+      "commit",
+      "stage",
+      "staged",
+      "git add",
+      "save changes",
+      "git commit",
+    ],
     description: "clean commits with conventional format and GitLeaks scanning",
   },
   {
     name: "create-branch",
-    keywords: ["create branch", "new branch", "checkout", "feature branch", "start work on"],
+    keywords: [
+      "create branch",
+      "new branch",
+      "checkout",
+      "feature branch",
+      "start work on",
+    ],
     description: "branch naming validation and GitHub issue linking",
   },
   {
     name: "create-pr",
-    keywords: ["pull request", "open pr", "create pr", "submit pr", "push branch", "merge request"],
+    keywords: [
+      "pull request",
+      "open pr",
+      "create pr",
+      "submit pr",
+      "push branch",
+      "merge request",
+    ],
     description: "GitHub PRs with auto-assignment and structured description",
   },
   {
     name: "github-actions",
-    keywords: ["github action", "workflow", "ci/cd", "ci cd", "action pinning", ".github/workflows"],
+    keywords: [
+      "github action",
+      "workflow",
+      "ci/cd",
+      "ci cd",
+      "action pinning",
+      ".github/workflows",
+    ],
     description: "workflow auditing for SHA pinning and permissions",
   },
   {
     name: "github-issues",
-    keywords: ["file issue", "create issue", "bug report", "feature request", "github issue", "open issue"],
+    keywords: [
+      "file issue",
+      "create issue",
+      "bug report",
+      "feature request",
+      "github issue",
+      "open issue",
+    ],
     description: "GitHub issues with templates and auto-assignment",
   },
   {
     name: "refactor",
-    keywords: ["refactor", "code smell", "dead code", "code quality", "clean up code", "reduce complexity"],
+    keywords: [
+      "refactor",
+      "code smell",
+      "dead code",
+      "code quality",
+      "clean up code",
+      "reduce complexity",
+    ],
     description: "TS/JS audit for dead code, nesting, and patterns",
   },
   {
     name: "security",
-    keywords: ["security audit", "vulnerability", "owasp", "secret scan", "gitleaks", "security review", "cve", "dependency audit"],
+    keywords: [
+      "security audit",
+      "vulnerability",
+      "owasp",
+      "secret scan",
+      "gitleaks",
+      "security review",
+      "cve",
+      "dependency audit",
+    ],
     description: "OWASP Top 10 audit with GitLeaks and dependency checks",
   },
   {
@@ -48,13 +98,33 @@ const SKILLS = [
   },
   {
     name: "testing",
-    keywords: ["write test", "run test", "test coverage", "unit test", "component test", "vitest", "testing library", "test fail"],
-    description: "unit and component testing with Vitest and React Testing Library",
+    keywords: [
+      "write test",
+      "run test",
+      "test coverage",
+      "unit test",
+      "component test",
+      "vitest",
+      "testing library",
+      "test fail",
+    ],
+    description:
+      "unit and component testing with Vitest and React Testing Library",
   },
   {
     name: "deps",
-    keywords: ["supply chain", "npm harden", "dependency pin", ".npmrc", "renovate", "lockfile integrity", "audit workflow", "version pinning"],
-    description: "npm supply chain hardening with .npmrc, pinning, Renovate, and audit CI",
+    keywords: [
+      "supply chain",
+      "npm harden",
+      "dependency pin",
+      ".npmrc",
+      "renovate",
+      "lockfile integrity",
+      "audit workflow",
+      "version pinning",
+    ],
+    description:
+      "npm supply chain hardening with .npmrc, pinning, Renovate, and audit CI",
   },
 ];
 
@@ -116,8 +186,7 @@ async function main() {
     .map((skill) => `  - /tartinerlabs:${skill.name} — ${skill.description}`)
     .join("\n");
 
-  const context =
-    `[tartinerlabs] Skills that may help:\n${suggestions}`;
+  const context = `[tartinerlabs] Skills that may help:\n${suggestions}`;
 
   const output = {
     hookSpecificOutput: {

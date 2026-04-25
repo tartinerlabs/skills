@@ -113,6 +113,17 @@ pnpm dlx skills add tartinerlabs/skills/setup
 pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal
 ```
 
+### [OpenCode](https://opencode.ai)
+
+Add to `opencode.json`:
+
+```json
+{
+  "$schema": "https://opencode.ai/config.json",
+  "plugin": ["@tartinerlabs/skills"]
+}
+```
+
 ## Plugin Metadata
 
 Plugin manifests are maintained manually on purpose.

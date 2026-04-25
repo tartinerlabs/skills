@@ -26,7 +26,7 @@ jobs:
           HEAD_SHA: ${{ github.event.pull_request.head.sha }}
         run: |
           LOCKFILE_CHANGED=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- pnpm-lock.yaml)
-          MANIFEST_CHANGED=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- '**/package.json')
+          MANIFEST_CHANGED=$(git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- 'package.json' '**/package.json')
 
           if [ -n "$LOCKFILE_CHANGED" ] && [ -z "$MANIFEST_CHANGED" ]; then
             echo "::error::Lockfile was modified without a corresponding package.json change. This may indicate lockfile tampering."
