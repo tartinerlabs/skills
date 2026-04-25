@@ -48,7 +48,7 @@ Skills with multiple checks use a `rules/` subdirectory alongside `SKILL.md`. Th
 
 Skills are distributed through four channels:
 - **Codex plugin** — repo-scoped metadata in `.codex-plugin/plugin.json` with marketplace metadata in `.agents/plugins/marketplace.json`
-- **Claude Code plugin** — `claude plugin install tartinerlabs/skills` (preferred plugin namespace: `tartiner`; deprecated compatibility alias: `tartinerlabs`)
+- **Claude Code plugin** — `claude plugin install tartinerlabs/skills`
 - **[skills.sh](https://skills.sh)** — `pnpm dlx skills add tartinerlabs/skills`
 - **[Context7](https://context7.com)** — `pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal`
 
@@ -60,7 +60,7 @@ Plugin metadata is maintained manually by design.
 
 - `.codex-plugin/plugin.json` is the Codex plugin manifest
 - `.agents/plugins/marketplace.json` is the repo-scoped Codex marketplace entry
-- `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` are the Claude plugin files; the marketplace intentionally exposes `tartiner` plus a deprecated `tartinerlabs` alias from the same skill source
+- `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` are the Claude plugin files
 - `package.json.version` is the only canonical shared field; keep it in sync with `.codex-plugin/plugin.json`
 
 When plugin copy changes, update both the Codex and Claude plugin manifests intentionally.

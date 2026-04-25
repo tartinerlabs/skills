@@ -4,23 +4,11 @@
     "name": "Tartiner Labs",
     "url": "https://github.com/tartinerlabs"
   },
-  "metadata": {
-    "description": "Tartiner Labs Claude Code skills for git workflows, GitHub automation, security audits, code refactoring, and project tooling"
-  },
   "plugins": [
-    {
-      "name": "tartiner",
-      "source": "./",
-      "description": "Claude Code skills for git workflows, GitHub automation, security audits, code refactoring, and project tooling",
-      "strict": false,
-      "skills": "./skills/"
-    },
     {
       "name": "tartinerlabs",
       "source": "./",
-      "description": "Deprecated: use tartiner instead. This legacy tartinerlabs alias remains temporarily for existing installs.",
-      "strict": false,
-      "skills": "./skills/"
+      "description": "Claude Code skills for git workflows, GitHub automation, security audits, code refactoring, and project tooling"
     }
   ]
 }

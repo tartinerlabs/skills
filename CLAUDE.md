@@ -46,8 +46,8 @@ Skills with multiple checks use a `rules/` subdirectory alongside `SKILL.md`. Th
 
 ## Distribution
 
-Skills are distributed through four channels:
-- **Claude Code plugin** — `claude plugin install tartinerlabs/skills` (preferred plugin namespace: `tartiner`, skills invoked as `/tartiner:<skill-name>`; deprecated compatibility alias: `tartinerlabs`)
+Skills are distributed through three channels:
+- **Claude Code plugin** — `claude plugin install tartinerlabs/skills` (plugin name: `tartinerlabs`, skills invoked as `/tartinerlabs:<skill-name>`)
 - **Codex plugin** — repo-scoped metadata in `.codex-plugin/plugin.json` with marketplace metadata in `.agents/plugins/marketplace.json`
 - **[skills.sh](https://skills.sh)** — `pnpm dlx skills add tartinerlabs/skills`
 - **[Context7](https://context7.com)** — `pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal`
@@ -56,7 +56,7 @@ The `Skills` CI workflow validates skills.sh and Context7 distribution on push t
 
 ## Plugin
 
-The `.claude-plugin/` directory contains the Claude Code plugin manifest (`plugin.json`) and marketplace metadata (`marketplace.json`). The preferred plugin wraps all skills under the `tartiner` namespace. The marketplace also exposes `tartinerlabs` as a deprecated compatibility alias for existing installs.
+The `.claude-plugin/` directory contains the Claude Code plugin manifest (`plugin.json`) and marketplace metadata (`marketplace.json`). The plugin wraps all skills under the `tartinerlabs` namespace without affecting existing distribution channels.
 
 Codex support is maintained manually via `.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`.
 
