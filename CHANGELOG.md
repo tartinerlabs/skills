@@ -1,3 +1,10 @@
+# [1.14.0](https://github.com/tartinerlabs/skills/compare/v1.13.0...v1.14.0) (2026-04-25)
+
+
+### Features
+
+* detect all commitlint config formats ([41be2d8](https://github.com/tartinerlabs/skills/commit/41be2d8b6fe472b2a8361dd8de80070b16de5245))
+
 # [1.13.0](https://github.com/tartinerlabs/skills/compare/v1.12.0...v1.13.0) (2026-04-14)
 
 
