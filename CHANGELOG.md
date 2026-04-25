@@ -1,3 +1,10 @@
+## [1.15.1](https://github.com/tartinerlabs/skills/compare/v1.15.0...v1.15.1) (2026-04-25)
+
+
+### Reverts
+
+* Revert "feat: add OpenCode skill discovery symlink" ([b054a36](https://github.com/tartinerlabs/skills/commit/b054a366b2f6d8d9fc4356bac08ac78d3f95ad11))
+
 # [1.15.0](https://github.com/tartinerlabs/skills/compare/v1.14.0...v1.15.0) (2026-04-25)
 
 
