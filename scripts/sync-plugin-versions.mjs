@@ -8,7 +8,7 @@ const MANIFESTS = [
 ];
 const VERSION_FIELD = /"version":\s*"[^"]+"/;
 
-export async function prepare({ nextRelease }, { cwd }) {
+export async function prepare(_pluginConfig, { nextRelease, cwd }) {
   const version = nextRelease?.version;
   if (!version) {
     throw new Error("Missing nextRelease.version");
