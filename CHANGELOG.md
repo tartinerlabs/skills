@@ -1,3 +1,15 @@
+# [1.18.0](https://github.com/tartinerlabs/skills/compare/v1.17.1...v1.18.0) (2026-04-26)
+
+
+### Bug Fixes
+
+* sync release manifest versions ([5933670](https://github.com/tartinerlabs/skills/commit/5933670ddb5b6c1e43f9c7f15bc0f4a9bd43eb3a))
+
+
+### Features
+
+* add Cursor plugin support ([635f450](https://github.com/tartinerlabs/skills/commit/635f450a4aa798e2789131bab762152376e65e77))
+
 ## [1.17.1](https://github.com/tartinerlabs/skills/compare/v1.17.0...v1.17.1) (2026-04-25)
 
 
