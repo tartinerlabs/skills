@@ -1,6 +1,7 @@
 {
   "name": "tartinerlabs",
-  "description": "Claude Code skills for git workflows, GitHub automation, security audits, code refactoring, and project tooling",
+  "version": "1.17.1",
+  "description": "Agent skills for git workflows, GitHub automation, security audits, code refactoring, and project tooling",
   "author": {
     "name": "Tartiner Labs",
     "url": "https://github.com/tartinerlabs"

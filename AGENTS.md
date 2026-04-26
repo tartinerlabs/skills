@@ -7,13 +7,13 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 **Repository:** https://github.com/tartinerlabs/skills
 **Package:** `@tartinerlabs/skills`
 
-A collection of agent skills distributed via Codex, Claude Code, and [skills.sh](https://skills.sh). Each skill is a markdown file with YAML frontmatter following the [Agent Skills spec](https://agentskills.io).
+A collection of agent skills distributed via Codex, Claude Code, Cursor, and [skills.sh](https://skills.sh). Each skill is a markdown file with YAML frontmatter following the [Agent Skills spec](https://agentskills.io).
 
 ## Development
 
 - **Package manager:** pnpm (v10.29.3)
 - **Git hooks:** Husky with commitlint (conventional commits via `@commitlint/config-conventional`) and GitLeaks secrets detection on pre-commit
-- **No build/test/lint steps** — this is a content-only repo of markdown skill files with manually maintained plugin metadata
+- **Checks:** `pnpm run build` and `pnpm run check`
 - **Releases:** Automated via semantic-release on push to `main` — bumps version in `package.json`, updates `CHANGELOG.md`, creates GitHub release
 
 ## Skill Format
@@ -46,9 +46,10 @@ Skills with multiple checks use a `rules/` subdirectory alongside `SKILL.md`. Th
 
 ## Distribution
 
-Skills are distributed through four channels:
+Skills are distributed through five channels:
 - **Codex plugin** — repo-scoped metadata in `.codex-plugin/plugin.json` with marketplace metadata in `.agents/plugins/marketplace.json`
 - **Claude Code plugin** — `claude plugin install tartinerlabs/skills`
+- **Cursor plugin** — Cursor metadata in `.cursor-plugin/plugin.json` with marketplace metadata in `.cursor-plugin/marketplace.json`
 - **[skills.sh](https://skills.sh)** — `pnpm dlx skills add tartinerlabs/skills`
 - **[Context7](https://context7.com)** — `pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal`
 
@@ -61,9 +62,10 @@ Plugin metadata is maintained manually by design.
 - `.codex-plugin/plugin.json` is the Codex plugin manifest
 - `.agents/plugins/marketplace.json` is the repo-scoped Codex marketplace entry
 - `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` are the Claude plugin files
-- `package.json.version` is the only canonical shared field; keep it in sync with `.codex-plugin/plugin.json`
+- `.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json` are the Cursor plugin files
+- `package.json.version` is the canonical shared field; semantic-release syncs manifest versions during release
 
-When plugin copy changes, update both the Codex and Claude plugin manifests intentionally.
+When plugin copy changes, update Codex, Claude, and Cursor plugin manifests intentionally. Do not expose Claude-only hooks in Cursor metadata unless they have been ported to Cursor's runtime.
 
 ## GitHub Actions
 

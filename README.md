@@ -5,7 +5,7 @@
 [![Version](https://img.shields.io/github/v/release/tartinerlabs/skills?style=for-the-badge)](https://github.com/tartinerlabs/skills/releases)
 [![License](https://img.shields.io/github/license/tartinerlabs/skills?style=for-the-badge)](LICENSE)
 
-Powertools for Codex and [Claude Code](https://docs.anthropic.com/en/docs/claude-code): git workflows, GitHub automation, code quality, and project tooling. Each skill ships with modular, independently editable rules for deep, opinionated guidance.
+Powertools for coding agents: git workflows, GitHub automation, code quality, and project tooling. Each skill ships with modular, independently editable rules for deep, opinionated guidance.
 
 ## Why These Skills
 
@@ -16,7 +16,7 @@ Powertools for Codex and [Claude Code](https://docs.anthropic.com/en/docs/claude
 
 ## Skills
 
-Invoke any skill with `/skill-name` in Claude Code. Codex support is provided through the repo-scoped plugin metadata in this repository.
+Install the plugin for your agent, then invoke skills through that agent's native skill or command interface.
 
 ### Git
 
@@ -78,6 +78,19 @@ To use it in Codex:
 2. Restart Codex if needed so it reloads the repo marketplace
 3. Open the plugin directory and install `tartinerlabs` from the repo marketplace
 
+### Cursor Plugin
+
+This repository includes Cursor plugin metadata in `.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`.
+
+For local development, install the plugin with Cursor's plugin flow or copy the repository into Cursor's local plugin directory:
+
+```bash
+mkdir -p ~/.cursor/plugins/local
+ln -s "$(pwd)" ~/.cursor/plugins/local/tartinerlabs
+```
+
+The shared `skills/` directory is exposed to Cursor directly. Claude-specific hooks are intentionally not declared in the Cursor manifest.
+
 ### [Skills](https://skills.sh)
 
 Install all skills:
@@ -132,7 +145,8 @@ Plugin manifests are maintained manually on purpose.
 
 - Codex metadata lives in `.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`
 - Claude metadata lives in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
-- `package.json.version` is the only shared source of truth across plugin manifests
+- Cursor metadata lives in `.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`
+- `package.json.version` is the shared source of truth across plugin manifests; semantic-release syncs manifest versions during release
 
 ## Architecture
 

@@ -17,7 +17,7 @@ Thanks for your interest in contributing to `@tartinerlabs/skills`! This guide c
    pnpm install
    ```
 
-3. If you update plugin metadata, keep the manual Codex and Claude manifests in sync.
+3. If you update plugin metadata, keep the manual Codex, Claude, and Cursor manifests in sync.
 
 ## Skill Structure
 
@@ -78,11 +78,14 @@ Plugin metadata is maintained manually by design.
 - Claude files:
   - `.claude-plugin/plugin.json`
   - `.claude-plugin/marketplace.json`
-- `package.json.version` is the only canonical shared field
+- Cursor files:
+  - `.cursor-plugin/plugin.json`
+  - `.cursor-plugin/marketplace.json`
+- `package.json.version` is the canonical shared field
 
-When releasing a new version, update `package.json.version` first and keep `.codex-plugin/plugin.json.version` in sync.
+When releasing a new version, update `package.json.version` first. The semantic-release prepare step syncs plugin manifest versions.
 
-When plugin copy changes, update the Codex and Claude plugin files intentionally. There is no generator for these files.
+When plugin copy changes, update the Codex, Claude, and Cursor plugin files intentionally. There is no generator for these files.
 
 ## Conventions
 
@@ -105,7 +108,7 @@ This repository uses [conventional commits](https://www.conventionalcommits.org/
 - CI runs two checks on push to `main`:
   - **Skills** — validates distribution via [skills.sh](https://skills.sh) and [Context7](https://context7.com)
   - **Release** — automated via semantic-release (bumps version, updates changelog, creates GitHub release)
-- The repo is also distributed as **Codex** and **Claude Code** plugins. Keep the plugin manifests aligned manually and treat `package.json.version` as the shared version source.
+- The repo is also distributed as **Codex**, **Claude Code**, and **Cursor** plugins. Keep the plugin manifests aligned manually and treat `package.json.version` as the shared version source.
 
 ## Reporting Issues
 

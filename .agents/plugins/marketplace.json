@@ -6,6 +6,7 @@
   "plugins": [
     {
       "name": "tartinerlabs",
+      "description": "Agent skills for git workflows, GitHub automation, security audits, code refactoring, and project tooling",
       "source": {
         "source": "local",
         "path": "./"

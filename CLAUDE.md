@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 **Repository:** https://github.com/tartinerlabs/skills
 **Package:** `@tartinerlabs/skills`
 
-A collection of agent skills distributed via Claude Code, Codex, and [skills.sh](https://skills.sh). Each skill is a markdown file with YAML frontmatter following the [Agent Skills spec](https://agentskills.io).
+A collection of agent skills distributed via Claude Code, Codex, Cursor, and [skills.sh](https://skills.sh). Each skill is a markdown file with YAML frontmatter following the [Agent Skills spec](https://agentskills.io).
 
 ## Development
 
@@ -46,9 +46,10 @@ Skills with multiple checks use a `rules/` subdirectory alongside `SKILL.md`. Th
 
 ## Distribution
 
-Skills are distributed through three channels:
+Skills are distributed through five channels:
 - **Claude Code plugin** — `claude plugin install tartinerlabs/skills` (plugin name: `tartinerlabs`, skills invoked as `/tartinerlabs:<skill-name>`)
 - **Codex plugin** — repo-scoped metadata in `.codex-plugin/plugin.json` with marketplace metadata in `.agents/plugins/marketplace.json`
+- **Cursor plugin** — Cursor metadata in `.cursor-plugin/plugin.json` with marketplace metadata in `.cursor-plugin/marketplace.json`
 - **[skills.sh](https://skills.sh)** — `pnpm dlx skills add tartinerlabs/skills`
 - **[Context7](https://context7.com)** — `pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal`
 
@@ -58,11 +59,13 @@ The `Skills` CI workflow validates skills.sh and Context7 distribution on push t
 
 The `.claude-plugin/` directory contains the Claude Code plugin manifest (`plugin.json`) and marketplace metadata (`marketplace.json`). The plugin wraps all skills under the `tartinerlabs` namespace without affecting existing distribution channels.
 
-Codex support is maintained manually via `.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`.
+Codex support is maintained manually via `.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`. Cursor support is maintained manually via `.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`.
 
-Plugin metadata is intentionally hand-maintained. `package.json.version` is the only shared source of truth between plugin manifests.
+Plugin metadata is intentionally hand-maintained. `package.json.version` is the shared source of truth between plugin manifests, and semantic-release syncs manifest versions during release.
 
 The `hooks/` directory contains a `UserPromptSubmit` hook (`prompt-skill-suggest.mjs`) that passively suggests relevant skills based on keyword matches in the user's prompt. The hook outputs suggestions via `additionalContext` — it does not auto-load skills.
+
+The Claude hook is not declared in the Cursor manifest because it depends on Claude-specific runtime variables.
 
 ## GitHub Actions
 

@@ -1,9 +1,5 @@
 {
   "name": "tartinerlabs",
-  "owner": {
-    "name": "Tartiner Labs",
-    "url": "https://github.com/tartinerlabs"
-  },
   "plugins": [
     {
       "name": "tartinerlabs",
