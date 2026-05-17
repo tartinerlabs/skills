@@ -1,3 +1,10 @@
+# [1.19.0](https://github.com/tartinerlabs/skills/compare/v1.18.0...v1.19.0) (2026-05-17)
+
+
+### Features
+
+* run audit skills in forked subagent context ([66af3e3](https://github.com/tartinerlabs/skills/commit/66af3e3a79cb53e77c0f588149193e165aa611ae))
+
 # [1.18.0](https://github.com/tartinerlabs/skills/compare/v1.17.1...v1.18.0) (2026-04-26)
 
 
