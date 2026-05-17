@@ -11,7 +11,7 @@ A collection of agent skills distributed via Claude Code, Codex, Cursor, and [sk
 
 ## Development
 
-- **Package manager:** pnpm (v10.16.1)
+- **Package manager:** pnpm (v11+) — use `pnx` instead of `npx` or `pnpm dlx`
 - **Git hooks:** Husky with commitlint (conventional commits via `@commitlint/config-conventional`) and GitLeaks secrets detection on pre-commit
 - **No build/test/lint steps** — this is a content-only repo of markdown skill files
 - **Releases:** Automated via semantic-release on push to `main` — bumps version in `package.json`, updates `CHANGELOG.md`, creates GitHub release
@@ -50,8 +50,8 @@ Skills are distributed through five channels:
 - **Claude Code plugin** — `claude plugin install tartinerlabs/skills` (plugin name: `tartinerlabs`, skills invoked as `/tartinerlabs:<skill-name>`)
 - **Codex plugin** — repo-scoped metadata in `.codex-plugin/plugin.json` with marketplace metadata in `.agents/plugins/marketplace.json`
 - **Cursor plugin** — Cursor metadata in `.cursor-plugin/plugin.json` with marketplace metadata in `.cursor-plugin/marketplace.json`
-- **[skills.sh](https://skills.sh)** — `pnpm dlx skills add tartinerlabs/skills`
-- **[Context7](https://context7.com)** — `pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal`
+- **[skills.sh](https://skills.sh)** — `pnx skills add tartinerlabs/skills`
+- **[Context7](https://context7.com)** — `pnx ctx7 skills install /tartinerlabs/skills --all --universal`
 
 The `Skills` CI workflow validates skills.sh and Context7 distribution on push to `main`.
 
