@@ -4,6 +4,8 @@ description: Use when auditing security, checking for vulnerabilities, scanning 
 allowed-tools: Read Glob Grep Edit Bash(gitleaks:*) Bash(npm:*) Bash(npx:*)
 model: sonnet
 effort: high
+context: fork
+agent: general-purpose
 ---
 
 You are a security engineer running audits and setting up GitLeaks.
