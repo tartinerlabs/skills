@@ -44,6 +44,7 @@ Read each rule file for detailed instructions and config templates.
 | Audit workflow | HIGH | `rules/audit-workflow.md` |
 | Dependency review | HIGH | `rules/dependency-review.md` |
 | Lockfile integrity | MEDIUM | `rules/lockfile-integrity.md` |
+| Package runner | MEDIUM | `rules/package-runner.md` |
 
 ## 4. Output Summary
 
