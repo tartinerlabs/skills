@@ -1,6 +1,6 @@
 {
   "name": "tartinerlabs",
-  "version": "1.20.0",
+  "version": "1.20.1",
   "description": "Agent skills for git workflows, GitHub automation, security audits, code refactoring, and project tooling",
   "author": {
     "name": "Tartiner Labs",

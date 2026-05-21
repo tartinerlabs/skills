@@ -1,3 +1,10 @@
+## [1.20.1](https://github.com/tartinerlabs/skills/compare/v1.20.0...v1.20.1) (2026-05-21)
+
+
+### Bug Fixes
+
+* add skills path, displayName, and schema to Claude plugin manifest ([d5d9786](https://github.com/tartinerlabs/skills/commit/d5d97865f431b17e33d36b611d1dc850f6a80ad8))
+
 # [1.20.0](https://github.com/tartinerlabs/skills/compare/v1.19.0...v1.20.0) (2026-05-21)
 
 
