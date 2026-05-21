@@ -1,3 +1,10 @@
+# [1.20.0](https://github.com/tartinerlabs/skills/compare/v1.19.0...v1.20.0) (2026-05-21)
+
+
+### Features
+
+* add package runner rule to deps skill ([83a8df6](https://github.com/tartinerlabs/skills/commit/83a8df66e4fefc2de688724c42ff83f4f1814a63))
+
 # [1.19.0](https://github.com/tartinerlabs/skills/compare/v1.18.0...v1.19.0) (2026-05-17)
 
 
