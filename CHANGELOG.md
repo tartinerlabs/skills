@@ -1,3 +1,10 @@
+# [1.21.0](https://github.com/tartinerlabs/skills/compare/v1.20.1...v1.21.0) (2026-05-23)
+
+
+### Features
+
+* complete opencode plugin distribution setup ([7c730a6](https://github.com/tartinerlabs/skills/commit/7c730a619cb97197284339f88c114001209a3d0f))
+
 ## [1.20.1](https://github.com/tartinerlabs/skills/compare/v1.20.0...v1.20.1) (2026-05-21)
 
 
