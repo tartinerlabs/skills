@@ -119,12 +119,10 @@ const SKILLS = [
       "dependency pin",
       ".npmrc",
       "renovate",
-      "lockfile integrity",
-      "audit workflow",
       "version pinning",
     ],
     description:
-      "npm supply chain hardening with .npmrc, pinning, Renovate, and audit CI",
+      "npm supply chain hardening with .npmrc, pinning, and Renovate",
   },
 ];
 
