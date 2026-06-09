@@ -1,3 +1,10 @@
+## [1.22.1](https://github.com/tartinerlabs/skills/compare/v1.22.0...v1.22.1) (2026-06-09)
+
+
+### Bug Fixes
+
+* add explicit width/height to plugin icon SVG ([0677879](https://github.com/tartinerlabs/skills/commit/0677879664cc3a3c8b7cede0e343cf333598eddd)), closes [#14](https://github.com/tartinerlabs/skills/issues/14)
+
 # [1.22.0](https://github.com/tartinerlabs/skills/compare/v1.21.0...v1.22.0) (2026-06-09)
 
 
