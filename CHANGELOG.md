@@ -1,3 +1,10 @@
+# [1.22.0](https://github.com/tartinerlabs/skills/compare/v1.21.0...v1.22.0) (2026-06-09)
+
+
+### Features
+
+* add Codex marketplace plugin icon ([f258fe9](https://github.com/tartinerlabs/skills/commit/f258fe9a302231ad7fc454c7d111b9e57636ad1d)), closes [#14](https://github.com/tartinerlabs/skills/issues/14)
+
 # [1.21.0](https://github.com/tartinerlabs/skills/compare/v1.20.1...v1.21.0) (2026-05-23)
 
 
