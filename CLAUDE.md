@@ -63,10 +63,6 @@ Codex support is maintained manually via `.codex-plugin/plugin.json` and `.agent
 
 Plugin metadata is intentionally hand-maintained. `package.json.version` is the shared source of truth between plugin manifests, and semantic-release syncs manifest versions during release.
 
-The `hooks/` directory contains a `UserPromptSubmit` hook (`prompt-skill-suggest.mjs`) that passively suggests relevant skills based on keyword matches in the user's prompt. The hook outputs suggestions via `additionalContext` — it does not auto-load skills.
-
-The Claude hook is not declared in the Cursor manifest because it depends on Claude-specific runtime variables.
-
 ## GitHub Actions
 
 - `actions/*` (GitHub-owned): use version tags (e.g., `@v4`)
