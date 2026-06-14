@@ -65,8 +65,7 @@ Plugin metadata is intentionally hand-maintained. `package.json.version` is the 
 
 ## GitHub Actions
 
-- `actions/*` (GitHub-owned): use version tags (e.g., `@v4`)
-- Third-party actions: pin to full commit hash with version comment (e.g., `@9fd676a...  # v4.2.0`)
+- All actions: pin to full commit hash with version comment (e.g., `@9fd676a...  # v4.2.0`), including GitHub-owned `actions/*`
 
 ## Conventions
 
