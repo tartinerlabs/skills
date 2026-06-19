@@ -1,3 +1,10 @@
+## [1.22.2](https://github.com/tartinerlabs/skills/compare/v1.22.1...v1.22.2) (2026-06-19)
+
+
+### Bug Fixes
+
+* make update-project agent-agnostic, fix opencode plugins dir ([6cbb08c](https://github.com/tartinerlabs/skills/commit/6cbb08cb3c022625d1a41ed21bd19c4a24cc1a61))
+
 ## [1.22.1](https://github.com/tartinerlabs/skills/compare/v1.22.0...v1.22.1) (2026-06-09)
 
 
