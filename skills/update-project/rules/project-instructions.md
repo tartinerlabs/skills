@@ -1,10 +1,16 @@
 ---
-title: CLAUDE.md Maintenance
+title: Project Instructions Maintenance
 impact: HIGH
-tags: claude-md, documentation, instructions
+tags: project-instructions, claude-md, agents-md, documentation
 ---
 
-**Rule**: Keep Claude's project instructions current and accurate by scanning the project and updating relevant sections.
+**Rule**: Keep the project's agent instruction file current and accurate by scanning the project and updating relevant sections.
+
+### Which File
+
+- **`CLAUDE.md`** — Claude Code's project instructions
+- **`AGENTS.md`** — the cross-agent standard read by Codex, OpenCode, and others; OpenCode falls back to `CLAUDE.md` when `AGENTS.md` is absent
+- Maintain whichever file(s) the project already uses. If both exist, keep shared guidance consistent between them and avoid duplicating divergent instructions.
 
 ### What to Scan
 
