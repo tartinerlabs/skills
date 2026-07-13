@@ -11,7 +11,7 @@
   "keywords": ["xcode", "swift", "swiftui", "uikit", "testing", "security"],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Xcode Skills",
+    "displayName": "xcode-skills",
     "shortDescription": "Apple-authored skills exported unchanged from Xcode 27.",
     "longDescription": "Use Apple's exported Xcode 27 guidance for SwiftUI, UIKit modernization, Swift Testing, device verification, C bounds safety, and Xcode security settings.",
     "developerName": "Tartiner Labs",

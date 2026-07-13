@@ -1,7 +1,7 @@
 {
   "name": "tartinerlabs",
   "interface": {
-    "displayName": "Tartiner Labs"
+    "displayName": "tartiner-labs"
   },
   "plugins": [
     {

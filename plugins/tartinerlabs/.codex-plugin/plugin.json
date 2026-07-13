@@ -25,7 +25,7 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "Tartiner Labs",
+    "displayName": "tartiner-labs",
     "shortDescription": "Git, GitHub, security, refactor, and project tooling skills.",
     "developerName": "Tartiner Labs",
     "category": "Coding",
