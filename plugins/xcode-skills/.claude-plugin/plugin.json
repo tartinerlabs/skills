@@ -2,7 +2,7 @@
   "$schema": "https://cdn.jsdelivr.net/npm/@anthropic-ai/claude-code@latest/resources/plugin.schema.json",
   "name": "xcode-skills",
   "displayName": "xcode-skills",
-  "version": "1.23.1",
+  "version": "1.23.2",
   "description": "Apple-authored agent skills exported unchanged from Xcode 27 for Swift and Apple platform development",
   "author": {
     "name": "Tartiner Labs",

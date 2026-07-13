@@ -1,3 +1,10 @@
+## [1.23.2](https://github.com/tartinerlabs/skills/compare/v1.23.1...v1.23.2) (2026-07-13)
+
+
+### Bug Fixes
+
+* kebab-case plugin displayNames ([e341a4e](https://github.com/tartinerlabs/skills/commit/e341a4e0d9cc545cd76e348fbb00402323f7e166))
+
 ## [1.23.1](https://github.com/tartinerlabs/skills/compare/v1.23.0...v1.23.1) (2026-07-13)
 
 
