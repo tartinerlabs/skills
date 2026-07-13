@@ -52,6 +52,37 @@ Install the plugin for your agent, then invoke skills through that agent's nativ
 | [naming-format](skills/naming-format) | Audit and fix filename and export naming conventions for consistency |
 | [update-project](skills/update-project) | Update and maintain CLAUDE.md, AGENTS.md, README.md, agents, skills, and rules to match current project state |
 
+## Xcode Skills
+
+The separate [`xcode-skills`](xcode-skills) collection contains seven skills authored by Apple and exported with `xcrun agent skills export` from Xcode 27.0 (build `27A5218g`). The exported directory is published unchanged; Tartiner Labs maintains only the plugin wrapper and marketplace metadata outside it.
+
+| Skill | Description |
+|-------|-------------|
+| [adopt-c-bounds-safety](xcode-skills/adopt-c-bounds-safety) | Adopt and debug the C bounds-safety language extension |
+| [audit-xcode-security-settings](xcode-skills/audit-xcode-security-settings) | Audit and enable security-oriented Xcode build settings |
+| [device-interaction](xcode-skills/device-interaction) | Verify apps on a device or simulator through screenshots and UI interaction |
+| [modernize-tests](xcode-skills/modernize-tests) | Modernize XCTest and Swift Testing suites |
+| [swiftui-specialist](xcode-skills/swiftui-specialist) | Apply Apple's SwiftUI best practices |
+| [swiftui-whats-new-27](xcode-skills/swiftui-whats-new-27) | Use SwiftUI APIs and migration guidance for SDK 27 |
+| [uikit-app-modernization](xcode-skills/uikit-app-modernization) | Modernize UIKit apps for multi-window environments |
+
+Install the collection through its native plugin identity:
+
+```bash
+# Codex
+codex plugin add xcode-skills@tartinerlabs
+
+# Claude Code
+claude plugin install xcode-skills@tartinerlabs
+
+# Direct installer
+pnpm dlx skills add https://github.com/tartinerlabs/skills/tree/main/xcode-skills
+```
+
+In Codex and Claude Code, skills use the `xcode-skills:<skill-name>` namespace. In Cursor, install `xcode-skills` from the `tartinerlabs` marketplace.
+
+The guidance can be read by any compatible agent, but some workflows expect Xcode's agent runtime, including Xcode project tools, device interaction, or subagent support. Those workflows require Xcode or equivalent runtime capabilities.
+
 ## Agents
 
 Agents invoke skills autonomously with an isolated worktree. Invoke with `claude agent run <name>`.
@@ -146,6 +177,7 @@ Plugin manifests are maintained manually on purpose.
 - Codex metadata lives in `.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`
 - Claude metadata lives in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
 - Cursor metadata lives in `.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`
+- The separate Xcode collection is wrapped by `plugins/xcode-skills/`, which links to the untouched `xcode-skills/` export
 - `package.json.version` is the shared source of truth across plugin manifests; semantic-release syncs manifest versions during release
 
 ## Architecture
@@ -172,4 +204,4 @@ Each skill is a directory with a `SKILL.md` file following the [Agent Skills spe
 
 ## License
 
-MIT
+Tartiner Labs-authored content is licensed under the [MIT License](LICENSE). The `xcode-skills/` collection contains Apple-authored material exported from Xcode and is published with attribution without modification.

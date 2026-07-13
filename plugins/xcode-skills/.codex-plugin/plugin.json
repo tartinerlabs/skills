@@ -1,0 +1,27 @@
+{
+  "name": "xcode-skills",
+  "version": "1.22.2",
+  "description": "Apple-authored agent skills exported unchanged from Xcode 27 for Swift and Apple platform development",
+  "author": {
+    "name": "Tartiner Labs",
+    "url": "https://github.com/tartinerlabs"
+  },
+  "homepage": "https://github.com/tartinerlabs/skills/tree/main/xcode-skills",
+  "repository": "https://github.com/tartinerlabs/skills",
+  "keywords": ["xcode", "swift", "swiftui", "uikit", "testing", "security"],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Xcode Skills",
+    "shortDescription": "Apple-authored skills exported unchanged from Xcode 27.",
+    "longDescription": "Use Apple's exported Xcode 27 guidance for SwiftUI, UIKit modernization, Swift Testing, device verification, C bounds safety, and Xcode security settings.",
+    "developerName": "Tartiner Labs",
+    "category": "Coding",
+    "capabilities": ["Interactive", "Write"],
+    "websiteURL": "https://github.com/tartinerlabs/skills/tree/main/xcode-skills",
+    "defaultPrompt": [
+      "Review this SwiftUI code using Apple's Xcode 27 guidance.",
+      "Modernize this UIKit app for current multi-window APIs.",
+      "Audit this Xcode project's security build settings."
+    ]
+  }
+}

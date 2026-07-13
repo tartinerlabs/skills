@@ -5,6 +5,11 @@
       "name": "tartinerlabs",
       "source": "./",
       "description": "Agent skills for git workflows, GitHub automation, security audits, code refactoring, and project tooling"
+    },
+    {
+      "name": "xcode-skills",
+      "source": "./plugins/xcode-skills",
+      "description": "Apple-authored agent skills exported unchanged from Xcode 27 for Swift and Apple platform development"
     }
   ]
 }

@@ -63,6 +63,12 @@ Codex support is maintained manually via `.codex-plugin/plugin.json` and `.agent
 
 Plugin metadata is intentionally hand-maintained. `package.json.version` is the shared source of truth between plugin manifests, and semantic-release syncs manifest versions during release.
 
+## Xcode Skill Export
+
+The root-level `xcode-skills/` directory is generated exclusively by `xcrun agent skills export`. After an export, do not edit, add, remove, rename, move, reformat, or manually clean up anything inside that directory. Future exports must write directly to the same `xcode-skills/` path and remain untouched afterward.
+
+All Codex, Claude, and Cursor metadata for this collection belongs in `plugins/xcode-skills/`. Its `skills` symlink points to `../../xcode-skills`; wrapper metadata and documentation may change, but the exported directory may not.
+
 ## GitHub Actions
 
 - All actions: pin to full commit hash with version comment (e.g., `@9fd676a...  # v4.2.0`), including GitHub-owned `actions/*`

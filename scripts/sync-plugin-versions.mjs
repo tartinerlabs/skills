@@ -5,6 +5,9 @@ const MANIFESTS = [
   ".codex-plugin/plugin.json",
   ".claude-plugin/plugin.json",
   ".cursor-plugin/plugin.json",
+  "plugins/xcode-skills/.codex-plugin/plugin.json",
+  "plugins/xcode-skills/.claude-plugin/plugin.json",
+  "plugins/xcode-skills/.cursor-plugin/plugin.json",
 ];
 const VERSION_FIELD = /"version":\s*"[^"]+"/;
 

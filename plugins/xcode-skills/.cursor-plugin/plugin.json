@@ -1,0 +1,16 @@
+{
+  "name": "xcode-skills",
+  "displayName": "Xcode Skills",
+  "version": "1.22.2",
+  "description": "Apple-authored agent skills exported unchanged from Xcode 27 for Swift and Apple platform development",
+  "author": {
+    "name": "Tartiner Labs",
+    "email": "ruchern.chong@tartinerlabs.com"
+  },
+  "homepage": "https://github.com/tartinerlabs/skills/tree/main/xcode-skills",
+  "repository": "https://github.com/tartinerlabs/skills",
+  "keywords": ["xcode", "swift", "swiftui", "uikit", "testing", "security"],
+  "category": "Coding",
+  "tags": ["xcode", "swift", "swiftui", "uikit"],
+  "skills": "./skills/"
+}

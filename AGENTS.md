@@ -67,6 +67,12 @@ Plugin metadata is maintained manually by design.
 
 When plugin copy changes, update Codex, Claude, and Cursor plugin manifests intentionally. Do not expose Claude-only hooks in Cursor metadata unless they have been ported to Cursor's runtime.
 
+## Xcode Skill Export
+
+The root-level `xcode-skills/` directory is generated exclusively by `xcrun agent skills export`. After an export, do not edit, add, remove, rename, move, reformat, or manually clean up anything inside that directory. Future exports must write directly to the same `xcode-skills/` path and remain untouched afterward.
+
+All Codex, Claude, and Cursor metadata for this collection belongs in `plugins/xcode-skills/`. Its `skills` symlink points to `../../xcode-skills`; wrapper metadata and documentation may change, but the exported directory may not.
+
 ## GitHub Actions
 
 - `actions/*` (GitHub-owned): use version tags (e.g., `@v4`)
