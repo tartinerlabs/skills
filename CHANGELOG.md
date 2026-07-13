@@ -1,3 +1,10 @@
+# [1.23.0](https://github.com/tartinerlabs/skills/compare/v1.22.2...v1.23.0) (2026-07-13)
+
+
+### Features
+
+* add Xcode skills export metadata ([f3b7201](https://github.com/tartinerlabs/skills/commit/f3b720146fcf6493e02a0b25d3df7b89808ff1a6))
+
 ## [1.22.2](https://github.com/tartinerlabs/skills/compare/v1.22.1...v1.22.2) (2026-06-19)
 
 
