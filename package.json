@@ -28,6 +28,7 @@
     "build": "tsc",
     "check": "biome check",
     "format": "biome check --write",
+    "sync:xcode-codex": "node scripts/sync-xcode-codex-skills.mjs",
     "prepare": "husky",
     "prepublishOnly": "pnpm run build"
   },

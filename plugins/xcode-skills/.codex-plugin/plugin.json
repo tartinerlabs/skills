@@ -9,7 +9,7 @@
   "homepage": "https://github.com/tartinerlabs/skills/tree/main/xcode-skills",
   "repository": "https://github.com/tartinerlabs/skills",
   "keywords": ["xcode", "swift", "swiftui", "uikit", "testing", "security"],
-  "skills": "./skills/",
+  "skills": "./skills-codex/",
   "interface": {
     "displayName": "xcode-skills",
     "shortDescription": "Apple-authored skills exported unchanged from Xcode 27.",

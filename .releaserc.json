@@ -7,6 +7,7 @@
     "@semantic-release/npm",
     "@semantic-release/github",
     "./scripts/sync-plugin-versions.mjs",
+    "./scripts/sync-xcode-codex-skills.mjs",
     [
       "@semantic-release/git",
       {
@@ -18,7 +19,8 @@
           "plugins/tartinerlabs/.cursor-plugin/plugin.json",
           "plugins/xcode-skills/.codex-plugin/plugin.json",
           "plugins/xcode-skills/.claude-plugin/plugin.json",
-          "plugins/xcode-skills/.cursor-plugin/plugin.json"
+          "plugins/xcode-skills/.cursor-plugin/plugin.json",
+          "plugins/xcode-skills/skills-codex/**"
         ],
         "message": "chore(release): ${nextRelease.version}"
       }
