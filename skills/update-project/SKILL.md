@@ -2,7 +2,7 @@
 name: update-project
 description: Use when updating docs, syncing CLAUDE.md, AGENTS.md, or README.md, fixing stale documentation, or refreshing project rules and skills. Keeps docs aligned with code changes.
 allowed-tools: Read Glob Edit Write Bash(git:*)
-model: sonnet
+model: haiku
 effort: low
 ---
 

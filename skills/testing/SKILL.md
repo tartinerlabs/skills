@@ -2,7 +2,7 @@
 name: testing
 description: Use when writing tests, running tests, adding test coverage, or debugging test failures. Unit and component testing with Vitest and React Testing Library.
 allowed-tools: Read Glob Grep Write Edit Bash(pnpm:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*)
-model: sonnet
+model: haiku
 effort: medium
 ---
 

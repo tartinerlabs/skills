@@ -37,7 +37,7 @@ effort: medium
 - `name` — Skill identifier, invoked as `/skill-name` in Claude Code
 - `description` — Purpose and trigger conditions
 - `allowed-tools` — Scoped tool permissions (e.g., `Bash(git status)` for specific commands, `Read` for full tool access)
-- `model` — Model preference (typically `sonnet` for cost efficiency)
+- `model` — Model preference. Low/medium-effort skills default to `haiku` (cheaper, separate rate-limit bucket); high-effort skills that need deeper reasoning (forked subagents, complex audits) use `sonnet`
 - `effort` — Reasoning effort level (`low`, `medium`, `high`, `max`). Overrides the session effort level while the skill is active
 
 ### Rules Pattern

@@ -2,7 +2,7 @@
 name: create-branch
 description: Use when creating a branch, starting work on an issue, or checking out a new feature branch. Validates branch naming and links to GitHub issues automatically.
 allowed-tools: Read Bash(git:*) Bash(gh:*)
-model: sonnet
+model: haiku
 effort: low
 ---
 

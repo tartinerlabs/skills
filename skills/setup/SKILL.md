@@ -2,7 +2,7 @@
 name: setup
 description: Use when setting up a project, adding linting, formatting, git hooks, or TypeScript. Installs Biome, Husky, commitlint, lint-staged, and GitLeaks for JS/TS.
 allowed-tools: Read Glob Write Edit Bash(pnpm:*) Bash(pnx:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*)
-model: sonnet
+model: haiku
 effort: low
 ---
 

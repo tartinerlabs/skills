@@ -2,7 +2,7 @@
 name: deps
 description: Use when hardening npm supply chain, pinning dependency versions, adding .npmrc security flags, or setting up Renovate. Locks down install-time scripts, registries, version ranges, and CI checks.
 allowed-tools: Read Glob Grep Write Edit Bash(pnpm:*) Bash(pnx:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(gh:*)
-model: sonnet
+model: haiku
 effort: medium
 ---
 

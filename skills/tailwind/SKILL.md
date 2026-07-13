@@ -2,7 +2,7 @@
 name: tailwind
 description: Use when writing Tailwind classes, fixing spacing issues, reviewing CSS, or auditing Tailwind patterns. Enforces v4 best practices for grid and responsive.
 allowed-tools: Read Glob Grep Edit
-model: sonnet
+model: haiku
 effort: medium
 ---
 

@@ -1,7 +1,7 @@
 ---
 name: deps
 description: Audits and hardens npm supply chain security. Use when you need autonomous supply chain hardening — .npmrc flags, version pinning, and Renovate config. Delegates well as a background task.
-model: sonnet
+model: haiku
 effort: medium
 maxTurns: 30
 tools: Read, Glob, Grep, Write, Edit, Bash

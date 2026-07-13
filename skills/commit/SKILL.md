@@ -2,7 +2,7 @@
 name: commit
 description: Use when committing changes, staging files, saving work, or making a git commit. Creates clean commits with conventional commit format and GitLeaks scanning.
 allowed-tools: Read Bash(git:*)
-model: sonnet
+model: haiku
 effort: low
 ---
 
