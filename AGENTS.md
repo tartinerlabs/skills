@@ -47,9 +47,9 @@ Skills with multiple checks use a `rules/` subdirectory alongside `SKILL.md`. Th
 ## Distribution
 
 Skills are distributed through five channels:
-- **Codex plugin** — repo-scoped metadata in `.codex-plugin/plugin.json` with marketplace metadata in `.agents/plugins/marketplace.json`
+- **Codex plugin** — plugin metadata in `plugins/tartinerlabs/.codex-plugin/plugin.json` with marketplace metadata in `.agents/plugins/marketplace.json`
 - **Claude Code plugin** — `claude plugin install tartinerlabs/skills`
-- **Cursor plugin** — Cursor metadata in `.cursor-plugin/plugin.json` with marketplace metadata in `.cursor-plugin/marketplace.json`
+- **Cursor plugin** — plugin metadata in `plugins/tartinerlabs/.cursor-plugin/plugin.json` with marketplace metadata in `.cursor-plugin/marketplace.json`
 - **[skills.sh](https://skills.sh)** — `pnpm dlx skills add tartinerlabs/skills`
 - **[Context7](https://context7.com)** — `pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal`
 
@@ -57,13 +57,14 @@ The `Skills` CI workflow validates skills.sh and Context7 distribution on push t
 
 ## Plugin Metadata
 
-Plugin metadata is maintained manually by design.
+Plugin metadata is maintained manually by design. Every plugin lives in its own `plugins/<name>/` wrapper holding the three per-channel manifests plus a `skills` symlink to the skill source; both `plugins/tartinerlabs/` (`skills` → `../../skills`) and `plugins/xcode-skills/` (`skills` → `../../xcode-skills`) use this identical shape.
 
-- `.codex-plugin/plugin.json` is the Codex plugin manifest
+- `plugins/tartinerlabs/.codex-plugin/plugin.json` is the Codex plugin manifest; `plugins/tartinerlabs/assets/icon.svg` is its Codex `composerIcon`
 - `.agents/plugins/marketplace.json` is the repo-scoped Codex marketplace entry
-- `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json` are the Claude plugin files
-- `.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json` are the Cursor plugin files
-- `package.json.version` is the canonical shared field; semantic-release syncs manifest versions during release
+- `plugins/tartinerlabs/.claude-plugin/plugin.json` is the Claude plugin manifest; the root `.claude-plugin/marketplace.json` is the Claude marketplace
+- `plugins/tartinerlabs/.cursor-plugin/plugin.json` is the Cursor plugin manifest; the root `.cursor-plugin/marketplace.json` is the Cursor marketplace
+- Each marketplace references both plugins as `./plugins/<name>`. Keep every plugin subdirectory-sourced — the Claude Code loader silently drops a plugin sourced at the marketplace root (`source: "./"`) when another plugin exists
+- `package.json.version` is the canonical shared field; semantic-release (`scripts/sync-plugin-versions.mjs`) syncs the six `plugins/**/plugin.json` manifest versions during release
 
 When plugin copy changes, update Codex, Claude, and Cursor plugin manifests intentionally. Do not expose Claude-only hooks in Cursor metadata unless they have been ported to Cursor's runtime.
 

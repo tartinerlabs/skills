@@ -101,7 +101,7 @@ claude plugin install tartinerlabs/skills
 
 ### Codex Plugin
 
-This repository includes repo-scoped Codex plugin metadata in `.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`.
+This repository includes repo-scoped Codex plugin metadata in `plugins/tartinerlabs/.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`.
 
 To use it in Codex:
 
@@ -111,7 +111,7 @@ To use it in Codex:
 
 ### Cursor Plugin
 
-This repository includes Cursor plugin metadata in `.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`.
+This repository includes Cursor plugin metadata in `plugins/tartinerlabs/.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`.
 
 For local development, install the plugin with Cursor's plugin flow or copy the repository into Cursor's local plugin directory:
 
@@ -174,9 +174,11 @@ Add to `opencode.json`:
 
 Plugin manifests are maintained manually on purpose.
 
-- Codex metadata lives in `.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`
-- Claude metadata lives in `.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
-- Cursor metadata lives in `.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`
+Each plugin lives in its own `plugins/<name>/` wrapper holding the three per-channel manifests plus a `skills` symlink; both `plugins/tartinerlabs/` and `plugins/xcode-skills/` use this identical shape, and every marketplace references its plugins as `./plugins/<name>`.
+
+- Codex metadata lives in `plugins/tartinerlabs/.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`
+- Claude metadata lives in `plugins/tartinerlabs/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
+- Cursor metadata lives in `plugins/tartinerlabs/.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`
 - The separate Xcode collection is wrapped by `plugins/xcode-skills/`, which links to the untouched `xcode-skills/` export
 - `package.json.version` is the shared source of truth across plugin manifests; semantic-release syncs manifest versions during release
 

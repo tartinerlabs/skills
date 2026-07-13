@@ -2,9 +2,9 @@ import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
 const MANIFESTS = [
-  ".codex-plugin/plugin.json",
-  ".claude-plugin/plugin.json",
-  ".cursor-plugin/plugin.json",
+  "plugins/tartinerlabs/.codex-plugin/plugin.json",
+  "plugins/tartinerlabs/.claude-plugin/plugin.json",
+  "plugins/tartinerlabs/.cursor-plugin/plugin.json",
   "plugins/xcode-skills/.codex-plugin/plugin.json",
   "plugins/xcode-skills/.claude-plugin/plugin.json",
   "plugins/xcode-skills/.cursor-plugin/plugin.json",

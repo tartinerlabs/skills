@@ -48,8 +48,8 @@ Skills with multiple checks use a `rules/` subdirectory alongside `SKILL.md`. Th
 
 Skills are distributed through five channels:
 - **Claude Code plugin** — `claude plugin install tartinerlabs/skills` (plugin name: `tartinerlabs`, skills invoked as `/tartinerlabs:<skill-name>`)
-- **Codex plugin** — repo-scoped metadata in `.codex-plugin/plugin.json` with marketplace metadata in `.agents/plugins/marketplace.json`
-- **Cursor plugin** — Cursor metadata in `.cursor-plugin/plugin.json` with marketplace metadata in `.cursor-plugin/marketplace.json`
+- **Codex plugin** — plugin metadata in `plugins/tartinerlabs/.codex-plugin/plugin.json` with marketplace metadata in `.agents/plugins/marketplace.json`
+- **Cursor plugin** — plugin metadata in `plugins/tartinerlabs/.cursor-plugin/plugin.json` with marketplace metadata in `.cursor-plugin/marketplace.json`
 - **[skills.sh](https://skills.sh)** — `pnx skills add tartinerlabs/skills`
 - **[Context7](https://context7.com)** — `pnx ctx7 skills install /tartinerlabs/skills --all --universal`
 
@@ -57,11 +57,14 @@ The `Skills` CI workflow validates skills.sh and Context7 distribution on push t
 
 ## Plugin
 
-The `.claude-plugin/` directory contains the Claude Code plugin manifest (`plugin.json`) and marketplace metadata (`marketplace.json`). The plugin wraps all skills under the `tartinerlabs` namespace without affecting existing distribution channels.
+Every plugin lives in its own `plugins/<name>/` wrapper holding the three per-channel manifests (`.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, `.cursor-plugin/plugin.json`) plus a `skills` symlink to the skill source. Both plugins use this identical shape:
 
-Codex support is maintained manually via `.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`. Cursor support is maintained manually via `.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`.
+- `plugins/tartinerlabs/` wraps the main collection (`skills` → `../../skills`) under the `tartinerlabs` namespace. Its `assets/icon.svg` is the Codex `composerIcon`.
+- `plugins/xcode-skills/` wraps the Xcode export (`skills` → `../../xcode-skills`).
 
-Plugin metadata is intentionally hand-maintained. `package.json.version` is the shared source of truth between plugin manifests, and semantic-release syncs manifest versions during release.
+The repo root's `.claude-plugin/` and `.cursor-plugin/` hold **only** their `marketplace.json`; the Codex marketplace is `.agents/plugins/marketplace.json`. Each marketplace references both plugins as `./plugins/<name>`. Keeping every plugin subdirectory-sourced (no `source: "./"` at the marketplace root) is required — the Claude Code loader silently drops a root-sourced plugin when another plugin exists.
+
+Plugin metadata is intentionally hand-maintained. `package.json.version` is the shared source of truth between plugin manifests, and semantic-release (`scripts/sync-plugin-versions.mjs`) syncs the six `plugins/**/plugin.json` manifest versions during release.
 
 ## Xcode Skill Export
 
