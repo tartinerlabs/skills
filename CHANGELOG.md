@@ -1,3 +1,10 @@
+## [1.23.1](https://github.com/tartinerlabs/skills/compare/v1.23.0...v1.23.1) (2026-07-13)
+
+
+### Bug Fixes
+
+* align both plugins on subdir wrapper pattern ([ae48458](https://github.com/tartinerlabs/skills/commit/ae4845802c65c36fa7b9033d513d13ad51aa5a82))
+
 # [1.23.0](https://github.com/tartinerlabs/skills/compare/v1.22.2...v1.23.0) (2026-07-13)
 
 

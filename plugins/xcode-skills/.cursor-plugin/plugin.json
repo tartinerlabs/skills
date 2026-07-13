@@ -1,7 +1,7 @@
 {
   "name": "xcode-skills",
   "displayName": "Xcode Skills",
-  "version": "1.22.2",
+  "version": "1.23.1",
   "description": "Apple-authored agent skills exported unchanged from Xcode 27 for Swift and Apple platform development",
   "author": {
     "name": "Tartiner Labs",
