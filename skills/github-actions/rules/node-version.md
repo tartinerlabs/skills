@@ -1,14 +1,12 @@
-# Node Version
+---
+title: Node Version
+impact: MEDIUM
+tags: node, lts, setup-node, versioning
+---
 
-**Severity: MEDIUM**
+**Rule**: Always use LTS aliases instead of hardcoded version numbers. Use `lts/*` for the current LTS release. This stays current automatically without manual updates.
 
-Always use LTS aliases instead of hardcoded version numbers.
-
-## Rule
-
-Use `lts/*` for the current LTS release. This stays current automatically without manual updates.
-
-## Incorrect
+### Incorrect
 
 ```yaml
 # Hardcoded version — goes stale, requires manual bumps
@@ -22,7 +20,7 @@ Use `lts/*` for the current LTS release. This stays current automatically withou
     node-version-file: '.node-version'
 ```
 
-## Correct
+### Correct
 
 ```yaml
 # LTS alias — always resolves to the latest LTS
@@ -31,7 +29,7 @@ Use `lts/*` for the current LTS release. This stays current automatically withou
     node-version: 'lts/*'
 ```
 
-## Available Aliases
+### Available Aliases
 
 | Alias | Resolves to |
 |-------|-------------|
@@ -39,6 +37,6 @@ Use `lts/*` for the current LTS release. This stays current automatically withou
 | `lts/-1` | Previous LTS (for compatibility testing) |
 | `latest` | Latest release including non-LTS (avoid in CI) |
 
-## Why This Matters
+### Why This Matters
 
 Hardcoded versions go stale and require manual updates when new LTS releases come out. LTS aliases ensure workflows always use a supported, stable version without maintenance overhead.

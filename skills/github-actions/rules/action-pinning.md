@@ -1,15 +1,15 @@
-# Action Pinning
+---
+title: Action Pinning
+impact: HIGH
+tags: actions, pinning, sha, supply-chain
+---
 
-**Severity: HIGH**
-
-Pin all actions to prevent supply-chain attacks and ensure reproducible builds.
-
-## Rule
+**Rule**: Pin all actions to prevent supply-chain attacks and ensure reproducible builds.
 
 - **GitHub-owned actions** (`actions/*`): use version tags (e.g., `@v4`)
 - **Third-party actions** (everything else): pin to full commit SHA with version comment
 
-## Incorrect
+### Incorrect
 
 ```yaml
 # Third-party action using version tag — vulnerable to tag mutation
@@ -17,7 +17,7 @@ Pin all actions to prevent supply-chain attacks and ensure reproducible builds.
 - uses: JamesIves/github-pages-deploy-action@v4
 ```
 
-## Correct
+### Correct
 
 ```yaml
 # GitHub-owned — version tags are fine
@@ -29,13 +29,13 @@ Pin all actions to prevent supply-chain attacks and ensure reproducible builds.
 - uses: JamesIves/github-pages-deploy-action@6c2391ed697a5e80688e3b2d0e42e74bac79deed  # v4.7.3
 ```
 
-## How to Find the SHA
+### How to Find the SHA
 
 ```bash
 # Look up the commit SHA for a specific version tag
 gh api repos/{owner}/{repo}/git/ref/tags/{tag} --jq '.object.sha'
 ```
 
-## Why This Matters
+### Why This Matters
 
 Version tags are mutable — a malicious actor who gains access to a repository can point an existing tag to a different commit containing malicious code. Commit SHAs are immutable and cryptographically verified.

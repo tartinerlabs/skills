@@ -1,7 +1,7 @@
 ---
 name: project-structure
 description: Use when deciding where code should live, organising files, or auditing project structure. Checks colocation, grouping, and directory anti-patterns.
-allowed-tools: Read Glob Grep
+allowed-tools: Read Glob Grep Edit Bash(git:*)
 model: haiku
 effort: medium
 ---
@@ -33,8 +33,33 @@ Scan for project indicators to determine the appropriate organisation approach:
 
 ### Step 2: Audit
 
-Check the existing structure against all rules. Report violations grouped by severity with directory paths.
+Check the existing structure against all rules. Report violations grouped by rule with directory paths:
+
+```
+## Project Structure Audit Results
+
+### HIGH Severity
+- `src/helpers/formatDate.ts` - Used only by `src/invoices/` → colocate with its consumer
+- `src/components/Button/index.tsx` - Barrel-only directory → import the component directly
+
+### MEDIUM Severity
+- `src/` - Flat file dump with no feature or layer grouping → group by feature
+
+### Summary
+| Rule | Violations | Directories |
+|------|-----------|-------------|
+| Colocation | X | N |
+| Anti-patterns | Y | N |
+| **Total** | **X+Y** | **N** |
+```
 
 ### Step 3: Recommend
 
 Based on project type and existing patterns, recommend where new code should live. Always prioritise colocation.
+
+### Step 4: Fix
+
+Apply fixes for each violation:
+1. Move files to their correct location using `git mv` to preserve git history
+2. Update all import paths in dependent files
+3. Verify no broken imports remain after moves

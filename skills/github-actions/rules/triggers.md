@@ -1,14 +1,12 @@
-# Triggers
+---
+title: Triggers
+impact: LOW
+tags: triggers, push, pull-request, paths
+---
 
-**Severity: LOW**
+**Rule**: Use sensible, scoped triggers to avoid unnecessary workflow runs. Always scope `push` and `pull_request` triggers to specific branches. Avoid triggering on every branch.
 
-Use sensible, scoped triggers to avoid unnecessary workflow runs.
-
-## Rule
-
-Always scope `push` and `pull_request` triggers to specific branches. Avoid triggering on every branch.
-
-## Incorrect
+### Incorrect
 
 ```yaml
 # Triggers on every branch push — wasteful
@@ -20,7 +18,7 @@ on:
   pull_request:
 ```
 
-## Correct
+### Correct
 
 ```yaml
 # Scoped to main branch
@@ -31,7 +29,7 @@ on:
     branches: [main]
 ```
 
-## Path Filtering
+### Path Filtering
 
 For monorepos or projects with distinct areas, use path filters to only run relevant workflows:
 
@@ -51,7 +49,7 @@ on:
       - 'pnpm-lock.yaml'
 ```
 
-## Common Trigger Patterns
+### Common Trigger Patterns
 
 | Pattern | Use case |
 |---------|----------|
@@ -60,6 +58,6 @@ on:
 | `workflow_dispatch` | Manual trigger |
 | `schedule: cron` | Periodic jobs (e.g., dependency updates) |
 
-## Why This Matters
+### Why This Matters
 
 Overly broad triggers waste compute minutes and create noise in the Actions tab. Scoping triggers ensures workflows only run when relevant code changes.

@@ -14,7 +14,7 @@ Read individual rule files in `rules/` for detailed explanations and code exampl
 
 Determine the test type from the user's request:
 
-- **E2E / browser testing** (keywords: "e2e", "end-to-end", "browser", "playwright", "page interaction", "screenshot") → Tell the user to use a browser/E2E testing skill instead and stop.
+- **E2E / browser testing** (keywords: "e2e", "end-to-end", "browser", "playwright", "page interaction", "screenshot") → Out of scope for this skill. Point the user to their agent's own browser/E2E automation tooling (e.g. Playwright, or a dedicated browser-automation capability) and stop.
 - **Unit / component testing** → Proceed with the workflow below.
 
 ## Mode Detection
