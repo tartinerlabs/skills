@@ -17,6 +17,15 @@ Determine the test type from the user's request:
 - **E2E / browser testing** (keywords: "e2e", "end-to-end", "browser", "playwright", "page interaction", "screenshot") → Tell the user to use a browser/E2E testing skill instead and stop.
 - **Unit / component testing** → Proceed with the workflow below.
 
+## Mode Detection
+
+Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
+
+- **Review (read-only, default)** — "review", "audit", "check", or "assess" test quality or coverage. Read the tests and source, then produce an evidence-backed report (gaps, weak assertions, missing edge cases) and make NO file edits. Skip Steps 4-5.
+- **Write / Fix** — the user explicitly asks to write, add, create, or fix tests, or to debug failing tests. Only then run Step 4 (write test files) and Step 5 (run and verify). Running tests to observe failures is allowed in this mode.
+
+When intent is ambiguous, stay in Review mode and end the report by offering to write the tests.
+
 ## Rules Overview
 
 | Rule | Impact | File |

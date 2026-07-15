@@ -22,20 +22,22 @@ Read individual rule files in `rules/` for detailed explanations and examples.
 | Insecure dependencies | MEDIUM | `rules/insecure-dependencies.md` |
 | Data protection | MEDIUM | `rules/data-protection.md` |
 
+## Mode Detection
+
+Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
+
+- **Audit (read-only, default)** — "audit", "review", "check", "scan", "diagnose", or any unclear request. Produce an evidence-backed report and make NO file edits. Read-only scans (including `gitleaks detect`) are allowed; setting up hooks or editing code is not.
+- **Fix** — the user explicitly asks to fix, set up, harden, apply, or says "audit and fix". Only then run the GitLeaks Setup and any remediation steps.
+
+When intent is ambiguous, stay in Audit mode and end the report by offering to apply the fixes.
+
 ## Workflow
 
-### Step 1: GitLeaks Setup
+### Step 1: Code Security Audit
 
-Ensure GitLeaks is configured in the project's pre-commit hook:
+Scan the codebase against every rule in `rules/`. Search for vulnerability patterns. In Audit mode, also check whether GitLeaks is wired into the pre-commit hook (does `.husky/pre-commit` exist and contain `gitleaks`?) and report it as a finding if missing — but do not modify any files.
 
-1. Check if `.husky/pre-commit` exists and contains `gitleaks`
-2. If missing, set up Husky and add `gitleaks protect --staged --verbose` before any `lint-staged` command
-
-### Step 2: Code Security Audit
-
-Scan the codebase against every rule in `rules/`. Search for vulnerability patterns.
-
-### Step 3: Report
+### Step 2: Report
 
 ```
 ## Security Audit Results
@@ -54,13 +56,22 @@ Scan the codebase against every rule in `rules/`. Search for vulnerability patte
 | **Total** | **Z** |
 ```
 
-### Step 4: Retrospective History Scan (Optional)
+### Step 3: Retrospective History Scan (Optional)
 
-Only when user passes `--scan-history`:
+Only when user passes `--scan-history`. This is a read-only scan, allowed in either mode:
 
 ```bash
 gitleaks detect --source . --verbose
 ```
+
+### Step 4: GitLeaks Setup (fix mode only)
+
+Skip this step entirely in Audit mode. Only run it when the request is in Fix mode (see Mode Detection).
+
+Ensure GitLeaks is configured in the project's pre-commit hook:
+
+1. Check if `.husky/pre-commit` exists and contains `gitleaks`
+2. If missing, set up Husky and add `gitleaks protect --staged --verbose` before any `lint-staged` command
 
 ## Assumptions
 

@@ -10,9 +10,13 @@ agent: general-purpose
 
 ## Mode Detection
 
-Determine the mode based on context:
-- **Create mode**: No `.github/workflows/` directory exists, or user explicitly asks to create/add a workflow
-- **Audit mode**: `.github/workflows/*.yml` files exist, or user explicitly asks to audit/review/fix workflows
+Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
+
+- **Create mode**: No `.github/workflows/` directory exists, or the user explicitly asks to create/add a workflow. Generates workflows and resolves every action reference to a full commit SHA.
+- **Audit (read-only, default)**: `.github/workflows/*.yml` files exist and the user asks to audit/review/check, or the request is ambiguous. Produce an evidence-backed report and make NO file edits.
+- **Fix**: The user explicitly asks to fix, pin, apply, or says "audit and fix". Only then apply the scoped edits in Audit Mode's Auto-Fix step.
+
+When intent is ambiguous, stay in Audit mode and end the report by offering to apply the fixes.
 
 ---
 
@@ -37,6 +41,8 @@ Scan for project indicators:
 ### 3. Generate Workflow
 
 Apply all rules from the `rules/` directory when generating workflows. Read each rule file for detailed requirements and examples.
+
+Resolve every action reference (including the `actions/*` uses in the template below) to a full commit SHA with a version comment before writing the workflow. Look up SHAs with `gh api`.
 
 ### 4. Workflow Template
 
@@ -99,9 +105,9 @@ Read all files in `.github/workflows/*.yml` and audit against every rule in the 
 - Files scanned: N
 ```
 
-### 3. Auto-Fix
+### 3. Auto-Fix (fix mode only)
 
-After reporting, apply fixes. Look up commit SHAs for pinning using `gh api`.
+Skip this step entirely in Audit mode — report the pinning and permission violations only. Only apply fixes when the request is in Fix mode (see Mode Detection). When fixing, look up commit SHAs for pinning using `gh api`.
 
 ---
 
