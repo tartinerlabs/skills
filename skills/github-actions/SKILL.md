@@ -115,8 +115,8 @@ Skip this step entirely in Audit mode — report **all** rule violations found i
 
 Read individual rule files for detailed checks and examples:
 
-| Rule | Severity | File |
-|------|----------|------|
+| Rule | Impact | File |
+|------|--------|------|
 | Action pinning | HIGH | `rules/action-pinning.md` |
 | Permissions | HIGH | `rules/permissions.md` |
 | Concurrency | MEDIUM | `rules/concurrency.md` |

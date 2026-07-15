@@ -37,6 +37,8 @@ Before installing anything, scan for existing configurations:
 
 Read each rule file for detailed setup instructions and config files.
 
+> These tables use a `Purpose` column rather than the `Impact` column found in audit skills — setup rules are install guides for tools to add, not severity-ranked findings, so there is no impact level to report.
+
 ### Auto-install (always set up when missing)
 
 | Tool | Purpose | Rule |

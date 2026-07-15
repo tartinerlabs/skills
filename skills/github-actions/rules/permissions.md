@@ -1,14 +1,12 @@
-# Permissions
+---
+title: Permissions
+impact: HIGH
+tags: permissions, least-privilege, security
+---
 
-**Severity: HIGH**
+**Rule**: Every workflow must declare explicit permissions using the principle of least privilege. Add a top-level `permissions` block to every workflow. Only grant the minimum permissions required.
 
-Every workflow must declare explicit permissions using the principle of least privilege.
-
-## Rule
-
-Add a top-level `permissions` block to every workflow. Only grant the minimum permissions required.
-
-## Incorrect
+### Incorrect
 
 ```yaml
 # No permissions block — defaults to broad read/write access
@@ -21,7 +19,7 @@ jobs:
       - uses: actions/checkout@v4
 ```
 
-## Correct
+### Correct
 
 ```yaml
 name: CI
@@ -38,7 +36,7 @@ jobs:
       - uses: actions/checkout@v4
 ```
 
-## Common Permission Scopes
+### Common Permission Scopes
 
 | Scope | When to use |
 |-------|-------------|
@@ -49,7 +47,7 @@ jobs:
 | `packages: write` | Publishing to GitHub Packages |
 | `id-token: write` | OIDC token for cloud deployments |
 
-## Per-Job Permissions
+### Per-Job Permissions
 
 For workflows with multiple jobs needing different access, use job-level permissions:
 
@@ -71,6 +69,6 @@ jobs:
       - uses: actions/checkout@v4
 ```
 
-## Why This Matters
+### Why This Matters
 
 Without explicit permissions, workflows default to broad read/write access to the repository. A compromised action or workflow could modify code, create releases, or access secrets.

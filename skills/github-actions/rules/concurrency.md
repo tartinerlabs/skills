@@ -1,14 +1,12 @@
-# Concurrency
+---
+title: Concurrency
+impact: MEDIUM
+tags: concurrency, cancel-in-progress, workflow
+---
 
-**Severity: MEDIUM**
+**Rule**: Use concurrency groups to cancel redundant in-progress runs. Add a `concurrency` block to every workflow that cancels in-progress runs when a new commit is pushed to the same branch.
 
-Use concurrency groups to cancel redundant in-progress runs.
-
-## Rule
-
-Add a `concurrency` block to every workflow that cancels in-progress runs when a new commit is pushed to the same branch.
-
-## Incorrect
+### Incorrect
 
 ```yaml
 # No concurrency — multiple runs stack up on rapid pushes
@@ -24,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
 ```
 
-## Correct
+### Correct
 
 ```yaml
 name: CI
@@ -43,7 +41,7 @@ jobs:
     runs-on: ubuntu-latest
 ```
 
-## When NOT to Cancel
+### When NOT to Cancel
 
 For deployment workflows to production, you may want to queue instead of cancel:
 
@@ -53,6 +51,6 @@ concurrency:
   cancel-in-progress: false  # queue instead of cancel
 ```
 
-## Why This Matters
+### Why This Matters
 
 Without concurrency groups, pushing multiple commits in quick succession creates parallel workflow runs that waste compute minutes and may cause race conditions in deployments.
