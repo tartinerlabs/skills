@@ -15,7 +15,7 @@ This creates a `.husky/` directory and a default `pre-commit` hook.
 The final `.husky/pre-commit` is assembled by other rules (GitLeaks, lint-staged). The expected order is:
 
 ```bash
-gitleaks protect --staged --verbose
+gitleaks git --staged --redact --verbose
 pnx lint-staged
 ```
 

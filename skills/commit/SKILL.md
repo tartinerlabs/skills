@@ -1,7 +1,7 @@
 ---
 name: commit
 description: Use when committing changes, staging files, saving work, or making a git commit. Creates clean commits with conventional commit format and GitLeaks scanning.
-allowed-tools: Read Bash(git:*)
+allowed-tools: Read Bash(git:*) Bash(gitleaks:*)
 model: haiku
 effort: low
 ---
@@ -24,21 +24,22 @@ Read ALL rule files before proceeding — do not skip or ask:
 
 ## Pre-Commit Security Check
 
-Before committing, ensure GitLeaks is configured:
+Scan staged changes for secrets before every commit:
 
-1. Check for `.husky/pre-commit` containing `gitleaks protect`
-2. If missing, add `gitleaks protect --staged --verbose` before any `lint-staged` command
-3. If `.husky/` doesn't exist, run `pnx husky init` first
+1. Run `gitleaks git --staged --redact --verbose` after staging.
+2. If GitLeaks reports a leak, **STOP** — do not commit. Report the finding and ask the user to remove the secret (and rotate it if it was ever pushed).
+3. If GitLeaks is not installed (command not found), **STOP** — do not commit and do not install it implicitly. Tell the user to install it (`brew install gitleaks` or equivalent) and re-run.
+
+Never edit `.husky/`, `commitlint`, or other project tooling as part of a commit. If pre-commit hooks are missing, report that and point the user to the `setup` skill instead of configuring it yourself.
 
 ## Workflow
 
-1. **Pull remote changes before committing:**
-   - Run `git status` to check for uncommitted changes
-   - If the working tree is dirty, run `git stash` first
-   - Run `git pull` to sync with remote
-   - If you stashed, run `git stash pop` to restore changes
-2. Show current `git status` and analyse all changes
-3. Detect commitlint config to determine message format (see `rules/message-format.md`)
-4. Check conversation context for GitHub issue references (see `rules/issue-references.md`)
-5. Assess scope of changes (see `rules/change-scope.md`)
-6. Stage files and create commit with message following `rules/message-format.md`
+A commit request stages and commits only — it must never pull, stash, restore stashes, or rewrite project tooling.
+
+1. Show current `git status` and analyse all changes
+2. Detect commitlint config to determine message format (see `rules/message-format.md`)
+3. Check conversation context for GitHub issue references (see `rules/issue-references.md`)
+4. Assess scope of changes (see `rules/change-scope.md`)
+5. Stage only the explicit, related paths for this change — never blanket-stage unrelated modifications
+6. Run the Pre-Commit Security Check above
+7. Create the commit with a message following `rules/message-format.md`

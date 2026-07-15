@@ -4,7 +4,7 @@ impact: HIGH
 tags: commit, message, format, 50-char
 ---
 
-**Rule**: Subject line maximum 72 characters. Use present tense verbs. Be specific but concise.
+**Rule**: Subject line maximum 50 characters. Use present tense verbs. Be specific but concise.
 
 ### Detect commitlint
 
@@ -33,7 +33,7 @@ docs: update API usage examples
 
 **Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
 
-- The 72-character limit includes the `type: ` prefix
+- The 50-character limit includes the `type: ` prefix
 - Use scope only when it adds clarity: `fix(auth): handle expired token redirect`
 - Description starts with lowercase verb
 
