@@ -10,9 +10,13 @@ agent: general-purpose
 
 ## Mode Detection
 
-Determine the mode based on context:
-- **Create mode**: No `.github/workflows/` directory exists, or user explicitly asks to create/add a workflow
-- **Audit mode**: `.github/workflows/*.yml` files exist, or user explicitly asks to audit/review/fix workflows
+Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
+
+- **Create mode**: The user explicitly asks to create, add, generate, scaffold, or set up a workflow, CI, or a CI/CD pipeline (e.g. "set up CI") — regardless of whether a `.github/workflows/` directory already exists. Generates workflows and pins actions per `rules/action-pinning.md` (GitHub-owned `actions/*` on version tags, third-party on full commit SHAs).
+- **Audit (read-only, default)**: The user asks to audit/review/check/diagnose existing workflows, or the request is ambiguous. Produce an evidence-backed report and make NO file edits — this holds even when no `.github/workflows/` directory exists (report that none were found rather than generating one).
+- **Fix**: The user explicitly asks to fix, pin, apply, or says "audit and fix". Only then apply the scoped edits in Audit Mode's Auto-Fix step.
+
+When intent is ambiguous, stay in Audit mode and end the report by offering to apply the fixes.
 
 ---
 
@@ -37,6 +41,8 @@ Scan for project indicators:
 ### 3. Generate Workflow
 
 Apply all rules from the `rules/` directory when generating workflows. Read each rule file for detailed requirements and examples.
+
+Pin actions per `rules/action-pinning.md` before writing the workflow: GitHub-owned `actions/*` stay on version tags (e.g. `@v4`); third-party actions pin to a full commit SHA with a version comment. Look up SHAs with `gh api`.
 
 ### 4. Workflow Template
 
@@ -99,9 +105,9 @@ Read all files in `.github/workflows/*.yml` and audit against every rule in the 
 - Files scanned: N
 ```
 
-### 3. Auto-Fix
+### 3. Auto-Fix (fix mode only)
 
-After reporting, apply fixes. Look up commit SHAs for pinning using `gh api`.
+Skip this step entirely in Audit mode — report **all** rule violations found in the audit (pinning, permissions, concurrency, node version, caching, triggers, and matrix), not just pinning and permissions. Only apply fixes when the request is in Fix mode (see Mode Detection). When fixing, look up commit SHAs for pinning using `gh api`.
 
 ---
 

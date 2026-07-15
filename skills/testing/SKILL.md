@@ -17,6 +17,16 @@ Determine the test type from the user's request:
 - **E2E / browser testing** (keywords: "e2e", "end-to-end", "browser", "playwright", "page interaction", "screenshot") → Tell the user to use a browser/E2E testing skill instead and stop.
 - **Unit / component testing** → Proceed with the workflow below.
 
+## Mode Detection
+
+Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
+
+- **Review (read-only, default)** — "review", "audit", "check", or "assess" test quality or coverage. Read the tests and source, then produce an evidence-backed report (gaps, weak assertions, missing edge cases) and make NO file edits. Skip Steps 4-5.
+- **Run** — the user explicitly asks to run or execute the existing tests. Run Step 5 (run and verify) and report the results; do not write new tests or edit failing ones unless also asked.
+- **Write / Fix** — the user explicitly asks to write, add, create, or fix tests, to debug failing tests, or to increase/improve coverage or cover edge cases. Run Step 4 (write test files) and Step 5 (run and verify). Running tests to observe failures, then editing tests, is allowed in this mode.
+
+When intent is ambiguous, stay in Review mode and end the report by offering to write or run the tests.
+
 ## Rules Overview
 
 | Rule | Impact | File |
@@ -72,7 +82,7 @@ pnpm run test          # or npm/bun/yarn equivalent
 pnpm vitest run <file> # run a specific test file
 ```
 
-Report results. If tests fail, read the error output, fix the test, and re-run.
+Report results. In **Write / Fix** mode only, if tests fail, read the error output, fix the test, and re-run. In **Run** mode, report the failures without editing any files.
 
 ## Assumptions
 

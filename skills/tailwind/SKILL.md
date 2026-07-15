@@ -23,6 +23,15 @@ Read individual rule files in `rules/` for detailed explanations and code exampl
 | Logical shorthands | MEDIUM | `rules/logical-shorthands.md` |
 | GPU-accelerated animations | MEDIUM | `rules/gpu-animations.md` |
 
+## Mode Detection
+
+Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
+
+- **Audit (read-only, default)** — "audit", "review", "check", "diagnose", or any unclear request. Produce an evidence-backed report and make NO file edits.
+- **Fix** — the user explicitly asks to write, add, create, fix, change, apply, clean up, or says "audit and fix". Only then apply the scoped changes in the Fix step.
+
+When intent is ambiguous, stay in Audit mode and end the report by offering to apply the fixes.
+
 ## Workflow
 
 ### Step 1: Audit
@@ -58,7 +67,9 @@ List all findings grouped by rule:
 | **Total** | **Z** | **N** |
 ```
 
-### Step 3: Fix
+### Step 3: Fix (fix mode only)
+
+Skip this step entirely in Audit mode. Only apply changes when the request is in Fix mode (see Mode Detection).
 
 Apply fixes. For each fix:
 1. Verify the change preserves visual appearance

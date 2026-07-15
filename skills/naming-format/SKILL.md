@@ -20,6 +20,15 @@ Read individual rule files in `rules/` for detailed explanations and examples.
 | Index files | HIGH | `rules/index-files.md` |
 | Framework conventions | MEDIUM | `rules/framework-conventions.md` |
 
+## Mode Detection
+
+Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
+
+- **Audit (read-only, default)** — "audit", "review", "check", "diagnose", or any unclear request. Produce an evidence-backed report and make NO file edits or renames.
+- **Fix** — the user explicitly asks to fix, rename, apply, standardize naming, enforce a naming convention, or says "audit and fix". Only then apply the renames and import updates in the Fix step.
+
+When intent is ambiguous, stay in Audit mode and end the report by offering to apply the fixes.
+
 ## Workflow
 
 ### Step 1: Detect
@@ -53,7 +62,9 @@ Check all files and exports against the rules. Report violations grouped by rule
 | **Total**         | **X+Y**    | **N** |
 ```
 
-### Step 3: Fix
+### Step 3: Fix (fix mode only)
+
+Skip this step entirely in Audit mode. Only apply renames when the request is in Fix mode (see Mode Detection).
 
 Apply fixes for each violation:
 1. Rename files using `git mv` to preserve git history

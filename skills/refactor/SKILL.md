@@ -20,6 +20,15 @@ Read individual rule files in `rules/` for detailed explanations and code exampl
 | TypeScript/JS Idioms | `ts-` | type-assertions, optional-chaining, nullish-coalescing, barrel-reexports, enum-union, async-await |
 | Design Principles | `design-` | single-responsibility, interface-segregation, god-objects, tight-coupling |
 
+## Mode Detection
+
+Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
+
+- **Audit (read-only, default)** — "audit", "review", "check", "clean up review", or any unclear request. Produce an evidence-backed report and make NO file edits.
+- **Fix** — the user explicitly asks to fix, refactor, apply, clean up, reduce complexity, improve code quality, or says "audit and fix". Only then apply the scoped changes in the Fix step.
+
+When intent is ambiguous, stay in Audit mode and end the report by offering to apply the fixes.
+
 ## Workflow
 
 ### Step 1: Audit
@@ -73,7 +82,9 @@ List all findings grouped by category:
 | **Total**            | **X+Y+Z** | **N** |
 ```
 
-### Step 3: Fix
+### Step 3: Fix (fix mode only)
+
+Skip this step entirely in Audit mode. Only apply changes when the request is in Fix mode (see Mode Detection).
 
 Apply refactorings. For each fix:
 1. Verify the change preserves existing behaviour
