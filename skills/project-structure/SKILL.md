@@ -1,7 +1,7 @@
 ---
 name: project-structure
 description: Use when deciding where code should live, organising files, or auditing project structure. Checks colocation, grouping, and directory anti-patterns.
-allowed-tools: Read Glob Grep Edit Bash(git:*)
+allowed-tools: Read Glob Grep Edit Bash(git:*) Bash(mkdir:*)
 model: haiku
 effort: medium
 ---
@@ -60,6 +60,7 @@ Based on project type and existing patterns, recommend where new code should liv
 ### Step 4: Fix
 
 Apply fixes for each violation:
-1. Move files to their correct location using `git mv` to preserve git history
-2. Update all import paths in dependent files
-3. Verify no broken imports remain after moves
+1. Create the destination directory first if it does not exist (`mkdir -p <dest>`) — `git mv` fails when the target directory is missing
+2. Move files to their correct location using `git mv` to preserve git history
+3. Update all import paths in dependent files
+4. Verify no broken imports remain after moves
