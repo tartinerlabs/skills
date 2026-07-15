@@ -24,10 +24,12 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --test",
     "build": "tsc",
     "check": "biome check",
     "format": "biome check --write",
+    "validate": "node scripts/validate-skills.mjs",
+    "lint:md": "markdownlint-cli2",
     "prepare": "husky",
     "prepublishOnly": "pnpm run build"
   },
@@ -43,8 +45,10 @@
     "@types/node": "22.19.17",
     "husky": "9.1.7",
     "lint-staged": "16.4.0",
+    "markdownlint-cli2": "0.23.0",
     "semantic-release": "25.0.3",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "yaml": "2.9.0"
   },
   "packageManager": "pnpm@11.0.6",
   "lint-staged": {

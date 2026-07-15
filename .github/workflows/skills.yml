@@ -11,6 +11,7 @@ on:
       - main
     paths:
       - skills/**
+      - xcode-skills/**
 
 jobs:
   install:
@@ -21,6 +22,8 @@ jobs:
         include:
           - name: skills.sh
             command: pnpm dlx skills add tartinerlabs/skills --yes
+          - name: skills.sh (xcode-skills)
+            command: pnpm dlx skills add https://github.com/tartinerlabs/skills/tree/main/xcode-skills --yes
           - name: Context7
             command: pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal
     name: Install via ${{ matrix.name }}

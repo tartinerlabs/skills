@@ -1,7 +1,7 @@
 import { readFile, writeFile } from "node:fs/promises";
 import { join } from "node:path";
 
-const MANIFESTS = [
+export const MANIFESTS = [
   "plugins/tartinerlabs/.codex-plugin/plugin.json",
   "plugins/tartinerlabs/.claude-plugin/plugin.json",
   "plugins/tartinerlabs/.cursor-plugin/plugin.json",

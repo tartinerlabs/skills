@@ -1,0 +1,31 @@
+{
+  // Lint authored markdown only: skill content and top-level docs.
+  // The generated Xcode export under xcode-skills/ is excluded.
+  "globs": ["skills/**/*.md", "*.md"],
+  "ignores": ["node_modules/**", "xcode-skills/**", "CHANGELOG.md"],
+  "config": {
+    "default": true,
+    // Prose lines and tables in skills run long by design.
+    "MD013": false,
+    // Duplicate headings recur across sibling rule files (e.g. "Examples").
+    "MD024": false,
+    // Rule files intentionally open at h1 then use h3 for sub-examples.
+    "MD001": false,
+    // Skill instructions embed bare URLs intentionally.
+    "MD034": false,
+    // Inline HTML is used in some skill examples.
+    "MD033": false,
+    // Output/sample fences are intentionally language-less.
+    "MD040": false,
+    // Compact table pipe style is the collection's authored convention.
+    "MD060": false,
+    // Tight lists sit flush against surrounding prose in rule files.
+    "MD032": false,
+    // Code spans deliberately show literal prefixes such as `type: `.
+    "MD038": false,
+    // First line is YAML frontmatter, not a heading.
+    "MD041": false,
+    // Emphasis is occasionally used as a lightweight heading in rule files.
+    "MD036": false
+  }
+}
