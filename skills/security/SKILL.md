@@ -26,7 +26,7 @@ Read individual rule files in `rules/` for detailed explanations and examples.
 
 Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
 
-- **Audit (read-only, default)** — "audit", "review", "check", "scan", "diagnose", or any unclear request. Produce an evidence-backed report and make NO file edits. Read-only scans (including `gitleaks detect`) are allowed; setting up hooks or editing code is not.
+- **Audit (read-only, default)** — "audit", "review", "check", "scan", "diagnose", or any unclear request. Produce an evidence-backed report and make NO file edits. Read-only scans (including `gitleaks git --redact`) are allowed; setting up hooks or editing code is not.
 - **Fix** — the user explicitly asks to fix, set up, harden, apply, or says "audit and fix". Only then run the GitLeaks Setup and any remediation steps.
 
 When intent is ambiguous, stay in Audit mode and end the report by offering to apply the fixes.
@@ -61,7 +61,7 @@ Scan the codebase against every rule in `rules/`. Search for vulnerability patte
 Only when user passes `--scan-history`. This is a read-only scan, allowed in either mode:
 
 ```bash
-gitleaks detect --source . --verbose
+gitleaks git --redact --verbose
 ```
 
 ### Step 4: GitLeaks Setup (fix mode only)
@@ -71,7 +71,8 @@ Skip this step entirely in Audit mode. Only run it when the request is in Fix mo
 Ensure GitLeaks is configured in the project's pre-commit hook:
 
 1. Check if `.husky/pre-commit` exists and contains `gitleaks`
-2. If missing, set up Husky and add `gitleaks protect --staged --verbose` before any `lint-staged` command
+2. If missing, set up Husky and add `gitleaks git --staged --redact --verbose` before any `lint-staged` command
+3. If the hook uses the legacy `gitleaks protect` command (deprecated and non-redacting), rewrite it to `gitleaks git --staged --redact --verbose`
 
 ## Assumptions
 

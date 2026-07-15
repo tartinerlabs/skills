@@ -15,7 +15,7 @@ brew install gitleaks
 Add to `.husky/pre-commit` as the **first command** (before lint-staged):
 
 ```bash
-gitleaks protect --staged --verbose
+gitleaks git --staged --redact --verbose
 ```
 
 This runs before lint-staged so secrets are caught before any other processing.
