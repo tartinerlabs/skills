@@ -25,7 +25,7 @@ Read individual rule files in `rules/` for detailed explanations and code exampl
 Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
 
 - **Audit (read-only, default)** — "audit", "review", "check", "clean up review", or any unclear request. Produce an evidence-backed report and make NO file edits.
-- **Fix** — the user explicitly asks to fix, refactor, apply, clean up, or says "audit and fix". Only then apply the scoped changes in the Fix step.
+- **Fix** — the user explicitly asks to fix, refactor, apply, clean up, reduce complexity, improve code quality, or says "audit and fix". Only then apply the scoped changes in the Fix step.
 
 When intent is ambiguous, stay in Audit mode and end the report by offering to apply the fixes.
 

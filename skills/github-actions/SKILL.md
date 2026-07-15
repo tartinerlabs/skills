@@ -12,7 +12,7 @@ agent: general-purpose
 
 Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
 
-- **Create mode**: The user explicitly asks to create, add, generate, or scaffold a workflow (or no `.github/workflows/` directory exists *and* the request is to set up CI). Generates workflows and pins actions per `rules/action-pinning.md` (GitHub-owned `actions/*` on version tags, third-party on full commit SHAs).
+- **Create mode**: The user explicitly asks to create, add, generate, scaffold, or set up a workflow, CI, or a CI/CD pipeline (e.g. "set up CI") — regardless of whether a `.github/workflows/` directory already exists. Generates workflows and pins actions per `rules/action-pinning.md` (GitHub-owned `actions/*` on version tags, third-party on full commit SHAs).
 - **Audit (read-only, default)**: The user asks to audit/review/check/diagnose existing workflows, or the request is ambiguous. Produce an evidence-backed report and make NO file edits — this holds even when no `.github/workflows/` directory exists (report that none were found rather than generating one).
 - **Fix**: The user explicitly asks to fix, pin, apply, or says "audit and fix". Only then apply the scoped edits in Audit Mode's Auto-Fix step.
 
