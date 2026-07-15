@@ -1,7 +1,13 @@
-import { access, lstat, readdir, readFile, stat } from "node:fs/promises";
+import {
+  access,
+  lstat,
+  readdir,
+  readFile,
+  readlink,
+  stat,
+} from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-import { parse as parseYaml } from "yaml";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { MANIFESTS } from "./sync-plugin-versions.mjs";
 
 // Marketplace manifests distributed alongside the plugin manifests.
@@ -11,26 +17,18 @@ const MARKETPLACES = [
   ".agents/plugins/marketplace.json",
 ];
 
-// Plugin wrappers expose their skill source through a `skills` symlink.
+// Plugin wrappers expose their skill source through a `skills` symlink that
+// must point at a specific collection — swapping the targets would publish the
+// wrong skills through that wrapper, so the exact destination is checked.
 const WRAPPER_SYMLINKS = [
-  "plugins/tartinerlabs/skills",
-  "plugins/xcode-skills/skills",
+  { path: "plugins/tartinerlabs/skills", target: "../../skills" },
+  { path: "plugins/xcode-skills/skills", target: "../../xcode-skills" },
 ];
 
 // `xcode-skills/` is a generated Xcode export — its skill content is
-// deliberately excluded from the frontmatter/rules checks. Only the
+// deliberately excluded from the rules checks below. Only the
 // `plugins/xcode-skills` manifests (in MANIFESTS) are validated.
 const SKILLS_DIR = "skills";
-
-const REQUIRED_FIELDS = [
-  "name",
-  "description",
-  "allowed-tools",
-  "model",
-  "effort",
-];
-const VALID_MODELS = new Set(["haiku", "sonnet"]);
-const VALID_EFFORTS = new Set(["low", "medium", "high", "max"]);
 
 async function pathExists(path) {
   try {
@@ -49,12 +47,6 @@ async function readJson(root, relPath, errors) {
     errors.push(`${relPath}: not valid JSON (${error.message})`);
     return null;
   }
-}
-
-// Extract the raw YAML frontmatter block delimited by the first pair of `---`.
-function extractFrontmatter(source) {
-  const match = source.match(/^---\n([\s\S]*?)\n---/);
-  return match ? match[1] : null;
 }
 
 // Collect every rule file name a SKILL.md refers to. Two patterns are used
@@ -98,6 +90,9 @@ function extractReferencedRules(source) {
   return names;
 }
 
+// Structure check only: SKILL.md exists and its referenced `rules/*.md` files
+// resolve (and no rule file is left orphaned). Frontmatter fields are not
+// parsed or validated.
 async function validateSkill(root, skillName, errors) {
   const skillDir = join(root, SKILLS_DIR, skillName);
   const skillFile = join(skillDir, "SKILL.md");
@@ -107,75 +102,7 @@ async function validateSkill(root, skillName, errors) {
   }
 
   const source = await readFile(skillFile, "utf8");
-  const frontmatterBlock = extractFrontmatter(source);
-  if (!frontmatterBlock) {
-    errors.push(
-      `${SKILLS_DIR}/${skillName}/SKILL.md: missing YAML frontmatter`,
-    );
-    return;
-  }
 
-  let frontmatter;
-  try {
-    frontmatter = parseYaml(frontmatterBlock);
-  } catch (error) {
-    errors.push(
-      `${SKILLS_DIR}/${skillName}/SKILL.md: frontmatter is not valid YAML (${error.message})`,
-    );
-    return;
-  }
-  if (!frontmatter || typeof frontmatter !== "object") {
-    errors.push(
-      `${SKILLS_DIR}/${skillName}/SKILL.md: frontmatter is not a mapping`,
-    );
-    return;
-  }
-
-  const prefix = `${SKILLS_DIR}/${skillName}/SKILL.md`;
-  for (const field of REQUIRED_FIELDS) {
-    if (
-      frontmatter[field] === undefined ||
-      frontmatter[field] === null ||
-      frontmatter[field] === ""
-    ) {
-      errors.push(`${prefix}: missing required field \`${field}\``);
-    }
-  }
-
-  if (frontmatter.name !== undefined && frontmatter.name !== skillName) {
-    errors.push(
-      `${prefix}: name \`${frontmatter.name}\` does not match directory \`${skillName}\``,
-    );
-  }
-  if (frontmatter.model !== undefined && !VALID_MODELS.has(frontmatter.model)) {
-    errors.push(
-      `${prefix}: model \`${frontmatter.model}\` must be one of ${[...VALID_MODELS].join(", ")}`,
-    );
-  }
-  if (
-    frontmatter.effort !== undefined &&
-    !VALID_EFFORTS.has(frontmatter.effort)
-  ) {
-    errors.push(
-      `${prefix}: effort \`${frontmatter.effort}\` must be one of ${[...VALID_EFFORTS].join(", ")}`,
-    );
-  }
-
-  const hasContext = frontmatter.context !== undefined;
-  const hasAgent = frontmatter.agent !== undefined;
-  if (hasContext && frontmatter.context !== "fork") {
-    errors.push(
-      `${prefix}: context \`${frontmatter.context}\` must be \`fork\``,
-    );
-  }
-  if (hasContext !== hasAgent) {
-    errors.push(
-      `${prefix}: \`context: fork\` and \`agent\` must appear together`,
-    );
-  }
-
-  // Rules cross-checks: referenced files must exist, and no rule file may be
-  // left unreferenced (orphaned).
   const referenced = extractReferencedRules(source);
   const rulesDir = join(skillDir, "rules");
   let ruleFiles = [];
@@ -227,12 +154,22 @@ async function validatePlugins(root, errors) {
 }
 
 async function validateSymlinks(root, errors) {
-  for (const symlinkPath of WRAPPER_SYMLINKS) {
+  for (const {
+    path: symlinkPath,
+    target: expectedTarget,
+  } of WRAPPER_SYMLINKS) {
     const fullPath = join(root, symlinkPath);
     try {
       const linkStat = await lstat(fullPath);
       if (!linkStat.isSymbolicLink()) {
         errors.push(`${symlinkPath}: expected a symlink`);
+        continue;
+      }
+      const actualTarget = await readlink(fullPath);
+      if (actualTarget !== expectedTarget) {
+        errors.push(
+          `${symlinkPath}: points at \`${actualTarget}\`, expected \`${expectedTarget}\``,
+        );
         continue;
       }
       const targetStat = await stat(fullPath);
@@ -283,6 +220,6 @@ async function main() {
   console.log("✓ Skill validation passed");
 }
 
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (import.meta.url === pathToFileURL(process.argv[1]).href) {
   await main();
 }

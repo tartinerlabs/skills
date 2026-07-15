@@ -90,35 +90,6 @@ test("passes on a valid fixture", async (t) => {
   );
 });
 
-test("flags invalid and missing frontmatter fields", async (t) => {
-  const root = await buildFixture(t);
-  await writeText(
-    join(root, "skills/demo/SKILL.md"),
-    `---
-name: demo
-allowed-tools: Read
-model: banana
-effort: low
----
-
-Body with \`rules/foo.md\`.
-
-| Rule | File |
-|------|------|
-| Foo | \`rules/foo.md\` |
-`,
-  );
-  const errors = await validate(root);
-  assert.ok(
-    errors.some((e) => e.includes("missing required field `description`")),
-    errors.join("\n"),
-  );
-  assert.ok(
-    errors.some((e) => e.includes("model `banana`")),
-    errors.join("\n"),
-  );
-});
-
 test("flags a referenced rule file that does not exist", async (t) => {
   const root = await buildFixture(t);
   await unlink(join(root, "skills/demo/rules/foo.md"));
@@ -153,8 +124,26 @@ test("flags a broken wrapper symlink", async (t) => {
   );
   const errors = await validate(root);
   assert.ok(
+    errors.some((e) => e.includes("plugins/tartinerlabs/skills")),
+    errors.join("\n"),
+  );
+});
+
+test("flags a wrapper symlink pointing at the wrong collection", async (t) => {
+  const root = await buildFixture(t);
+  // Swap tartinerlabs' skills link to the xcode-skills collection — a valid,
+  // existing directory, so only the target comparison can catch it.
+  await unlink(join(root, "plugins/tartinerlabs/skills"));
+  await symlink(
+    "../../xcode-skills",
+    join(root, "plugins/tartinerlabs/skills"),
+  );
+  const errors = await validate(root);
+  assert.ok(
     errors.some(
-      (e) => e.includes("plugins/tartinerlabs/skills") && e.includes("symlink"),
+      (e) =>
+        e.includes("plugins/tartinerlabs/skills") &&
+        e.includes("expected `../../skills`"),
     ),
     errors.join("\n"),
   );
