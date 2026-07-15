@@ -1,3 +1,16 @@
+# [1.24.0](https://github.com/tartinerlabs/skills/compare/v1.23.3...v1.24.0) (2026-07-15)
+
+
+### Bug Fixes
+
+* allow mkdir before git mv in structure fix ([6db0051](https://github.com/tartinerlabs/skills/commit/6db005148f395966f84b5fdc431eb78f35bc63d7))
+* make commit and gitleaks flows safe ([1cf4bee](https://github.com/tartinerlabs/skills/commit/1cf4bee72ffd5acd84d3d4c6716561355d388525)), closes [#50](https://github.com/tartinerlabs/skills/issues/50) [#42](https://github.com/tartinerlabs/skills/issues/42)
+
+
+### Features
+
+* add repo validation and CI quality gates ([4f964f1](https://github.com/tartinerlabs/skills/commit/4f964f107b99e5632e1a1648cec986ad94191c15))
+
 ## [1.23.3](https://github.com/tartinerlabs/skills/compare/v1.23.2...v1.23.3) (2026-07-15)
 
 
