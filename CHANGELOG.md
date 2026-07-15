@@ -1,3 +1,12 @@
+## [1.23.3](https://github.com/tartinerlabs/skills/compare/v1.23.2...v1.23.3) (2026-07-15)
+
+
+### Bug Fixes
+
+* align audit-skill mode triggers with intent ([df22441](https://github.com/tartinerlabs/skills/commit/df2244145c2a60ad246c6e83ca51d486daaa61f1))
+* default audit skills to read-only mode ([adab7f1](https://github.com/tartinerlabs/skills/commit/adab7f1b0c4b32c870f5b730b1dcc15117600baf))
+* refine skill mode-detection intents ([089396f](https://github.com/tartinerlabs/skills/commit/089396ff96c4d880bacfa8b011d9541fc27a7ebd))
+
 ## [1.23.2](https://github.com/tartinerlabs/skills/compare/v1.23.1...v1.23.2) (2026-07-13)
 
 
