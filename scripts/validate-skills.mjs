@@ -90,9 +90,51 @@ function extractReferencedRules(source) {
   return names;
 }
 
-// Structure check only: SKILL.md exists and its referenced `rules/*.md` files
-// resolve (and no rule file is left orphaned). Frontmatter fields are not
-// parsed or validated.
+// Collect literal `<subdir>/<name>.md` paths a SKILL.md refers to. Used for
+// `references/` (progressive-disclosure guides). Template placeholders such as
+// `references/<lang>.md` contain `<`, which is outside the character class, so
+// they are simply ignored rather than treated as a real (missing) file.
+function extractReferencedFiles(source, subdir) {
+  const names = new Set();
+  const re = new RegExp(`${subdir}\\/([A-Za-z0-9][A-Za-z0-9-]*)\\.md`, "g");
+  for (const match of source.matchAll(re)) {
+    names.add(match[1]);
+  }
+  return names;
+}
+
+// Compare the `<name>.md` files present in `<skillDir>/<subdir>` against the
+// set referenced by SKILL.md, pushing an error for every missing reference and
+// every orphaned file. Returns nothing; mutates `errors`.
+async function checkSubdir(skillDir, skillName, subdir, referenced, errors) {
+  const dir = join(skillDir, subdir);
+  let files = [];
+  if (await pathExists(dir)) {
+    files = (await readdir(dir))
+      .filter((entry) => entry.endsWith(".md"))
+      .map((entry) => entry.slice(0, -3));
+  }
+  const fileSet = new Set(files);
+
+  for (const name of referenced) {
+    if (!fileSet.has(name)) {
+      errors.push(
+        `${SKILLS_DIR}/${skillName}: references \`${subdir}/${name}.md\` which does not exist`,
+      );
+    }
+  }
+  for (const name of files) {
+    if (!referenced.has(name)) {
+      errors.push(
+        `${SKILLS_DIR}/${skillName}: \`${subdir}/${name}.md\` is never referenced in SKILL.md (orphan)`,
+      );
+    }
+  }
+}
+
+// Structure check only: SKILL.md exists and its referenced `rules/*.md` and
+// `references/*.md` files resolve (and none are left orphaned). Frontmatter
+// fields are not parsed or validated.
 async function validateSkill(root, skillName, errors) {
   const skillDir = join(root, SKILLS_DIR, skillName);
   const skillFile = join(skillDir, "SKILL.md");
@@ -103,30 +145,20 @@ async function validateSkill(root, skillName, errors) {
 
   const source = await readFile(skillFile, "utf8");
 
-  const referenced = extractReferencedRules(source);
-  const rulesDir = join(skillDir, "rules");
-  let ruleFiles = [];
-  if (await pathExists(rulesDir)) {
-    ruleFiles = (await readdir(rulesDir))
-      .filter((entry) => entry.endsWith(".md"))
-      .map((entry) => entry.slice(0, -3));
-  }
-  const ruleFileSet = new Set(ruleFiles);
-
-  for (const name of referenced) {
-    if (!ruleFileSet.has(name)) {
-      errors.push(
-        `${SKILLS_DIR}/${skillName}: references \`rules/${name}.md\` which does not exist`,
-      );
-    }
-  }
-  for (const name of ruleFiles) {
-    if (!referenced.has(name)) {
-      errors.push(
-        `${SKILLS_DIR}/${skillName}: \`rules/${name}.md\` is never referenced in SKILL.md (orphan)`,
-      );
-    }
-  }
+  await checkSubdir(
+    skillDir,
+    skillName,
+    "rules",
+    extractReferencedRules(source),
+    errors,
+  );
+  await checkSubdir(
+    skillDir,
+    skillName,
+    "references",
+    extractReferencedFiles(source, "references"),
+    errors,
+  );
 }
 
 async function validatePlugins(root, errors) {

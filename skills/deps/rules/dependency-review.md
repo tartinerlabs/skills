@@ -6,6 +6,10 @@ tags: ci, github-actions, dependency-review, supply-chain
 
 **Rule**: Add a CI workflow that blocks PRs introducing dependencies with known vulnerabilities.
 
+### Host
+
+`actions/dependency-review-action` is **GitHub-only** (it reads GitHub's dependency graph). On GitLab, skip this template and use GitLab's built-in Dependency Scanning (`include: template: Security/Dependency-Scanning.gitlab-ci.yml`) instead.
+
 ### Detection
 
 Skip if a `.github/workflows/*.yml` file already contains `dependency-review-action`.

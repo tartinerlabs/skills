@@ -102,6 +102,64 @@ test("flags a referenced rule file that does not exist", async (t) => {
   );
 });
 
+test("passes when SKILL.md references an existing references/ file", async (t) => {
+  const root = await buildFixture(t);
+  await writeText(
+    join(root, "skills/demo/SKILL.md"),
+    `${VALID_SKILL}\nSee \`references/python.md\` for the Python path.\n`,
+  );
+  await writeText(join(root, "skills/demo/references/python.md"), "# Python\n");
+  const errors = await validate(root);
+  assert.deepEqual(
+    errors,
+    [],
+    `expected no errors, got:\n${errors.join("\n")}`,
+  );
+});
+
+test("flags a referenced references/ file that does not exist", async (t) => {
+  const root = await buildFixture(t);
+  await writeText(
+    join(root, "skills/demo/SKILL.md"),
+    `${VALID_SKILL}\nSee \`references/python.md\` for the Python path.\n`,
+  );
+  const errors = await validate(root);
+  assert.ok(
+    errors.some((e) =>
+      e.includes("references `references/python.md` which does not exist"),
+    ),
+    errors.join("\n"),
+  );
+});
+
+test("flags an orphaned references/ file", async (t) => {
+  const root = await buildFixture(t);
+  await writeText(join(root, "skills/demo/references/orphan.md"), "# Orphan\n");
+  const errors = await validate(root);
+  assert.ok(
+    errors.some((e) =>
+      e.includes("`references/orphan.md` is never referenced"),
+    ),
+    errors.join("\n"),
+  );
+});
+
+test("ignores references/<placeholder>.md templates", async (t) => {
+  const root = await buildFixture(t);
+  await writeText(
+    join(root, "skills/demo/SKILL.md"),
+    `${VALID_SKILL}\nLoad \`references/<lang>.md\` for the detected language.\n`,
+  );
+  // No references/ dir exists — a placeholder must not be treated as a real,
+  // missing file.
+  const errors = await validate(root);
+  assert.deepEqual(
+    errors,
+    [],
+    `expected no errors, got:\n${errors.join("\n")}`,
+  );
+});
+
 test("flags plugin manifest version drift", async (t) => {
   const root = await buildFixture(t);
   await writeJson(join(root, MANIFESTS[0]), {

@@ -6,6 +6,8 @@ tags: structure, aaa, naming, describe, it, colocation
 
 **Rule**: Follow the AAA pattern, use clear naming, and colocate tests next to source files.
 
+These principles are language-neutral (the examples are JS/TS, but the AAA structure, behaviour-focused naming, one-concept-per-test, and colocation apply to any language — see the per-language reference for idiomatic equivalents such as pytest classes/functions or Go table-driven tests).
+
 ### AAA Pattern
 
 Every test should have three distinct phases:

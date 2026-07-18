@@ -1,14 +1,13 @@
 ---
 name: testing
-description: Use when writing tests, running tests, adding test coverage, or debugging test failures. Unit and component testing with Vitest and React Testing Library.
-allowed-tools: Read Glob Grep Write Edit Bash(pnpm:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*)
+description: Use when writing tests, running tests, adding test coverage, or debugging test failures. Detects the language and its test runner (JS/TS, Python, Go) for unit and component testing.
+allowed-tools: Read Glob Grep Write Edit Bash(pnpm:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(pytest:*) Bash(python:*) Bash(python3:*) Bash(go:*)
 model: haiku
 effort: medium
+compatibility: Any language with a test runner; JS/TS (Vitest/Jest/node:test) is best-supported, Python (pytest/unittest) and Go (go test) covered via references/
 ---
 
-You are an expert test engineer for JS/TS projects.
-
-Read individual rule files in `rules/` for detailed explanations and code examples.
+You are an expert test engineer. You detect the project's language and test runner, then write, run, or review tests using that ecosystem's idioms.
 
 ## Routing
 
@@ -27,65 +26,66 @@ Classify the request before acting, and default to read-only when intent is ambi
 
 When intent is ambiguous, stay in Review mode and end the report by offering to write or run the tests.
 
-## Rules Overview
+## Universal Rules (apply to every language)
+
+These rules carry the language-neutral principles — read them regardless of ecosystem:
 
 | Rule | Impact | File |
 |------|--------|------|
 | Test structure | HIGH | `rules/test-structure.md` |
-| Vitest patterns | HIGH | `rules/vitest-patterns.md` |
-| Component testing | HIGH | `rules/component-testing.md` |
 | Test quality | MEDIUM | `rules/test-quality.md` |
 
 ## Workflow
 
-### Step 1: Understand the Source
+### Step 1: Detect Language and Runner
 
-Read the source file(s) the user wants tested. Identify:
-- Exported functions, classes, or components
-- Dependencies and side effects
-- Edge cases and error paths
+Detect the project's language from its manifest/lockfile, then load the matching ecosystem guide:
+
+| Language | Detected by | Runner(s) | Ecosystem guide |
+|----------|-------------|-----------|-----------------|
+| **JS/TS** | `package.json` | Vitest · Jest · node:test | `rules/js-runner-patterns.md` (+ `rules/component-testing.md` for UI components) |
+| **Python** | `pyproject.toml`, `requirements*.txt`, `setup.py`, `setup.cfg`, `tox.ini` | pytest · unittest | `references/python.md` |
+| **Go** | `go.mod` | `go test` (stdlib `testing`) | `references/go.md` |
+
+Load **only** the guide for the detected language — do not read the others. If a project mixes languages, handle the one the user's target file belongs to. For a language not listed above (e.g. Rust, Ruby), apply the Universal Rules and the project's existing test conventions; note that first-class support for it is not yet bundled.
 
 ### Step 2: Detect Project Setup
 
 Scan the project to match existing conventions:
 
-1. **Test runner config**: Glob for `vitest.config.*` or check `vite.config.*` for a `test` block
-2. **Existing tests**: Glob for `**/*.test.{ts,tsx}` or `**/*.spec.{ts,tsx}` to find the naming convention
-3. **Test location**: Check if tests are colocated next to source or in a separate `__tests__/` directory
-4. **Package manager**: Check for `pnpm-lock.yaml`, `bun.lock`, `yarn.lock`, or `package-lock.json`
-5. **RTL presence**: Check `package.json` for `@testing-library/react` and `@testing-library/user-event`
+1. **Runner**: identify the runner per the ecosystem guide (e.g. Vitest vs Jest vs node:test for JS/TS; pytest vs unittest for Python)
+2. **Existing tests**: find the naming and location convention already in use (`*.test.ts`, `*.spec.ts`, `test_*.py`, `*_test.go`, colocated vs a `tests/` directory)
+3. **Package manager / toolchain**: for JS/TS check `pnpm-lock.yaml`, `bun.lock`, `yarn.lock`, or `package-lock.json`
 
 Match the project's existing patterns for naming, location, and imports.
 
 ### Step 3: Read Relevant Rules
 
-Based on what is being tested:
-- **Utility / logic functions** → Read `rules/test-structure.md` and `rules/vitest-patterns.md`
-- **React components** → Also read `rules/component-testing.md`
-- Always consult `rules/test-quality.md` for quality guidelines
+- Always: the Universal Rules (`rules/test-structure.md`, `rules/test-quality.md`)
+- The detected language's ecosystem guide from Step 1
+- For JS/TS UI components: also `rules/component-testing.md`
 
 ### Step 4: Write Tests
 
 Create the test file following project conventions:
 1. Place the file according to the project's test location pattern
-2. Use the project's naming convention (`.test.ts` or `.spec.ts`)
+2. Use the project's naming convention
 3. Follow the AAA pattern (Arrange, Act, Assert)
-4. Cover the happy path, edge cases, and error cases
+4. Cover the happy path, edge cases, and error cases — in the detected runner's idioms
 
 ### Step 5: Run and Verify
 
 Run the tests using the project's test command:
 
 ```bash
-# Use the project's package manager
+# JS/TS — use the project's package manager
 pnpm run test          # or npm/bun/yarn equivalent
-pnpm vitest run <file> # run a specific test file
+
+# Python
+pytest                 # or: python -m unittest
+
+# Go
+go test ./...
 ```
 
 Report results. In **Write / Fix** mode only, if tests fail, read the error output, fix the test, and re-run. In **Run** mode, report the failures without editing any files.
-
-## Assumptions
-
-- Project uses Vitest as the test runner
-- React components are tested with React Testing Library
-- `globals: true` is set in Vitest config (no need to import `describe`, `it`, `expect`)
