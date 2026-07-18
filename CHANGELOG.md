@@ -1,3 +1,10 @@
+## [1.25.1](https://github.com/tartinerlabs/skills/compare/v1.25.0...v1.25.1) (2026-07-18)
+
+
+### Bug Fixes
+
+* address Codex review comments on PR [#53](https://github.com/tartinerlabs/skills/issues/53) ([32c2a4d](https://github.com/tartinerlabs/skills/commit/32c2a4d6f38437e4c34e8aeb9d81afb66495fa0d))
+
 # [1.25.0](https://github.com/tartinerlabs/skills/compare/v1.24.0...v1.25.0) (2026-07-18)
 
 
