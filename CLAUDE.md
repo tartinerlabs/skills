@@ -39,10 +39,17 @@ effort: medium
 - `allowed-tools` — Scoped tool permissions (e.g., `Bash(git status)` for specific commands, `Read` for full tool access)
 - `model` — Model preference. Low/medium-effort skills default to `haiku` (cheaper, separate rate-limit bucket); high-effort skills that need deeper reasoning (forked subagents, complex audits) use `sonnet`
 - `effort` — Reasoning effort level (`low`, `medium`, `high`, `max`). Overrides the session effort level while the skill is active
+- `compatibility` — Portable Agent-Skills-spec field declaring the skill's real requirements (e.g. `Requires git`, `Any language project; detects the ecosystem`). Every in-scope skill carries one. Unlike `model`/`effort`/`context: fork` (Claude-Code-only, ignored gracefully elsewhere), `compatibility` is portable across all distribution channels
 
-### Rules Pattern
+### Language-aware, JS/TS-first model
+
+Every skill is **language-aware with JS/TS as the first-class default** — no skill assumes React or a single framework/host. Skills **detect, don't assume**: read the project's manifest (`package.json`/`pyproject.toml`/`go.mod`/…) as prose (never `!`-shell-injection, which is Claude-Code-only) and adapt. The general workflow/audit skills work in any language, gating framework-specific rules behind detection. The ecosystem tooling (`setup`, `deps`, `testing`) is polyglot. `tailwind` is the one inherent JS/CSS specialist (out of scope for the platform-agnostic pass). Secret scanning is abstracted: `commit`/`security`/`setup`/`deps` accept any scanner (GitLeaks default, TruffleHog accepted), not a hard-coded tool.
+
+### Rules and References Pattern
 
 Skills with multiple checks use a `rules/` subdirectory alongside `SKILL.md`. The main skill file references rules via a table and tells Claude to read them at runtime. Each rule file is a standalone markdown document with severity, examples, and fix instructions. This keeps skills modular — rules can be added, removed, or edited independently.
+
+Polyglot skills add a `references/` subdirectory for **progressive disclosure**: SKILL.md detects the language and loads **only** the matching `references/<lang>.md` (e.g. `references/python.md`, `references/go.md`), so a JS project never loads Go content. The asymmetry is intentional — the first-class JS/TS path stays in modular `rules/`; other ecosystems live in `references/<lang>.md`; truly universal checks stay in `rules/` and are cross-linked from each language guide. `references/` is also the most portable component across distribution channels. `scripts/validate-skills.mjs` enforces the same existence + orphan discipline on both `rules/*.md` and `references/*.md` (template placeholders like `references/<lang>.md` are ignored).
 
 ## Distribution
 
