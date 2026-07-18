@@ -81,7 +81,7 @@ All Codex, Claude, and Cursor metadata for this collection belongs in `plugins/x
 
 ## GitHub Actions
 
-- All actions: pin to full commit hash with version comment (e.g., `@9fd676a...  # v4.2.0`), including GitHub-owned `actions/*`
+- All actions: pin to a full commit SHA with a version or source-ref comment (e.g., `@9fd676a...  # v4.2.0`), including GitHub-owned `actions/*`
 
 ## Conventions
 

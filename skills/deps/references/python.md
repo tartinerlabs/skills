@@ -8,7 +8,7 @@ Dependency supply-chain hardening for Python projects — the ecosystem equivale
 - hashes in `requirements.txt` (`--hash=sha256:...`) or a `uv.lock`/`poetry.lock` → integrity pinning present
 - pinned versions (`==`) rather than ranges (`>=`, `~=`) → already pinned
 - `renovate.json` / `.github/dependabot.yml` → automated updates present
-- `.github/workflows/*.yml` with `dependency-review-action` → PR dependency review present
+- `.github/workflows/*.{yml,yaml}` with `dependency-review-action` → PR dependency review present
 
 **Skip checks that already pass.** Report what was skipped at the end.
 

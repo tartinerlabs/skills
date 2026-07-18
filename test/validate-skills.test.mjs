@@ -206,3 +206,109 @@ test("flags a wrapper symlink pointing at the wrong collection", async (t) => {
     errors.join("\n"),
   );
 });
+
+test("flags an action that uses a mutable tag", async (t) => {
+  const root = await buildFixture(t);
+  await writeText(
+    join(root, "skills/demo/rules/foo.md"),
+    "# Foo\n\n```yaml\n- uses: actions/checkout@v7\n```\n",
+  );
+  const errors = await validate(root);
+  assert.ok(
+    errors.some(
+      (e) =>
+        e.includes("skills/demo/rules/foo.md:4") &&
+        e.includes("full 40-character commit SHA"),
+    ),
+    errors.join("\n"),
+  );
+});
+
+test("flags a pinned action without a readable ref comment", async (t) => {
+  const root = await buildFixture(t);
+  await writeText(
+    join(root, "skills/demo/rules/foo.md"),
+    "# Foo\n\n```yaml\n- uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0\n```\n",
+  );
+  const errors = await validate(root);
+  assert.ok(
+    errors.some(
+      (e) =>
+        e.includes("skills/demo/rules/foo.md:4") &&
+        e.includes("version or source-ref comment"),
+    ),
+    errors.join("\n"),
+  );
+});
+
+test("accepts pinned actions and full-SHA placeholders", async (t) => {
+  const root = await buildFixture(t);
+  await writeText(
+    join(root, "skills/demo/rules/foo.md"),
+    [
+      "# Foo",
+      "",
+      "```yaml",
+      "- uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0",
+      "```",
+      "",
+      "Use `- uses: owner/action@<full-SHA>  # vX.Y.Z` for other actions.",
+      "",
+    ].join("\n"),
+  );
+  const errors = await validate(root);
+  assert.deepEqual(
+    errors,
+    [],
+    `expected no errors, got:\n${errors.join("\n")}`,
+  );
+});
+
+test("allows mutable refs only in the action-pinning incorrect section", async (t) => {
+  const root = await buildFixture(t);
+  await writeText(
+    join(root, "skills/github-actions/SKILL.md"),
+    VALID_SKILL.replaceAll("demo", "github-actions").replaceAll(
+      "rules/foo.md",
+      "rules/action-pinning.md",
+    ),
+  );
+  await writeText(
+    join(root, "skills/github-actions/rules/action-pinning.md"),
+    [
+      "# Action Pinning",
+      "",
+      "### Incorrect",
+      "",
+      "- uses: actions/checkout@v7",
+      "",
+      "### Correct",
+      "",
+      "- uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0",
+      "",
+    ].join("\n"),
+  );
+  const errors = await validate(root);
+  assert.deepEqual(
+    errors,
+    [],
+    `expected no errors, got:\n${errors.join("\n")}`,
+  );
+});
+
+test("scans yaml workflow files for mutable action refs", async (t) => {
+  const root = await buildFixture(t);
+  await writeText(
+    join(root, ".github/workflows/ci.yaml"),
+    "steps:\n  - uses: actions/checkout@v7\n",
+  );
+  const errors = await validate(root);
+  assert.ok(
+    errors.some(
+      (e) =>
+        e.includes(".github/workflows/ci.yaml:2") &&
+        e.includes("full 40-character commit SHA"),
+    ),
+    errors.join("\n"),
+  );
+});

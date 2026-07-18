@@ -29,6 +29,10 @@ const WRAPPER_SYMLINKS = [
 // deliberately excluded from the rules checks below. Only the
 // `plugins/xcode-skills` manifests (in MANIFESTS) are validated.
 const SKILLS_DIR = "skills";
+const ACTION_PINNING_RULE = "skills/github-actions/rules/action-pinning.md";
+const ACTION_USE_RE =
+  /\buses:\s*([A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+(?:\/[A-Za-z0-9_.-]+)*)@([^\s`]+)/g;
+const FULL_COMMIT_SHA_RE = /^[a-f0-9]{40}$/i;
 
 async function pathExists(path) {
   try {
@@ -46,6 +50,63 @@ async function readJson(root, relPath, errors) {
   } catch (error) {
     errors.push(`${relPath}: not valid JSON (${error.message})`);
     return null;
+  }
+}
+
+async function collectFiles(dir, extensions) {
+  if (!(await pathExists(dir))) return [];
+
+  const files = [];
+  const entries = await readdir(dir, { withFileTypes: true });
+  for (const entry of entries) {
+    const path = join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files.push(...(await collectFiles(path, extensions)));
+    } else if (extensions.some((extension) => entry.name.endsWith(extension))) {
+      files.push(path);
+    }
+  }
+  return files;
+}
+
+function checkActionUses(root, file, source, errors) {
+  const relPath = file.slice(root.length + 1);
+  let allowMutableExample = false;
+
+  for (const [index, line] of source.split("\n").entries()) {
+    if (relPath === ACTION_PINNING_RULE && line.startsWith("### ")) {
+      allowMutableExample = line === "### Incorrect";
+    }
+
+    for (const match of line.matchAll(ACTION_USE_RE)) {
+      if (allowMutableExample || match[2] === "<full-SHA>") continue;
+
+      const location = `${relPath}:${index + 1}`;
+      if (!FULL_COMMIT_SHA_RE.test(match[2])) {
+        errors.push(
+          `${location}: \`${match[1]}@${match[2]}\` must use a full 40-character commit SHA`,
+        );
+        continue;
+      }
+
+      const remainder = line.slice((match.index ?? 0) + match[0].length);
+      if (!/^\s+#\s+\S/.test(remainder)) {
+        errors.push(
+          `${location}: \`${match[1]}@${match[2]}\` must include a version or source-ref comment`,
+        );
+      }
+    }
+  }
+}
+
+async function validateActionPinning(root, errors) {
+  const files = [
+    ...(await collectFiles(join(root, SKILLS_DIR), [".md"])),
+    ...(await collectFiles(join(root, ".github/workflows"), [".yml", ".yaml"])),
+  ];
+
+  for (const file of files) {
+    checkActionUses(root, file, await readFile(file, "utf8"), errors);
   }
 }
 
@@ -233,6 +294,7 @@ export async function validate(root) {
 
   await validatePlugins(root, errors);
   await validateSymlinks(root, errors);
+  await validateActionPinning(root, errors);
 
   return errors;
 }

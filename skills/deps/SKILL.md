@@ -40,7 +40,7 @@ Use the detected package manager for all commands. Replace `<pm>` in rule files 
 Before applying any hardening, scan for existing configurations:
 - `.npmrc` / `.yarnrc.yml` / `bunfig.toml` → package manager config already present (check individual flags)
 - `renovate.json` / `.renovaterc` / `.renovaterc.json` / `renovate` key in `package.json` → Renovate already configured
-- `.github/workflows/*.yml` containing `dependency-review` → dependency review exists
+- `.github/workflows/*.{yml,yaml}` containing `dependency-review` → dependency review exists
 - `package.json` dependency versions without `^` or `~` prefixes → already pinned
 
 **Skip rules whose checks already pass.** Report what was skipped at the end.
@@ -77,4 +77,4 @@ After all rules are processed, display a summary:
 
 ## Compatibility
 
-Works on any language project — detect the ecosystem (Step 0) and harden its dependency supply chain: JS/TS is the best-supported path (`rules/*.md`), with Python, Go and Rust covered via `references/`. The **PR dependency-review CI** step assumes GitHub (`actions/dependency-review-action`, via GitHub's dependency graph); on GitLab, use GitLab's built-in Dependency Scanning instead. `gh` is used to look up action commit SHAs when writing GitHub workflows. Git must be initialised in the project.
+Works on any language project — detect the ecosystem (Step 0) and harden its dependency supply chain: JS/TS is the best-supported path (`rules/*.md`), with Python, Go and Rust covered via `references/`. The **PR dependency-review CI** step assumes GitHub (`actions/dependency-review-action`, via GitHub's dependency graph); on GitLab, use GitLab's built-in Dependency Scanning instead. `gh` is used to resolve every action release to a full commit SHA when writing GitHub workflows. Git must be initialised in the project.
