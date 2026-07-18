@@ -1,3 +1,11 @@
+# [1.25.0](https://github.com/tartinerlabs/skills/compare/v1.24.0...v1.25.0) (2026-07-18)
+
+
+### Features
+
+* make ecosystem tooling skills polyglot ([294b286](https://github.com/tartinerlabs/skills/commit/294b286cf47021280ed055c6206e28acf3c921b4))
+* make workflow skills language-agnostic ([45adc4f](https://github.com/tartinerlabs/skills/commit/45adc4fb9783b54b65e4ce0a965d456085f71ee2))
+
 # [1.24.0](https://github.com/tartinerlabs/skills/compare/v1.23.3...v1.24.0) (2026-07-15)
 
 
