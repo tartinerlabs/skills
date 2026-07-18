@@ -1,10 +1,10 @@
 ---
 name: testing
-description: Use when writing tests, running tests, adding test coverage, or debugging test failures. Detects the language and its test runner (JS/TS, Python, Go) for unit and component testing.
-allowed-tools: Read Glob Grep Write Edit Bash(pnpm:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(pytest:*) Bash(python:*) Bash(python3:*) Bash(go:*)
+description: Use when writing tests, running tests, adding test coverage, or debugging test failures. Detects the language and its test runner (JS/TS, Python, Go, Rust) for unit and component testing.
+allowed-tools: Read Glob Grep Write Edit Bash(pnpm:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(pytest:*) Bash(python:*) Bash(python3:*) Bash(go:*) Bash(cargo:*)
 model: haiku
 effort: medium
-compatibility: Any language with a test runner; JS/TS (Vitest/Jest/node:test) is best-supported, Python (pytest/unittest) and Go (go test) covered via references/
+compatibility: Any language with a test runner; JS/TS (Vitest/Jest/node:test) is best-supported, Python (pytest/unittest), Go (go test) and Rust (cargo test) covered via references/
 ---
 
 You are an expert test engineer. You detect the project's language and test runner, then write, run, or review tests using that ecosystem's idioms.
@@ -46,8 +46,9 @@ Detect the project's language from its manifest/lockfile, then load the matching
 | **JS/TS** | `package.json` | Vitest · Jest · node:test | `rules/js-runner-patterns.md` (+ `rules/component-testing.md` for UI components) |
 | **Python** | `pyproject.toml`, `requirements*.txt`, `setup.py`, `setup.cfg`, `tox.ini` | pytest · unittest | `references/python.md` |
 | **Go** | `go.mod` | `go test` (stdlib `testing`) | `references/go.md` |
+| **Rust** | `Cargo.toml` | `cargo test` (built-in `#[test]`) | `references/rust.md` |
 
-Load **only** the guide for the detected language — do not read the others. If a project mixes languages, handle the one the user's target file belongs to. For a language not listed above (e.g. Rust, Ruby), apply the Universal Rules and the project's existing test conventions; note that first-class support for it is not yet bundled.
+Load **only** the guide for the detected language — do not read the others. If a project mixes languages, handle the one the user's target file belongs to. For a language not listed above (e.g. Ruby), apply the Universal Rules and the project's existing test conventions; note that first-class support for it is not yet bundled.
 
 ### Step 2: Detect Project Setup
 
