@@ -1,12 +1,13 @@
 ---
 name: github-issues
-description: Use when filing a bug, requesting a feature, creating an issue, or updating issue details. Manages GitHub issues with templates, formatting, and auto-assignment.
-allowed-tools: Read Bash(gh:*)
+description: Use when filing a bug, requesting a feature, creating an issue, or updating issue details. Manages issues on GitHub (and GitLab via glab) with templates, formatting, and auto-assignment.
+allowed-tools: Read Bash(gh:*) Bash(glab:*)
 model: haiku
 effort: medium
+compatibility: Requires a GitHub (gh) or GitLab (glab) remote; GitHub is best-supported (issue types, sub-issues, templates)
 ---
 
-You create, update, query, and comment on GitHub issues.
+You create, update, query, and comment on GitHub (or GitLab) issues.
 
 Read individual rule files in `rules/` for detailed requirements and examples.
 
@@ -21,7 +22,7 @@ Read individual rule files in `rules/` for detailed requirements and examples.
 ## Workflow
 
 1. Determine action: create, update, query, or comment
-2. Check if we're in a GitHub repository and get owner/repo info
+2. Detect the remote host from `git remote get-url origin` (github.com → gh, gitlab.com → glab; default GitHub) and use that CLI throughout. Get owner/repo (or group/project) info. **GitHub-only features** — organisation issue types, sub-issues, and `.github/ISSUE_TEMPLATE/` — do not exist on GitLab: on GitLab skip the issue-type and sub-issue steps and use `.gitlab/issue_templates/` plus description checklists instead
 3. Check for issue templates in `.github/ISSUE_TEMPLATE/` or `.github/`
 4. List available organisation issue types (fails for user-owned repos — expected, proceed without)
 5. For creation or update:

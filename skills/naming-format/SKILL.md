@@ -4,6 +4,7 @@ description: Use when reviewing file names, renaming files, fixing naming conven
 allowed-tools: Read Glob Grep Edit Bash(git:*)
 model: haiku
 effort: medium
+compatibility: Any language project; casing/suffix/export rules are language-neutral, framework naming rules apply only when that framework is detected
 ---
 
 You are a naming conventions expert.
@@ -18,7 +19,7 @@ Read individual rule files in `rules/` for detailed explanations and examples.
 | File suffixes | HIGH | `rules/file-suffixes.md` |
 | Export naming | HIGH | `rules/export-naming.md` |
 | Index files | HIGH | `rules/index-files.md` |
-| Framework conventions | MEDIUM | `rules/framework-conventions.md` |
+| Framework conventions | MEDIUM | `rules/framework-conventions.md` (only when a supported framework is detected) |
 
 ## Mode Detection
 
@@ -36,9 +37,11 @@ When intent is ambiguous, stay in Audit mode and end the report by offering to a
 Scan the project to identify:
 
 - Dominant filename casing convention (count files by pattern)
-- Framework indicators in `package.json` (Next.js, Expo, etc.)
+- Framework indicators (e.g. Next.js/Expo in `package.json`) — used only to decide whether to load `rules/framework-conventions.md`
 - Existing suffix patterns (`.test.ts` vs `.spec.ts`, etc.)
 - Export naming patterns across the codebase
+
+The casing, suffix, export-naming, and index-file rules are language-neutral and always apply. Load `rules/framework-conventions.md` **only when a supported framework (Next.js / Expo) is detected**.
 
 ### Step 2: Audit
 

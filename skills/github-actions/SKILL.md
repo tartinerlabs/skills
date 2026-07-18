@@ -6,6 +6,7 @@ model: sonnet
 effort: high
 context: fork
 agent: general-purpose
+compatibility: Targets GitHub Actions (GitHub-native); uses gh for SHA lookups; auto-detects project language (Node/JS-TS, Go, Python, Rust, Ruby)
 ---
 
 ## Mode Detection
@@ -127,7 +128,6 @@ Read individual rule files for detailed checks and examples:
 
 ---
 
-## Assumptions
+## Compatibility
 
-- GitHub CLI (`gh`) is available for looking up action commit SHAs
-- The project is hosted on GitHub
+GitHub Actions is a GitHub-native CI system — this skill targets it specifically, and `gh` is used to look up action commit SHAs. Project **language** is auto-detected (Node/JS-TS, Go, Python, Rust, Ruby), so the generated workflow adapts across ecosystems. GitLab CI and other CI systems are separate and out of scope here.

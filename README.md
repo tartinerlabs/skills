@@ -5,14 +5,15 @@
 [![Version](https://img.shields.io/github/v/release/tartinerlabs/skills?style=for-the-badge)](https://github.com/tartinerlabs/skills/releases)
 [![License](https://img.shields.io/github/license/tartinerlabs/skills?style=for-the-badge)](LICENSE)
 
-Powertools for coding agents: git workflows, GitHub automation, code quality, and project tooling. Each skill ships with modular, independently editable rules for deep, opinionated guidance.
+Language-agnostic agent skills for git/GitHub workflows, code quality, and project tooling &mdash; with first-class JS/TS support. Each skill ships with modular, independently editable rules for deep, opinionated guidance.
 
 ## Why These Skills
 
+- **Language-aware, JS/TS-first** &mdash; Skills detect the project's language and adapt. The general workflow/audit skills work in any language; the ecosystem tooling (`setup`, `deps`, `testing`) is polyglot &mdash; JS/TS is the best-supported path, with Python and Go covered via per-language `references/`.
 - **Modular rules architecture** &mdash; Each skill ships with standalone rule files in `rules/` directories. Rules can be added, removed, or edited independently without touching the main skill logic.
 - **Opinionated audit workflows** &mdash; Skills like `security`, `github-actions`, `tailwind`, and `refactor` produce structured severity-graded reports, then auto-fix issues.
-- **GitLeaks built in** &mdash; The `commit`, `security`, and `setup` skills all enforce GitLeaks secret detection as a first-class concern.
-- **Convention-aware** &mdash; Skills detect your project's existing conventions (language variant, commit format, package manager, project structure) and adapt automatically.
+- **Secret scanning built in** &mdash; The `commit`, `security`, and `setup` skills enforce secret detection as a first-class concern (GitLeaks by default, TruffleHog accepted).
+- **Convention-aware** &mdash; Skills detect your project's existing conventions (language, commit format, package manager, project structure, git host) and adapt automatically.
 
 ## Skills
 
@@ -22,32 +23,32 @@ Install the plugin for your agent, then invoke skills through that agent's nativ
 
 | Skill | Description |
 |-------|-------------|
-| [commit](skills/commit) | Clean git commits with conventional commit detection and GitLeaks secret scanning |
-| [create-branch](skills/create-branch) | Create and checkout a branch with naming validation and GitHub issue linking |
+| [commit](skills/commit) | Clean git commits with conventional commit detection and secret scanning |
+| [create-branch](skills/create-branch) | Create and checkout a branch with naming validation and GitHub/GitLab issue linking |
 
 ### GitHub
 
 | Skill | Description |
 |-------|-------------|
-| [create-pr](skills/create-pr) | Push branch and create a pull request with structured description and auto-assignment |
-| [github-issues](skills/github-issues) | Create, update, query, and comment on GitHub issues with MCP |
+| [create-pr](skills/create-pr) | Push branch and create a pull/merge request (GitHub or GitLab) with structured description and auto-assignment |
+| [github-issues](skills/github-issues) | Create, update, query, and comment on issues (GitHub, or GitLab via glab) |
 | [github-actions](skills/github-actions) | Create and audit GitHub Actions workflows with SHA pinning, permissions, and caching checks |
 
 ### Code Quality
 
 | Skill | Description |
 |-------|-------------|
-| [deps](skills/deps) | Harden npm supply chain with .npmrc flags, version pinning, and Renovate config |
-| [refactor](skills/refactor) | Audit and refactor TypeScript/JavaScript code for dead code, deep nesting, type assertions, and design patterns |
-| [security](skills/security) | OWASP Top 10 security audit with GitLeaks secret detection and dependency vulnerability scanning |
+| [deps](skills/deps) | Harden the dependency supply chain — detects the ecosystem (JS/TS, Python, Go) for pinning, vulnerability scanning, and CI gates |
+| [refactor](skills/refactor) | Audit and refactor code for dead code, deep nesting, and design patterns (language-agnostic; TS/JS idiom rules for TS/JS files) |
+| [security](skills/security) | OWASP Top 10 security audit with secret detection and dependency vulnerability scanning |
 | [tailwind](skills/tailwind) | Audit and fix Tailwind CSS v4 anti-patterns for spacing, 8px grid, mobile-first, and GPU animations |
-| [testing](skills/testing) | Write and run tests with Vitest and React Testing Library for JS/TS projects |
+| [testing](skills/testing) | Write and run unit/component tests — detects the language and test runner (JS/TS, Python, Go) |
 
 ### Project
 
 | Skill | Description |
 |-------|-------------|
-| [setup](skills/setup) | Add Biome, Husky, commitlint, lint-staged, GitLeaks, and TypeScript to JS/TS projects |
+| [setup](skills/setup) | Set up the ecosystem's lint/format/git-hooks/secret-scanning toolchain — detects the language (JS/TS, Python, Go) |
 | [project-structure](skills/project-structure) | Audit project directory structure for colocation, grouping, and anti-pattern detection |
 | [naming-format](skills/naming-format) | Audit and fix filename and export naming conventions for consistency |
 | [update-project](skills/update-project) | Update and maintain CLAUDE.md, AGENTS.md, README.md, agents, skills, and rules to match current project state |
@@ -184,20 +185,25 @@ Each plugin lives in its own `plugins/<name>/` wrapper holding the three per-cha
 
 ## Architecture
 
-Skills use a modular rules pattern. Each skill directory contains:
+Skills use a modular rules pattern, with per-language guides loaded on demand. Each skill directory contains:
 
 ```
 skills/<name>/
-  SKILL.md          # Skill definition with frontmatter
-  rules/            # Independent, editable rule files
+  SKILL.md          # Skill definition with frontmatter; detects the language and routes
+  rules/            # Independent, editable rule files (universal checks + the JS/TS path)
     some-rule.md    # Severity, examples, fix instructions
+  references/       # Per-language guides, loaded only when that language is detected
+    python.md       # e.g. the Python path for setup/deps/testing
+    go.md           # e.g. the Go path
 
 agents/<name>.md    # Optional Claude Code agents that invoke skills autonomously
 ```
 
+For the polyglot skills (`setup`, `deps`, `testing`), SKILL.md detects the project's language from its manifest and loads **only** the matching guide — JS/TS lives in the first-class modular `rules/`, and other ecosystems live in `references/<lang>.md`, so a JS project never loads Go content.
+
 This means you can:
 - **Customise** a rule's severity or examples without forking the skill
-- **Add** project-specific rules by dropping a new `.md` file in `rules/`
+- **Add** project-specific rules by dropping a new `.md` file in `rules/`, or a new language by adding `references/<lang>.md`
 - **Remove** rules you disagree with
 
 ## Skill Format

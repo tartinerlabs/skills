@@ -1,10 +1,10 @@
 ---
 title: Component Testing
 impact: HIGH
-tags: react, testing-library, rtl, user-event, queries
+tags: react, vue, svelte, testing-library, rtl, user-event, queries
 ---
 
-**Rule**: Test React components from the user's perspective using React Testing Library.
+**Rule**: Test components from the user's perspective using the project's Testing Library. Detect the framework from `package.json` and use the matching package — `@testing-library/react` (React), `@testing-library/vue` (Vue), or `@testing-library/svelte` (Svelte). They share the same philosophy (accessible queries, `screen`, `user-event`); the examples below use React, and the query priority and user-event guidance apply identically across all three. If the project ships no Testing Library, this rule does not apply.
 
 ### Query Priority
 

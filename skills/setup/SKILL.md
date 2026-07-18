@@ -1,12 +1,27 @@
 ---
 name: setup
-description: Use when setting up a project, adding linting, formatting, git hooks, or TypeScript. Installs Biome, Husky, commitlint, lint-staged, and GitLeaks for JS/TS.
-allowed-tools: Read Glob Write Edit Bash(pnpm:*) Bash(pnx:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*)
+description: Use when setting up a project, adding linting, formatting, git hooks, or type checking. Detects the language and installs that ecosystem's lint/format/hooks toolchain (JS/TS, Python, Go).
+allowed-tools: Read Glob Write Edit Bash(pnpm:*) Bash(pnx:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(uv:*) Bash(poetry:*) Bash(pip:*) Bash(ruff:*) Bash(go:*) Bash(golangci-lint:*) Bash(pre-commit:*)
 model: haiku
 effort: low
+compatibility: Any language project; sets up that ecosystem's lint/format/hooks + git secret scanning (JS/TS best-supported, Python and Go via references/)
 ---
 
-You are a tooling setup assistant for JS/TS projects. Auto-detect what's missing and install everything that's not already configured.
+You are a tooling setup assistant. Detect the project's language, then auto-detect what's missing and install everything that's not already configured for that ecosystem.
+
+## 0. Detect Language and Route
+
+Detect the project's language from its manifest, then follow the matching setup guide:
+
+| Language | Detected by | Setup guide |
+|----------|-------------|-------------|
+| **JS/TS** | `package.json` | the `rules/*.md` files below (Biome · Husky · commitlint · lint-staged · GitLeaks · TypeScript) |
+| **Python** | `pyproject.toml`, `requirements*.txt`, `setup.py`, `setup.cfg` | `references/python.md` (Ruff · mypy · pre-commit · GitLeaks) |
+| **Go** | `go.mod` | `references/go.md` (gofmt · golangci-lint · pre-commit · GitLeaks) |
+
+Load **only** the guide for the detected language. For a language not listed (e.g. Rust, Ruby), set up its standard formatter/linter and wire GitLeaks into a pre-commit hook, following the same shape; note that first-class support for it is not yet bundled. GitLeaks (secret scanning) is set up in **every** ecosystem — it is cross-language.
+
+The rest of this file (Steps 1-5) is the **JS/TS** path. For Python or Go, follow the referenced guide, then jump to Step 5 (Supply Chain Hardening) which applies to any ecosystem.
 
 ## 1. Detect Package Manager
 
@@ -76,10 +91,8 @@ After all tools are installed, display a summary:
 
 ## 5. Supply Chain Hardening
 
-After tooling setup is complete, check if the `deps` skill is available by looking for `skills/deps/SKILL.md` relative to this skill's directory. If it exists, run `/deps` to harden the npm supply chain. If it does not exist, skip this step silently.
+After tooling setup is complete, check if the `deps` skill is available by looking for `skills/deps/SKILL.md` relative to this skill's directory. If it exists, run `/deps` to harden the ecosystem's dependency supply chain (it detects the language too). If it does not exist, skip this step silently.
 
-## Assumptions
+## Compatibility
 
-- Project has a `package.json` (JS/TS project)
-- GitLeaks is installed on the system (`brew install gitleaks` or equivalent)
-- Git is initialised in the project
+Works on any language project — detect the ecosystem (Step 0) and install its lint/format/hooks toolchain: JS/TS is the best-supported path (`rules/*.md`), with Python and Go covered via `references/`. Requirements: Git is initialised in the project, and a secret scanner (GitLeaks default) is installed on the system (`brew install gitleaks` or equivalent) — GitLeaks is wired into the pre-commit hook in every ecosystem.
