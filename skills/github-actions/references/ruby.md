@@ -1,8 +1,8 @@
 # Ruby CI Workflow
 
-CI template for Ruby projects — the Ruby equivalent of the JS/TS Node template in `SKILL.md`. Detected by `Gemfile`. Pin actions per `rules/action-pinning.md`: `actions/checkout` is GitHub-owned (version tag), but `ruby/setup-ruby` is **third-party** and must pin to a full commit SHA with a version comment. Keep the `permissions` and `concurrency` blocks from the shared rules.
+CI template for Ruby projects — the Ruby equivalent of the JS/TS Node template in `SKILL.md`. Detected by `Gemfile`. Pin every action to a full commit SHA with a version or source-ref comment per `rules/action-pinning.md`. Keep the `permissions` and `concurrency` blocks from the shared rules.
 
-Look up the current SHA with `gh api repos/ruby/setup-ruby/git/ref/tags/<tag> --jq '.object.sha'` and update the comment — the SHA below is illustrative.
+Resolve the intended releases with `gh api repos/{owner}/{repo}/commits/{tag} --jq '.sha'` before writing the workflow; the concrete pins below are examples.
 
 ```yaml
 name: CI
@@ -24,7 +24,7 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
       - uses: ruby/setup-ruby@003a5c4d8d6321bd302e38f6f0ec593f77f06600  # v1.319.0
         with:
           ruby-version: .ruby-version

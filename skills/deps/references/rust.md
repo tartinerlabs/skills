@@ -8,7 +8,7 @@ Dependency supply-chain hardening for Rust projects — the ecosystem equivalent
 - `cargo audit` / `cargo deny` in CI → vulnerability scanning present
 - `deny.toml` → cargo-deny policy already configured
 - `renovate.json` / `.github/dependabot.yml` with `cargo` → automated updates present
-- `.github/workflows/*.yml` with `dependency-review-action` → PR dependency review present
+- `.github/workflows/*.{yml,yaml}` with `dependency-review-action` → PR dependency review present
 
 **Skip checks that already pass.** Report what was skipped at the end.
 

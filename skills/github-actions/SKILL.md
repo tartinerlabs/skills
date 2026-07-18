@@ -13,7 +13,7 @@ compatibility: Targets GitHub Actions (GitHub-native); uses gh for SHA lookups; 
 
 Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
 
-- **Create mode**: The user explicitly asks to create, add, generate, scaffold, or set up a workflow, CI, or a CI/CD pipeline (e.g. "set up CI") — regardless of whether a `.github/workflows/` directory already exists. Generates workflows and pins actions per `rules/action-pinning.md` (GitHub-owned `actions/*` on version tags, third-party on full commit SHAs).
+- **Create mode**: The user explicitly asks to create, add, generate, scaffold, or set up a workflow, CI, or a CI/CD pipeline (e.g. "set up CI") — regardless of whether a `.github/workflows/` directory already exists. Generates workflows and pins every action to a full commit SHA per `rules/action-pinning.md`.
 - **Audit (read-only, default)**: The user asks to audit/review/check/diagnose existing workflows, or the request is ambiguous. Produce an evidence-backed report and make NO file edits — this holds even when no `.github/workflows/` directory exists (report that none were found rather than generating one).
 - **Fix**: The user explicitly asks to fix, pin, apply, or says "audit and fix". Only then apply the scoped edits in Audit Mode's Auto-Fix step.
 
@@ -43,7 +43,7 @@ Scan for project indicators:
 
 Apply all rules from the `rules/` directory when generating workflows. Read each rule file for detailed requirements and examples.
 
-Pin actions per `rules/action-pinning.md` before writing the workflow: GitHub-owned `actions/*` stay on version tags (e.g. `@v4`); third-party actions pin to a full commit SHA with a version comment. Look up SHAs with `gh api`.
+Pin every action per `rules/action-pinning.md` before writing the workflow, including GitHub-owned `actions/*`. Resolve the intended release or source ref to a full commit SHA with `gh api repos/{owner}/{repo}/commits/{ref} --jq '.sha'`, then retain the release or source ref in a comment.
 
 ### 4. Workflow Template
 
@@ -79,8 +79,8 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
         with:
           node-version: 'lts/*'
           cache: '<pm>'
@@ -96,7 +96,7 @@ jobs:
 
 ### 1. Scan Workflows
 
-Read all files in `.github/workflows/*.yml` and audit against every rule in the `rules/` directory.
+Read all `.yml` and `.yaml` files in `.github/workflows/` and audit against every rule in the `rules/` directory.
 
 ### 2. Report Format
 

@@ -7,7 +7,7 @@ Dependency supply-chain hardening for Go projects — the ecosystem equivalent o
 - `go.sum` present → module checksums already tracked (Go's built-in integrity layer)
 - `govulncheck` in CI → vulnerability scanning present
 - `renovate.json` / `.github/dependabot.yml` with `gomod` → automated updates present
-- `.github/workflows/*.yml` with `dependency-review-action` → PR dependency review present
+- `.github/workflows/*.{yml,yaml}` with `dependency-review-action` → PR dependency review present
 
 **Skip checks that already pass.** Report what was skipped at the end.
 

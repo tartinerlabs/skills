@@ -12,7 +12,7 @@ tags: ci, github-actions, dependency-review, supply-chain
 
 ### Detection
 
-Skip if a `.github/workflows/*.yml` file already contains `dependency-review-action`.
+Skip if a `.github/workflows/*.{yml,yaml}` file already contains `dependency-review-action`.
 
 ### Template
 
@@ -38,15 +38,15 @@ jobs:
   dependency-review:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
 
-      - uses: actions/dependency-review-action@v4
+      - uses: actions/dependency-review-action@a1d282b36b6f3519aa1f3fc636f609c47dddb294  # v5.0.0
 ```
 
 ### Adaptation
 
-- Match action versions used in the project's existing workflows
-- Follow the project's action pinning rules
+- Match action release versions used in the project's existing workflows while retaining full commit SHA pins
+- Follow the project's action pinning rules; absent a project-specific rule, pin every action to a full commit SHA with a version or source-ref comment
 - Replace `main` with the project's default branch if different
 - No package manager setup needed — the action uses GitHub's dependency graph API
 

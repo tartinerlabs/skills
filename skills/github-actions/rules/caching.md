@@ -10,7 +10,7 @@ tags: caching, dependencies, setup-actions, performance
 
 ```yaml
 # No caching — downloads all dependencies every run
-- uses: actions/setup-node@v4
+- uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
   with:
     node-version: 'lts/*'
 - run: pnpm install --frozen-lockfile
@@ -20,7 +20,7 @@ tags: caching, dependencies, setup-actions, performance
 
 ```yaml
 # Caching enabled — reuses dependencies across runs
-- uses: actions/setup-node@v4
+- uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
   with:
     node-version: 'lts/*'
     cache: 'pnpm'
@@ -31,10 +31,10 @@ tags: caching, dependencies, setup-actions, performance
 
 | Setup Action | Cache Parameter |
 |-------------|----------------|
-| `actions/setup-node@v4` | `cache: 'pnpm'` / `'npm'` / `'yarn'` |
-| `actions/setup-python@v5` | `cache: 'pip'` / `'pipenv'` / `'poetry'` |
-| `actions/setup-go@v5` | `cache: true` |
-| `actions/setup-java@v4` | `cache: 'maven'` / `'gradle'` |
+| `actions/setup-node` | `cache: 'pnpm'` / `'npm'` / `'yarn'` |
+| `actions/setup-python` | `cache: 'pip'` / `'pipenv'` / `'poetry'` |
+| `actions/setup-go` | `cache: true` |
+| `actions/setup-java` | `cache: 'maven'` / `'gradle'` |
 
 ### Why This Matters
 
