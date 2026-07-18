@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import {
   mkdir,
   mkdtemp,
+  readFile,
   rm,
   symlink,
   unlink,
@@ -171,6 +172,20 @@ test("flags plugin manifest version drift", async (t) => {
     errors.some((e) => e.includes("version `9.9.9`") && e.includes(VERSION)),
     errors.join("\n"),
   );
+});
+
+test("semantic-release commits every synced plugin manifest", async () => {
+  const releaseConfig = JSON.parse(
+    await readFile(new URL("../.releaserc.json", import.meta.url), "utf8"),
+  );
+  const gitPlugin = releaseConfig.plugins.find(
+    (plugin) => Array.isArray(plugin) && plugin[0] === "@semantic-release/git",
+  );
+  const assets = gitPlugin?.[1]?.assets ?? [];
+
+  for (const manifest of MANIFESTS) {
+    assert.ok(assets.includes(manifest), `${manifest} is missing from assets`);
+  }
 });
 
 test("flags a broken wrapper symlink", async (t) => {
