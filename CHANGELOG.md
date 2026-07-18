@@ -1,3 +1,10 @@
+## [1.26.1](https://github.com/tartinerlabs/skills/compare/v1.26.0...v1.26.1) (2026-07-18)
+
+
+### Bug Fixes
+
+* pin all GitHub Actions to commit SHAs ([bab1220](https://github.com/tartinerlabs/skills/commit/bab12205f9a7d59e7f7cbe79c088fa1d4952ff69))
+
 # [1.26.0](https://github.com/tartinerlabs/skills/compare/v1.25.1...v1.26.0) (2026-07-18)
 
 
