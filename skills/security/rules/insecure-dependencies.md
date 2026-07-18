@@ -1,31 +1,34 @@
 ---
 title: Insecure Dependencies
 impact: MEDIUM
-tags: dependencies, audit, npm, pnpm, yarn, bun, vulnerabilities
+tags: dependencies, audit, npm, pnpm, yarn, bun, pip, go, vulnerabilities
 ---
 
-**Rule**: Check for known vulnerabilities in project dependencies.
+**Rule**: Check for known vulnerabilities in project dependencies. Use the auditor for the project's ecosystem — detect the language from its manifest (`package.json` / `pyproject.toml` / `go.mod`) and run the matching tool. Auditing only npm on a Python or Go project silently misses CVEs.
 
 ### How to Audit
 
+**JS/TS** (match the package manager):
+
 ```bash
-# npm
-npm audit
-
-# pnpm
-pnpm audit
-
-# yarn
-yarn audit
-
-# bun
-bun audit
+npm audit        # or: pnpm audit / yarn audit / bun audit
 
 # Check for outdated packages
-npm outdated
-pnpm outdated
-yarn outdated
-bun outdated
+npm outdated     # or: pnpm outdated / yarn outdated / bun outdated
+```
+
+**Python** — `pip-audit`:
+
+```bash
+pip-audit                       # audit the current environment
+pip-audit -r requirements.txt   # audit a requirements file
+```
+
+**Go** — `govulncheck` (from golang.org/x/vuln):
+
+```bash
+govulncheck ./...   # reports only vulnerabilities reachable from your code
+go list -m -u all   # show available module updates
 ```
 
 ### What to Check

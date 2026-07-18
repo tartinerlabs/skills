@@ -12,11 +12,13 @@ tags: vitest, jest, node-test, mocking, setup, teardown, globals
 |---|---|---|---|
 | Mock namespace | `vi` | `jest` | `mock` (from `node:test`) |
 | Standalone mock | `vi.fn()` | `jest.fn()` | `mock.fn()` |
-| Module mock | `vi.mock()` | `jest.mock()` | `mock.module()` |
+| Module mock | `vi.mock()` | `jest.mock()` | `mock.module()` † |
 | Assertions | `expect` (built-in) | `expect` (built-in) | `node:assert` |
 | Globals without import | `globals: true` | on by default | never — import from `node:test` |
 
 Match whichever runner the project already uses (see Config Detection below). Do not introduce a second runner.
+
+† **node:test module mocking is experimental.** `mock.module()` only works when Node is started with `--experimental-test-module-mocks` (e.g. `node --test --experimental-test-module-mocks`). Add that flag to the project's test command when generating module mocks, or avoid module-level mocks (prefer dependency injection or `mock.fn()`) so a plain `node --test` script doesn't fail.
 
 ### Globals Mode
 

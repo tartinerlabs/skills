@@ -1,7 +1,7 @@
 ---
 name: setup
 description: Use when setting up a project, adding linting, formatting, git hooks, or type checking. Detects the language and installs that ecosystem's lint/format/hooks toolchain (JS/TS, Python, Go).
-allowed-tools: Read Glob Write Edit Bash(pnpm:*) Bash(pnx:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(uv:*) Bash(poetry:*) Bash(pip:*) Bash(ruff:*) Bash(go:*) Bash(golangci-lint:*) Bash(pre-commit:*)
+allowed-tools: Read Glob Write Edit Bash(pnpm:*) Bash(pnx:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(uv:*) Bash(poetry:*) Bash(pdm:*) Bash(pip:*) Bash(ruff:*) Bash(mypy:*) Bash(go:*) Bash(gofmt:*) Bash(goimports:*) Bash(golangci-lint:*) Bash(pre-commit:*)
 model: haiku
 effort: low
 compatibility: Any language project; sets up that ecosystem's lint/format/hooks + git secret scanning (JS/TS best-supported, Python and Go via references/)

@@ -1,7 +1,7 @@
 ---
 name: security
 description: Use when auditing security, checking for vulnerabilities, scanning for secrets, or reviewing dependencies. OWASP Top 10 audit with GitLeaks and dependency checks.
-allowed-tools: Read Glob Grep Edit Bash(gitleaks:*) Bash(trufflehog:*) Bash(pnx:*) Bash(npm:*)
+allowed-tools: Read Glob Grep Edit Bash(gitleaks:*) Bash(trufflehog:*) Bash(pnx:*) Bash(npm:*) Bash(pip-audit:*) Bash(govulncheck:*) Bash(go:*)
 model: sonnet
 effort: high
 context: fork
