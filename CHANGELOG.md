@@ -1,3 +1,10 @@
+## [1.27.1](https://github.com/tartinerlabs/skills/compare/v1.27.0...v1.27.1) (2026-07-18)
+
+
+### Bug Fixes
+
+* sync Antigravity release manifests ([669ec3f](https://github.com/tartinerlabs/skills/commit/669ec3f570c1b6aeb399259e738d3a69fbee6835))
+
 # [1.27.0](https://github.com/tartinerlabs/skills/compare/v1.26.1...v1.27.0) (2026-07-18)
 
 
