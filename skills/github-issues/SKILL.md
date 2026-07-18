@@ -23,7 +23,7 @@ Read individual rule files in `rules/` for detailed requirements and examples.
 
 1. Determine action: create, update, query, or comment
 2. Detect the remote host from `git remote get-url origin` (github.com → gh, gitlab.com → glab; default GitHub) and use that CLI throughout. Get owner/repo (or group/project) info. **GitHub-only features** — organisation issue types, sub-issues, and `.github/ISSUE_TEMPLATE/` — do not exist on GitLab: on GitLab skip the issue-type and sub-issue steps and use `.gitlab/issue_templates/` plus description checklists instead
-3. Check for issue templates in `.github/ISSUE_TEMPLATE/` or `.github/`
+3. Check for issue templates in the host's conventional location: on GitHub `.github/ISSUE_TEMPLATE/` or `.github/`; on GitLab `.gitlab/issue_templates/`
 4. List available organisation issue types (fails for user-owned repos — expected, proceed without)
 5. For creation or update:
    - For updates: fetch the current issue first

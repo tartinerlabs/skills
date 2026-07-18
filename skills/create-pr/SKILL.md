@@ -23,6 +23,8 @@ Read individual rule files in `rules/` for detailed requirements and examples.
 1. Check current git status and branch
 2. Push current branch to remote (with `-u` flag if needed)
 3. Analyse recent commits to generate PR title and description
-4. Detect the remote host from `git remote get-url origin` (github.com → gh, gitlab.com → glab; default GitHub) and create the PR/MR with the matching CLI — GitHub: `gh pr create --assignee @me`; GitLab: `glab mr create --assignee @me`. The body is concise bullet points only (no `## Summary`, `## Test Plan`, checklists, or other heading sections)
+4. Detect the remote host from `git remote get-url origin` (github.com → gh, gitlab.com → glab; default GitHub) and create the PR/MR with the matching CLI. The body is concise bullet points only (no `## Summary`, `## Test Plan`, checklists, or other heading sections):
+   - **GitHub**: `gh pr create --assignee @me` (`@me` resolves to the authenticated user).
+   - **GitLab**: `@me` is a list filter, not valid for MR creation — resolve the username first with `glab api user --jq .username`, then `glab mr create --assignee <username>`.
 
-Auto-assign to current user via `--assignee @me`. If assignment fails (user not a collaborator), the PR/MR is still created without assignment.
+Auto-assign to the current user. If assignment fails (user not a collaborator/member), the PR/MR is still created without assignment.

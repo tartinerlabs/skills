@@ -14,21 +14,25 @@ Dependency supply-chain hardening for Python projects — the ecosystem equivale
 
 ## 1. Pin Exact Versions
 
-Pin direct dependencies to exact versions so builds are reproducible and updates flow through reviewable PRs (the analogue of removing `^`/`~` in `package.json`).
+Pin direct dependencies to exact versions so builds are reproducible and updates flow through reviewable PRs (the analogue of removing `^`/`~` in `package.json`). **Where** you pin depends on whether the project is an application or a published library — detect this first.
 
-Incorrect (`pyproject.toml`):
+**App vs. library:**
+- **Library** (published to PyPI / installed by others as a package — typically has a build backend under `[build-system]` and is `pip install`-able): keep **compatible bounds** in `pyproject.toml` `dependencies`, and pin exact versions only in the lockfile (`uv.lock` / `poetry.lock`) or a compiled `requirements.txt`. Exact `==` pins in library metadata force those versions on every consumer and cause resolver conflicts.
+- **App / deployed service** (not published for others to install): pin exact versions directly in `pyproject.toml` for a fully reproducible environment.
+
+Library metadata — keep bounds (`pyproject.toml`):
 
 ```toml
-dependencies = ["requests>=2.31", "pydantic~=2.5"]
+dependencies = ["requests>=2.31,<3", "pydantic~=2.5"]
 ```
 
-Correct:
+App — pin exact (`pyproject.toml`):
 
 ```toml
 dependencies = ["requests==2.31.0", "pydantic==2.5.3"]
 ```
 
-For pip projects, compile a fully pinned, hashed lockfile from a loose `requirements.in`:
+For libraries (and pip-based apps), compile a fully pinned, hashed lockfile from the abstract requirements — this is where the exact pins live:
 
 ```bash
 uv pip compile requirements.in -o requirements.txt --generate-hashes
