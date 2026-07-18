@@ -49,3 +49,11 @@ Create `.husky/commit-msg`:
 ```bash
 pnx --no -- commitlint --edit $1
 ```
+
+### Why This Matters
+
+Enforcing the Conventional Commits format at commit time is what makes downstream automation possible: semantic-release derives version bumps and changelogs directly from commit types (`feat`, `fix`, `feat!`). commitlint rejects non-conforming messages before they enter history, so the log stays machine-readable.
+
+### Alternatives
+
+The opinion here is adopting a commit convention at all — many teams do fine with free-form messages, or use gitmoji, or a custom scheme. If you do not want automated releases/changelogs, commitlint adds friction for little gain; skip it. If the project already enforces a different convention, keep it.

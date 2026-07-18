@@ -47,7 +47,17 @@ Pin actions per `rules/action-pinning.md` before writing the workflow: GitHub-ow
 
 ### 4. Workflow Template
 
-Adapt this CI template to the detected project type and package manager (replace `<pm>` with the detected package manager):
+Route by the language detected in Step 1. The template below is the **JS/TS default**; for any other detected language, load `references/<lang>.md` and use its template instead:
+
+| Language | Template |
+|----------|----------|
+| **JS/TS** (Node) | the template below |
+| **Go** | `references/go.md` |
+| **Python** | `references/python.md` |
+| **Rust** | `references/rust.md` |
+| **Ruby** | `references/ruby.md` |
+
+Every template applies the same `rules/` (action pinning, `permissions`, concurrency). Adapt the JS/TS template to the detected package manager (replace `<pm>` with the detected package manager):
 
 ```yaml
 name: CI
@@ -130,4 +140,4 @@ Read individual rule files for detailed checks and examples:
 
 ## Compatibility
 
-GitHub Actions is a GitHub-native CI system — this skill targets it specifically, and `gh` is used to look up action commit SHAs. Project **language** is auto-detected (Node/JS-TS, Go, Python, Rust, Ruby), so the generated workflow adapts across ecosystems. GitLab CI and other CI systems are separate and out of scope here.
+GitHub Actions is a GitHub-native CI system — this skill targets it specifically, and `gh` is used to look up action commit SHAs. Project **language** is auto-detected (Node/JS-TS, Go, Python, Rust, Ruby), so the generated workflow adapts across ecosystems — the JS/TS template is inline in Create Mode and per-language templates live in `references/<lang>.md`. GitLab CI and other CI systems are separate and out of scope here.

@@ -1,10 +1,10 @@
 ---
 name: setup
-description: Use when setting up a project, adding linting, formatting, git hooks, or type checking. Detects the language and installs that ecosystem's lint/format/hooks toolchain (JS/TS, Python, Go).
-allowed-tools: Read Glob Write Edit Bash(pnpm:*) Bash(pnx:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(uv:*) Bash(poetry:*) Bash(pdm:*) Bash(pip:*) Bash(ruff:*) Bash(mypy:*) Bash(go:*) Bash(gofmt:*) Bash(goimports:*) Bash(golangci-lint:*) Bash(pre-commit:*)
+description: Use when setting up a project, adding linting, formatting, git hooks, or type checking. Detects the language and installs that ecosystem's lint/format/hooks toolchain (JS/TS, Python, Go, Rust).
+allowed-tools: Read Glob Write Edit Bash(pnpm:*) Bash(pnx:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(uv:*) Bash(poetry:*) Bash(pdm:*) Bash(pip:*) Bash(ruff:*) Bash(mypy:*) Bash(go:*) Bash(gofmt:*) Bash(goimports:*) Bash(golangci-lint:*) Bash(cargo:*) Bash(rustfmt:*) Bash(rustup:*) Bash(pre-commit:*) Bash(gitleaks:*) Bash(trufflehog:*)
 model: haiku
 effort: low
-compatibility: Any language project; sets up that ecosystem's lint/format/hooks + git secret scanning (JS/TS best-supported, Python and Go via references/)
+compatibility: Any language project; sets up that ecosystem's lint/format/hooks + a git secret scanner (GitLeaks default; TruffleHog accepted) (JS/TS best-supported, Python, Go and Rust via references/)
 ---
 
 You are a tooling setup assistant. Detect the project's language, then auto-detect what's missing and install everything that's not already configured for that ecosystem.
@@ -18,10 +18,11 @@ Detect the project's language from its manifest, then follow the matching setup 
 | **JS/TS** | `package.json` | the `rules/*.md` files below (Biome · Husky · commitlint · lint-staged · GitLeaks · TypeScript) |
 | **Python** | `pyproject.toml`, `requirements*.txt`, `setup.py`, `setup.cfg` | `references/python.md` (Ruff · mypy · pre-commit · GitLeaks) |
 | **Go** | `go.mod` | `references/go.md` (gofmt · golangci-lint · pre-commit · GitLeaks) |
+| **Rust** | `Cargo.toml` | `references/rust.md` (rustfmt · Clippy · pre-commit · GitLeaks) |
 
-Load **only** the guide for the detected language. For a language not listed (e.g. Rust, Ruby), set up its standard formatter/linter and wire GitLeaks into a pre-commit hook, following the same shape; note that first-class support for it is not yet bundled. GitLeaks (secret scanning) is set up in **every** ecosystem — it is cross-language.
+Load **only** the guide for the detected language. For a language not listed (e.g. Ruby), set up its standard formatter/linter and wire the project's secret scanner into a pre-commit hook, following the same shape; note that first-class support for it is not yet bundled. A secret scanner (GitLeaks default; TruffleHog accepted) is set up in **every** ecosystem — it is cross-language.
 
-The rest of this file (Steps 1-5) is the **JS/TS** path. For Python or Go, follow the referenced guide, then jump to Step 5 (Supply Chain Hardening) which applies to any ecosystem.
+The rest of this file (Steps 1-5) is the **JS/TS** path. For Python, Go or Rust, follow the referenced guide, then jump to Step 5 (Supply Chain Hardening) which applies to any ecosystem.
 
 ## 1. Detect Package Manager
 
@@ -41,7 +42,7 @@ Before installing anything, scan for existing configurations:
 - `.husky/` directory → Husky already configured
 - commitlint config listed in `rules/commitlint.md` → commitlint already configured
 - `.lintstagedrc*` / `lint-staged` key in `package.json` → lint-staged already configured
-- `gitleaks` in `.husky/pre-commit` → GitLeaks already configured
+- `gitleaks` or `trufflehog` in `.husky/pre-commit` → secret scanner already configured
 - `tsconfig.json` → TypeScript already configured
 - `.eslintrc*` / `eslint.config.*` → ESLint present (suggest migration to Biome)
 - `.prettierrc*` / `prettier.config.*` → Prettier present (suggest migration to Biome)
@@ -54,6 +55,8 @@ Read each rule file for detailed setup instructions and config files.
 
 > These tables use a `Purpose` column rather than the `Impact` column found in audit skills — setup rules are install guides for tools to add, not severity-ranked findings, so there is no impact level to report.
 
+> **This stack is opinionated by design.** Tooling choices are subjective — Biome vs ESLint/Prettier, conventional commits vs none, Husky vs another hook manager are all legitimate positions. Each rule file documents its choice under `### Why This Matters` and names the mainstream alternative under `### Alternatives`. Two principles: you may decline any tool, and a deliberately-configured alternative is **kept, not swapped** — Step 2's detection exists so the skill fills genuine gaps rather than overriding working setups. Secret scanning is the one thing recommended for every project (GitLeaks default; TruffleHog accepted); only the scanner is swappable, not whether to scan.
+
 ### Auto-install (always set up when missing)
 
 | Tool | Purpose | Rule |
@@ -62,7 +65,7 @@ Read each rule file for detailed setup instructions and config files.
 | Husky | Git hooks | `rules/husky.md` |
 | commitlint | Conventional commits | `rules/commitlint.md` |
 | lint-staged | Pre-commit linting | `rules/lint-staged.md` |
-| GitLeaks | Secrets detection | `rules/gitleaks.md` |
+| Secret scanner | Secrets detection | `rules/secret-scanner.md` |
 | TypeScript | Type checking | `rules/typescript.md` |
 
 ### Opt-in (only when explicitly requested)
@@ -95,4 +98,4 @@ After tooling setup is complete, check if the `deps` skill is available by looki
 
 ## Compatibility
 
-Works on any language project — detect the ecosystem (Step 0) and install its lint/format/hooks toolchain: JS/TS is the best-supported path (`rules/*.md`), with Python and Go covered via `references/`. Requirements: Git is initialised in the project, and a secret scanner (GitLeaks default) is installed on the system (`brew install gitleaks` or equivalent) — GitLeaks is wired into the pre-commit hook in every ecosystem.
+Works on any language project — detect the ecosystem (Step 0) and install its lint/format/hooks toolchain: JS/TS is the best-supported path (`rules/*.md`), with Python, Go and Rust covered via `references/`. Requirements: Git is initialised in the project, and a secret scanner (GitLeaks default; TruffleHog accepted) is installed on the system (`brew install gitleaks` or equivalent) — the scanner is wired into the pre-commit hook in every ecosystem.

@@ -23,6 +23,8 @@ goimports -w .
 gofmt -l .        # list files that need formatting
 ```
 
+> **Not an opinion.** Formatting is the one choice here with no alternative to document: `gofmt` is part of the Go toolchain and its output is canonical. There is no competing formatter and no style config to bikeshed — `goimports` is simply `gofmt` plus import management. Everything below (the linter) is where real choices exist.
+
 ## golangci-lint — Linting
 
 The de-facto aggregate linter for Go. Install:
@@ -48,6 +50,14 @@ run:
 
 Commands: `golangci-lint run` (lint), `golangci-lint run --fix`. Also run `go vet ./...` as a baseline.
 
+### Why This Matters
+
+golangci-lint is the de-facto aggregate linter for Go: it runs many individual linters (errcheck, staticcheck, govet, and dozens more) in parallel behind one config and one command, which is why nearly every Go project and CI pipeline standardises on it.
+
+### Alternatives
+
+You can run the underlying linters directly — **staticcheck** alone covers a large share of what matters, and **revive** is a faster, configurable replacement for the older golint. `go vet` ships with the toolchain and is always worth running. If the project already has a linting setup, keep it; golangci-lint is the default because it bundles the common set with the least configuration.
+
 ## pre-commit — Git Hooks
 
 Use the cross-language `pre-commit` framework (requires Python) or a plain `.git/hooks/pre-commit` script. `.pre-commit-config.yaml` — secret scanning first, then Go checks:
@@ -71,7 +81,7 @@ repos:
         types: [go]
 ```
 
-If the project has no Python (so no `pre-commit` framework), install the same checks as a plain `.git/hooks/pre-commit` shell script instead — run `gitleaks git --staged --redact --verbose` first, then `gofmt`/`golangci-lint`. GitLeaks stays the default secret scanner across ecosystems and must be installed on the system (`brew install gitleaks`).
+If the project has no Python (so no `pre-commit` framework), install the same checks as a plain `.git/hooks/pre-commit` shell script instead — run `gitleaks git --staged --redact --verbose` first, then `gofmt`/`golangci-lint`. GitLeaks is the default secret scanner across ecosystems (TruffleHog is an accepted alternative if the project already uses it — see `rules/secret-scanner.md`) and must be installed on the system (`brew install gitleaks`).
 
 ## Output
 

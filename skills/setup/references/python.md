@@ -45,6 +45,14 @@ quote-style = "double"
 
 Commands: `ruff check .` (lint), `ruff check --fix .`, `ruff format .`.
 
+### Why This Matters
+
+Ruff collapses Black (format), isort (import sorting), and flake8 (lint) into one Rust binary that runs orders of magnitude faster and shares a single `pyproject.toml` config — the Python analogue of picking Biome over ESLint + Prettier. Fewer tools, one config, no inter-tool disagreement.
+
+### Alternatives
+
+The established stack of **Black + isort + flake8** (optionally plus autoflake/pyupgrade) is battle-tested and still common. If the project already runs it deliberately, keep it — Ruff is the default for a fresh setup, not a mandated migration.
+
 ## mypy — Type Checking
 
 Install: `uv add --dev mypy`
@@ -59,6 +67,14 @@ warn_unused_ignores = true
 ```
 
 Command: `mypy <package>`.
+
+### Why This Matters
+
+`strict = true` enables the full set of type checks up front — like TypeScript's strict mode, it is far cheaper to start strict than to retrofit. mypy is the reference type checker and integrates broadly.
+
+### Alternatives
+
+**pyright** (used by Pylance) is faster and often catches more, and is the natural pick if the team already lives in VS Code. Non-strict mypy is reasonable when gradually typing an existing untyped codebase. Respect an existing type-checker config rather than replacing it.
 
 ## pre-commit — Git Hooks
 
@@ -80,7 +96,7 @@ repos:
       - id: ruff-format
 ```
 
-GitLeaks stays the default secret scanner across ecosystems — here it is wired as the first pre-commit hook (mirroring the JS/TS `gitleaks git --staged` step), and it must be installed on the system (`brew install gitleaks`).
+GitLeaks is the default secret scanner across ecosystems — here it is wired as the first pre-commit hook (mirroring the JS/TS `gitleaks git --staged` step), and it must be installed on the system (`brew install gitleaks`). TruffleHog is an accepted alternative if the project already uses it (see `rules/secret-scanner.md`).
 
 ## Output
 

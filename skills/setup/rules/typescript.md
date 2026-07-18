@@ -39,3 +39,11 @@ If a framework is detected, extend from its recommended tsconfig instead of crea
 | Expo | `expo/tsconfig.base` |
 
 When a framework is detected, skip creating `tsconfig.json` and inform the user to use the framework's setup command instead.
+
+### Why This Matters
+
+`strict: true` turns on the full family of strictness checks (`strictNullChecks`, `noImplicitAny`, and the rest) — it is where TypeScript catches the most real bugs at compile time. Starting strict on a new project is far cheaper than retrofitting it onto a loose codebase later, so it is the default here.
+
+### Alternatives
+
+Non-strict TypeScript (or strict-minus-`strictNullChecks`) is a legitimate choice for gradually migrating an existing JS codebase, and plain JavaScript with JSDoc type annotations gives much of the safety with no build step. If the project is deliberately untyped or loosely typed, do not force strict TS on it — offer it, and respect an existing `tsconfig.json`.

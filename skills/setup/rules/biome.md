@@ -71,3 +71,11 @@ If ESLint or Prettier are detected, suggest:
 pnx @biomejs/biome migrate eslint
 pnx @biomejs/biome migrate prettier
 ```
+
+### Why This Matters
+
+Biome is a single binary that handles both linting and formatting from one config, with no plugin resolution to manage — it runs an order of magnitude faster than ESLint + Prettier and removes the class of conflicts where a formatter and a linter disagree. For a project with no linter/formatter yet, it is the lowest-friction way to reach consistent, enforced style.
+
+### Alternatives
+
+ESLint + Prettier is the mainstream alternative and remains the stronger choice when you need its far larger plugin/rule ecosystem, custom-rule authoring, or framework-specific configs that Biome does not yet match. If the project already uses ESLint/Prettier deliberately, keep it — the `migrate` commands above are an **offer**, not a requirement.
