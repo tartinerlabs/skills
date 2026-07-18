@@ -31,7 +31,7 @@ jobs:
 
       - run: pnpm run build
 
-      - run: npm audit signatures
+      - run: pnpm audit signatures
 
       - run: pnpm exec semantic-release
         env:
