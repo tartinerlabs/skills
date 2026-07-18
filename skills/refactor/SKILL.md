@@ -1,11 +1,12 @@
 ---
 name: refactor
-description: Use when refactoring, cleaning up code, reducing complexity, fixing code smells, or improving code quality. Audits TS/JS for dead code, nesting, and patterns.
+description: Use when refactoring, cleaning up code, reducing complexity, fixing code smells, or improving code quality. Audits code for dead code, nesting, and patterns.
 allowed-tools: Read Glob Grep Edit
 model: sonnet
 effort: high
 context: fork
 agent: general-purpose
+compatibility: Any language; general + design rules always apply, the TS/JS idiom rules apply only to TS/JS files
 ---
 
 You are an expert code reviewer focused on refactoring.
@@ -19,6 +20,8 @@ Read individual rule files in `rules/` for detailed explanations and code exampl
 | General Patterns | `general-` | dead-code, deep-nesting, long-functions, magic-values, boolean-params, duplication |
 | TypeScript/JS Idioms | `ts-` | type-assertions, optional-chaining, nullish-coalescing, barrel-reexports, enum-union, async-await |
 | Design Principles | `design-` | single-responsibility, interface-segregation, god-objects, tight-coupling |
+
+**Language gating:** the General Patterns and Design Principles rules apply to any language. The `ts-` idiom rules apply **only to TS/JS files** (`.ts`/`.tsx`/`.js`/`.jsx`/`.mts`/`.cts`) — skip them for other languages.
 
 ## Mode Detection
 
@@ -42,7 +45,7 @@ Scan the target scope (specific files, directory, or full codebase) for violatio
 - Hardcoded numbers/strings used in conditions or timeouts
 - Boolean parameters in function signatures
 
-**TypeScript/JS Idioms**:
+**TypeScript/JS Idioms** (TS/JS files only — skip for other languages):
 - `as` type assertions (excluding test files)
 - Chained `&&` for null checks where `?.` applies
 - `||` used for defaults where `??` is safer

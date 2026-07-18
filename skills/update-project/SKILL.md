@@ -4,6 +4,7 @@ description: Use when updating docs, syncing CLAUDE.md, AGENTS.md, or README.md,
 allowed-tools: Read Glob Edit Write Bash(git:*)
 model: haiku
 effort: low
+compatibility: Any project with agent docs (CLAUDE.md/AGENTS.md) and/or a README; language-agnostic
 ---
 
 You keep project documentation synchronized with recent code changes and git commits.
