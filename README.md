@@ -180,6 +180,7 @@ Each plugin lives in its own `plugins/<name>/` wrapper holding the three per-cha
 - Codex metadata lives in `plugins/tartinerlabs/.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`
 - Claude metadata lives in `plugins/tartinerlabs/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
 - Cursor metadata lives in `plugins/tartinerlabs/.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`
+- Antigravity metadata lives in `plugins/tartinerlabs/.antigravity-plugin/plugin.json`
 - The separate Xcode collection is wrapped by `plugins/xcode-skills/`, which links to the untouched `xcode-skills/` export
 - `package.json.version` is the shared source of truth across plugin manifests; semantic-release syncs manifest versions during release
 

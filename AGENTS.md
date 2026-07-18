@@ -7,7 +7,7 @@ This file provides guidance to Codex (Codex.ai/code) when working with code in t
 **Repository:** https://github.com/tartinerlabs/skills
 **Package:** `@tartinerlabs/skills`
 
-A collection of agent skills distributed via Codex, Claude Code, Cursor, and [skills.sh](https://skills.sh). Each skill is a markdown file with YAML frontmatter following the [Agent Skills spec](https://agentskills.io).
+A collection of agent skills distributed via Codex, Claude Code, Cursor, Antigravity, and [skills.sh](https://skills.sh). Each skill is a markdown file with YAML frontmatter following the [Agent Skills spec](https://agentskills.io).
 
 ## Development
 
@@ -46,10 +46,11 @@ Skills with multiple checks use a `rules/` subdirectory alongside `SKILL.md`. Th
 
 ## Distribution
 
-Skills are distributed through five channels:
+Skills are distributed through six channels:
 - **Codex plugin** — plugin metadata in `plugins/tartinerlabs/.codex-plugin/plugin.json` with marketplace metadata in `.agents/plugins/marketplace.json`
 - **Claude Code plugin** — `claude plugin install tartinerlabs/skills`
 - **Cursor plugin** — plugin metadata in `plugins/tartinerlabs/.cursor-plugin/plugin.json` with marketplace metadata in `.cursor-plugin/marketplace.json`
+- **Antigravity plugin** — plugin metadata in `plugins/tartinerlabs/.antigravity-plugin/plugin.json`
 - **[skills.sh](https://skills.sh)** — `pnpm dlx skills add tartinerlabs/skills`
 - **[Context7](https://context7.com)** — `pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal`
 
@@ -63,10 +64,11 @@ Plugin metadata is maintained manually by design. Every plugin lives in its own 
 - `.agents/plugins/marketplace.json` is the repo-scoped Codex marketplace entry
 - `plugins/tartinerlabs/.claude-plugin/plugin.json` is the Claude plugin manifest; the root `.claude-plugin/marketplace.json` is the Claude marketplace
 - `plugins/tartinerlabs/.cursor-plugin/plugin.json` is the Cursor plugin manifest; the root `.cursor-plugin/marketplace.json` is the Cursor marketplace
+- `plugins/tartinerlabs/.antigravity-plugin/plugin.json` is the Antigravity plugin manifest
 - Each marketplace references both plugins as `./plugins/<name>`. Keep every plugin subdirectory-sourced — the Claude Code loader silently drops a plugin sourced at the marketplace root (`source: "./"`) when another plugin exists
 - `package.json.version` is the canonical shared field; semantic-release (`scripts/sync-plugin-versions.mjs`) syncs the six `plugins/**/plugin.json` manifest versions during release
 
-When plugin copy changes, update Codex, Claude, and Cursor plugin manifests intentionally. Do not expose Claude-only hooks in Cursor metadata unless they have been ported to Cursor's runtime.
+When plugin copy changes, update Codex, Claude, Cursor, and Antigravity plugin manifests intentionally. Do not expose Claude-only hooks in Cursor metadata unless they have been ported to Cursor's runtime.
 
 ## Xcode Skill Export
 
