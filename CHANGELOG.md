@@ -1,3 +1,11 @@
+# [1.26.0](https://github.com/tartinerlabs/skills/compare/v1.25.1...v1.26.0) (2026-07-18)
+
+
+### Features
+
+* add Rust support to deps and testing ([a46da98](https://github.com/tartinerlabs/skills/commit/a46da98dc010a58668d9fbefc4453f329a2a699f))
+* complete language-agnostic skill pass ([4fbda54](https://github.com/tartinerlabs/skills/commit/4fbda544b716d6cf895be415bb4fa2a9aaaff204))
+
 ## [1.25.1](https://github.com/tartinerlabs/skills/compare/v1.25.0...v1.25.1) (2026-07-18)
 
 
