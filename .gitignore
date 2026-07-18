@@ -9,6 +9,9 @@ Thumbs.db
 *.swo
 *~
 
+# Claude Code
+.claude/
+
 # Node (if skills have scripts)
 node_modules/
 
