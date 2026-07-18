@@ -1,3 +1,10 @@
+# [1.27.0](https://github.com/tartinerlabs/skills/compare/v1.26.1...v1.27.0) (2026-07-18)
+
+
+### Features
+
+* add Antigravity plugin support ([af27a20](https://github.com/tartinerlabs/skills/commit/af27a20bf9a9ff68ccaff151bfa46f1638417412))
+
 ## [1.26.1](https://github.com/tartinerlabs/skills/compare/v1.26.0...v1.26.1) (2026-07-18)
 
 
