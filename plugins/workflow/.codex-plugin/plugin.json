@@ -1,0 +1,30 @@
+{
+  "name": "workflow",
+  "version": "1.29.0",
+  "description": "Git and GitHub workflow skills — commits, branches, pull requests, issues, and CI actions",
+  "author": {
+    "name": "Tartiner Labs",
+    "url": "https://github.com/tartinerlabs"
+  },
+  "repository": "https://github.com/tartinerlabs/skills",
+  "license": "MIT",
+  "keywords": [
+    "git",
+    "github",
+    "commit",
+    "branch",
+    "pull-request",
+    "issues",
+    "github-actions",
+    "ci"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "workflow",
+    "shortDescription": "Git and GitHub workflow skills.",
+    "developerName": "Tartiner Labs",
+    "category": "Coding",
+    "websiteURL": "https://github.com/tartinerlabs/skills",
+    "composerIcon": "./assets/icon.svg"
+  }
+}

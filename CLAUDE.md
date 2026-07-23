@@ -53,10 +53,12 @@ Polyglot skills add a `references/` subdirectory for **progressive disclosure**:
 
 ## Distribution
 
+The skills ship as four themed **collection plugins** — `workflow` (commit, create-branch, create-pr, github-actions, github-issues), `quality` (refactor, naming-format, project-structure, tailwind), `security` (security, deps), and `tooling` (setup, testing, update-project). The original all-in-one `tartinerlabs` plugin is **deprecated** but still published for a transition period; its removal is a future release. The collection assignment is the `COLLECTIONS` map in `scripts/validate-skills.mjs` — every skill must belong to exactly one collection (validated in CI).
+
 Skills are distributed through five channels:
-- **Claude Code plugin** — `claude plugin install tartinerlabs/skills` (plugin name: `tartinerlabs`, skills invoked as `/tartinerlabs:<skill-name>`)
-- **Codex plugin** — plugin metadata in `plugins/tartinerlabs/.codex-plugin/plugin.json` with marketplace metadata in `.agents/plugins/marketplace.json`
-- **Cursor plugin** — plugin metadata in `plugins/tartinerlabs/.cursor-plugin/plugin.json` with marketplace metadata in `.cursor-plugin/marketplace.json`
+- **Claude Code plugin** — `claude plugin marketplace add tartinerlabs/skills`, then `claude plugin install <collection>@tartinerlabs` (skills invoked as `/<collection>:<skill-name>`, e.g. `/workflow:commit`)
+- **Codex plugin** — plugin metadata in `plugins/<collection>/.codex-plugin/plugin.json` with marketplace metadata in `.agents/plugins/marketplace.json`
+- **Cursor plugin** — plugin metadata in `plugins/<collection>/.cursor-plugin/plugin.json` with marketplace metadata in `.cursor-plugin/marketplace.json`
 - **[skills.sh](https://skills.sh)** — `pnx skills add tartinerlabs/skills`
 - **[Context7](https://context7.com)** — `pnx ctx7 skills install /tartinerlabs/skills --all --universal`
 
@@ -64,12 +66,12 @@ The `Skills` CI workflow validates skills.sh and Context7 distribution on push t
 
 ## Plugin
 
-Every plugin lives in its own `plugins/<name>/` wrapper holding the three per-channel manifests (`.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, `.cursor-plugin/plugin.json`) plus a `skills` symlink to the skill source. Both plugins use this identical shape:
+Every plugin lives in its own `plugins/<name>/` wrapper holding the four per-channel manifests (`.claude-plugin/plugin.json`, `.codex-plugin/plugin.json`, `.cursor-plugin/plugin.json`, `.antigravity-plugin/plugin.json`) plus a `skills` entry exposing its skill source. Two wrapper shapes exist:
 
-- `plugins/tartinerlabs/` wraps the main collection (`skills` → `../../skills`) under the `tartinerlabs` namespace. Its `assets/icon.svg` is the Codex `composerIcon`.
-- `plugins/xcode-skills/` wraps the Xcode export (`skills` → `../../xcode-skills`).
+- **Collection wrappers** — `plugins/workflow/`, `plugins/quality/`, `plugins/security/`, `plugins/tooling/` each have a real `skills/` directory containing one symlink per member skill (`skills/<skill>` → `../../../skills/<skill>`). Each wrapper's `assets/icon.svg` is the Codex `composerIcon`.
+- **Whole-directory wrappers** — `plugins/tartinerlabs/` (deprecated monolith, `skills` → `../../skills`) and `plugins/xcode-skills/` (Xcode export, `skills` → `../../xcode-skills`) expose an entire source directory through a single dir symlink.
 
-The repo root's `.claude-plugin/` and `.cursor-plugin/` hold **only** their `marketplace.json`; the Codex marketplace is `.agents/plugins/marketplace.json`. Each marketplace references both plugins as `./plugins/<name>`. Keeping every plugin subdirectory-sourced (no `source: "./"` at the marketplace root) is required — the Claude Code loader silently drops a root-sourced plugin when another plugin exists.
+The repo root's `.claude-plugin/` and `.cursor-plugin/` hold **only** their `marketplace.json`; the Codex marketplace is `.agents/plugins/marketplace.json`. Each marketplace references every plugin as `./plugins/<name>`. Keeping every plugin subdirectory-sourced (no `source: "./"` at the marketplace root) is required — the Claude Code loader silently drops a root-sourced plugin when another plugin exists.
 
 Plugin metadata is intentionally hand-maintained. `.release-please-manifest.json` is the shared source of truth for the released version, and release-please (`extra-files` in `release-please-config.json`) syncs `package.json` and the `plugins/**/plugin.json` manifest versions in the release PR.
 

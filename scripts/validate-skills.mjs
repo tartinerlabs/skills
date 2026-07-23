@@ -9,18 +9,33 @@ import {
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 
+// Skill collections: each key is a `plugins/<name>/` wrapper exposing the
+// listed skills through per-skill symlinks (`skills/<skill>` →
+// `../../../skills/<skill>`). Every directory under `skills/` must belong to
+// exactly one collection — validated below.
+export const COLLECTIONS = {
+  workflow: [
+    "commit",
+    "create-branch",
+    "create-pr",
+    "github-actions",
+    "github-issues",
+  ],
+  quality: ["refactor", "naming-format", "project-structure", "tailwind"],
+  security: ["security", "deps"],
+  tooling: ["setup", "testing", "update-project"],
+};
+
+const PLUGINS = [...Object.keys(COLLECTIONS), "tartinerlabs", "xcode-skills"];
+
 // Plugin manifests whose `version` release-please keeps in sync with the
 // released version (via `extra-files` in release-please-config.json).
-export const MANIFESTS = [
-  "plugins/tartinerlabs/.codex-plugin/plugin.json",
-  "plugins/tartinerlabs/.claude-plugin/plugin.json",
-  "plugins/tartinerlabs/.cursor-plugin/plugin.json",
-  "plugins/tartinerlabs/.antigravity-plugin/plugin.json",
-  "plugins/xcode-skills/.codex-plugin/plugin.json",
-  "plugins/xcode-skills/.claude-plugin/plugin.json",
-  "plugins/xcode-skills/.cursor-plugin/plugin.json",
-  "plugins/xcode-skills/.antigravity-plugin/plugin.json",
-];
+export const MANIFESTS = PLUGINS.flatMap((plugin) => [
+  `plugins/${plugin}/.codex-plugin/plugin.json`,
+  `plugins/${plugin}/.claude-plugin/plugin.json`,
+  `plugins/${plugin}/.cursor-plugin/plugin.json`,
+  `plugins/${plugin}/.antigravity-plugin/plugin.json`,
+]);
 
 // Marketplace manifests distributed alongside the plugin manifests.
 const MARKETPLACES = [
@@ -29,9 +44,11 @@ const MARKETPLACES = [
   ".agents/plugins/marketplace.json",
 ];
 
-// Plugin wrappers expose their skill source through a `skills` symlink that
-// must point at a specific collection — swapping the targets would publish the
-// wrong skills through that wrapper, so the exact destination is checked.
+// Whole-directory wrappers expose their skill source through a `skills`
+// symlink that must point at a specific source — swapping the targets would
+// publish the wrong skills through that wrapper, so the exact destination is
+// checked. Collection wrappers instead use per-skill symlinks derived from
+// COLLECTIONS (validated in validateCollections).
 const WRAPPER_SYMLINKS = [
   { path: "plugins/tartinerlabs/skills", target: "../../skills" },
   { path: "plugins/xcode-skills/skills", target: "../../xcode-skills" },
@@ -264,42 +281,107 @@ async function validatePlugins(root, errors) {
   }
 }
 
+async function checkSymlink(root, symlinkPath, expectedTarget, errors) {
+  const fullPath = join(root, symlinkPath);
+  try {
+    const linkStat = await lstat(fullPath);
+    if (!linkStat.isSymbolicLink()) {
+      errors.push(`${symlinkPath}: expected a symlink`);
+      return;
+    }
+    const actualTarget = await readlink(fullPath);
+    if (actualTarget !== expectedTarget) {
+      errors.push(
+        `${symlinkPath}: points at \`${actualTarget}\`, expected \`${expectedTarget}\``,
+      );
+      return;
+    }
+    const targetStat = await stat(fullPath);
+    if (!targetStat.isDirectory()) {
+      errors.push(`${symlinkPath}: symlink target is not a directory`);
+    }
+  } catch {
+    errors.push(`${symlinkPath}: broken or missing symlink`);
+  }
+}
+
 async function validateSymlinks(root, errors) {
   for (const {
     path: symlinkPath,
     target: expectedTarget,
   } of WRAPPER_SYMLINKS) {
-    const fullPath = join(root, symlinkPath);
-    try {
-      const linkStat = await lstat(fullPath);
-      if (!linkStat.isSymbolicLink()) {
-        errors.push(`${symlinkPath}: expected a symlink`);
-        continue;
-      }
-      const actualTarget = await readlink(fullPath);
-      if (actualTarget !== expectedTarget) {
+    await checkSymlink(root, symlinkPath, expectedTarget, errors);
+  }
+}
+
+// Collection wrappers must expose exactly their assigned skills, each through
+// a per-skill symlink into the flat `skills/` source. Every skill in the
+// source must belong to exactly one collection so a newly added skill cannot
+// silently ship in none (or two) of the collection plugins.
+async function validateCollections(root, skillNames, collections, errors) {
+  const assigned = new Map();
+  for (const [collection, skills] of Object.entries(collections)) {
+    for (const skill of skills) {
+      if (assigned.has(skill)) {
         errors.push(
-          `${symlinkPath}: points at \`${actualTarget}\`, expected \`${expectedTarget}\``,
+          `${SKILLS_DIR}/${skill}: assigned to both \`${assigned.get(skill)}\` and \`${collection}\` collections`,
         );
-        continue;
       }
-      const targetStat = await stat(fullPath);
-      if (!targetStat.isDirectory()) {
-        errors.push(`${symlinkPath}: symlink target is not a directory`);
-      }
+      assigned.set(skill, collection);
+    }
+  }
+  const skillSet = new Set(skillNames);
+  for (const skill of skillSet) {
+    if (!assigned.has(skill)) {
+      errors.push(
+        `${SKILLS_DIR}/${skill}: not assigned to any collection in COLLECTIONS`,
+      );
+    }
+  }
+  for (const skill of assigned.keys()) {
+    if (!skillSet.has(skill)) {
+      errors.push(
+        `COLLECTIONS: lists \`${skill}\` which does not exist in ${SKILLS_DIR}/`,
+      );
+    }
+  }
+
+  for (const [collection, skills] of Object.entries(collections)) {
+    const wrapperDir = `plugins/${collection}/skills`;
+    let entries;
+    try {
+      entries = await readdir(join(root, wrapperDir));
     } catch {
-      errors.push(`${symlinkPath}: broken or missing symlink`);
+      errors.push(`${wrapperDir}: directory not found`);
+      continue;
+    }
+    const expected = new Set(skills);
+    for (const entry of entries) {
+      if (!expected.has(entry)) {
+        errors.push(
+          `${wrapperDir}/${entry}: not part of the \`${collection}\` collection`,
+        );
+      }
+    }
+    for (const skill of skills) {
+      await checkSymlink(
+        root,
+        `${wrapperDir}/${skill}`,
+        `../../../skills/${skill}`,
+        errors,
+      );
     }
   }
 }
 
-export async function validate(root) {
+export async function validate(root, { collections = COLLECTIONS } = {}) {
   const errors = [];
 
+  let skillNames = [];
   const skillsRoot = join(root, SKILLS_DIR);
   if (await pathExists(skillsRoot)) {
     const entries = await readdir(skillsRoot, { withFileTypes: true });
-    const skillNames = entries
+    skillNames = entries
       .filter((entry) => entry.isDirectory())
       .map((entry) => entry.name)
       .sort();
@@ -312,6 +394,7 @@ export async function validate(root) {
 
   await validatePlugins(root, errors);
   await validateSymlinks(root, errors);
+  await validateCollections(root, skillNames, collections, errors);
   await validateActionPinning(root, errors);
 
   return errors;

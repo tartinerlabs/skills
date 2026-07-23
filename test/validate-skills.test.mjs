@@ -15,6 +15,10 @@ import { MANIFESTS, validate } from "../scripts/validate-skills.mjs";
 
 const VERSION = "1.0.0";
 
+// The fixture ships a single skill (`demo`) exposed through one collection
+// wrapper, standing in for the real COLLECTIONS map.
+const FIXTURE_COLLECTIONS = { workflow: ["demo"] };
+
 const MARKETPLACES = [
   ".claude-plugin/marketplace.json",
   ".cursor-plugin/marketplace.json",
@@ -62,9 +66,7 @@ async function buildFixture(t) {
   await mkdir(join(root, "xcode-skills/sample"), { recursive: true });
 
   for (const manifest of MANIFESTS) {
-    const name = manifest.includes("xcode-skills")
-      ? "xcode-skills"
-      : "tartinerlabs";
+    const name = manifest.split("/")[1];
     await writeJson(join(root, manifest), { name, version: VERSION });
   }
   for (const marketplace of MARKETPLACES) {
@@ -80,12 +82,30 @@ async function buildFixture(t) {
     join(root, "plugins/xcode-skills/skills"),
   );
 
+  for (const [collection, skills] of Object.entries(FIXTURE_COLLECTIONS)) {
+    await mkdir(join(root, "plugins", collection, "skills"), {
+      recursive: true,
+    });
+    for (const skill of skills) {
+      await symlink(
+        `../../../skills/${skill}`,
+        join(root, "plugins", collection, "skills", skill),
+      );
+    }
+  }
+
   return root;
+}
+
+// Every fixture-backed validate() call swaps the real COLLECTIONS map for the
+// fixture's one-collection stand-in.
+function validateFixture(root, collections = FIXTURE_COLLECTIONS) {
+  return validate(root, { collections });
 }
 
 test("passes on a valid fixture", async (t) => {
   const root = await buildFixture(t);
-  const errors = await validate(root);
+  const errors = await validateFixture(root);
   assert.deepEqual(
     errors,
     [],
@@ -96,7 +116,7 @@ test("passes on a valid fixture", async (t) => {
 test("flags a referenced rule file that does not exist", async (t) => {
   const root = await buildFixture(t);
   await unlink(join(root, "skills/demo/rules/foo.md"));
-  const errors = await validate(root);
+  const errors = await validateFixture(root);
   assert.ok(
     errors.some((e) =>
       e.includes("references `rules/foo.md` which does not exist"),
@@ -112,7 +132,7 @@ test("passes when SKILL.md references an existing references/ file", async (t) =
     `${VALID_SKILL}\nSee \`references/python.md\` for the Python path.\n`,
   );
   await writeText(join(root, "skills/demo/references/python.md"), "# Python\n");
-  const errors = await validate(root);
+  const errors = await validateFixture(root);
   assert.deepEqual(
     errors,
     [],
@@ -126,7 +146,7 @@ test("flags a referenced references/ file that does not exist", async (t) => {
     join(root, "skills/demo/SKILL.md"),
     `${VALID_SKILL}\nSee \`references/python.md\` for the Python path.\n`,
   );
-  const errors = await validate(root);
+  const errors = await validateFixture(root);
   assert.ok(
     errors.some((e) =>
       e.includes("references `references/python.md` which does not exist"),
@@ -138,7 +158,7 @@ test("flags a referenced references/ file that does not exist", async (t) => {
 test("flags an orphaned references/ file", async (t) => {
   const root = await buildFixture(t);
   await writeText(join(root, "skills/demo/references/orphan.md"), "# Orphan\n");
-  const errors = await validate(root);
+  const errors = await validateFixture(root);
   assert.ok(
     errors.some((e) =>
       e.includes("`references/orphan.md` is never referenced"),
@@ -155,7 +175,7 @@ test("ignores references/<placeholder>.md templates", async (t) => {
   );
   // No references/ dir exists — a placeholder must not be treated as a real,
   // missing file.
-  const errors = await validate(root);
+  const errors = await validateFixture(root);
   assert.deepEqual(
     errors,
     [],
@@ -166,10 +186,10 @@ test("ignores references/<placeholder>.md templates", async (t) => {
 test("flags plugin manifest version drift", async (t) => {
   const root = await buildFixture(t);
   await writeJson(join(root, MANIFESTS[0]), {
-    name: "tartinerlabs",
+    name: MANIFESTS[0].split("/")[1],
     version: "9.9.9",
   });
-  const errors = await validate(root);
+  const errors = await validateFixture(root);
   assert.ok(
     errors.some((e) => e.includes("version `9.9.9`") && e.includes(VERSION)),
     errors.join("\n"),
@@ -203,7 +223,7 @@ test("flags a broken wrapper symlink", async (t) => {
     "../../does-not-exist",
     join(root, "plugins/tartinerlabs/skills"),
   );
-  const errors = await validate(root);
+  const errors = await validateFixture(root);
   assert.ok(
     errors.some((e) => e.includes("plugins/tartinerlabs/skills")),
     errors.join("\n"),
@@ -219,12 +239,116 @@ test("flags a wrapper symlink pointing at the wrong collection", async (t) => {
     "../../xcode-skills",
     join(root, "plugins/tartinerlabs/skills"),
   );
-  const errors = await validate(root);
+  const errors = await validateFixture(root);
   assert.ok(
     errors.some(
       (e) =>
         e.includes("plugins/tartinerlabs/skills") &&
         e.includes("expected `../../skills`"),
+    ),
+    errors.join("\n"),
+  );
+});
+
+test("flags a missing per-skill collection symlink", async (t) => {
+  const root = await buildFixture(t);
+  await unlink(join(root, "plugins/workflow/skills/demo"));
+  const errors = await validateFixture(root);
+  assert.ok(
+    errors.some((e) =>
+      e.includes("plugins/workflow/skills/demo: broken or missing symlink"),
+    ),
+    errors.join("\n"),
+  );
+});
+
+test("flags a per-skill collection symlink with the wrong target", async (t) => {
+  const root = await buildFixture(t);
+  await unlink(join(root, "plugins/workflow/skills/demo"));
+  // Point at a valid, existing directory so only the target comparison can
+  // catch the swap.
+  await symlink("../../../skills", join(root, "plugins/workflow/skills/demo"));
+  const errors = await validateFixture(root);
+  assert.ok(
+    errors.some(
+      (e) =>
+        e.includes("plugins/workflow/skills/demo") &&
+        e.includes("expected `../../../skills/demo`"),
+    ),
+    errors.join("\n"),
+  );
+});
+
+test("flags an entry a collection wrapper should not expose", async (t) => {
+  const root = await buildFixture(t);
+  await symlink(
+    "../../../skills/demo",
+    join(root, "plugins/workflow/skills/extra"),
+  );
+  const errors = await validateFixture(root);
+  assert.ok(
+    errors.some((e) =>
+      e.includes(
+        "plugins/workflow/skills/extra: not part of the `workflow` collection",
+      ),
+    ),
+    errors.join("\n"),
+  );
+});
+
+test("flags a skill not assigned to any collection", async (t) => {
+  const root = await buildFixture(t);
+  await writeText(
+    join(root, "skills/loose/SKILL.md"),
+    VALID_SKILL.replaceAll("rules/foo.md", "rules/bar.md"),
+  );
+  await writeText(join(root, "skills/loose/rules/bar.md"), "# Bar\n");
+  const errors = await validateFixture(root);
+  assert.ok(
+    errors.some((e) =>
+      e.includes("skills/loose: not assigned to any collection"),
+    ),
+    errors.join("\n"),
+  );
+});
+
+test("flags a skill assigned to two collections", async (t) => {
+  const root = await buildFixture(t);
+  const errors = await validateFixture(root, {
+    workflow: ["demo"],
+    quality: ["demo"],
+  });
+  assert.ok(
+    errors.some((e) =>
+      e.includes(
+        "skills/demo: assigned to both `workflow` and `quality` collections",
+      ),
+    ),
+    errors.join("\n"),
+  );
+});
+
+test("flags a collection listing a skill that does not exist", async (t) => {
+  const root = await buildFixture(t);
+  const errors = await validateFixture(root, { workflow: ["demo", "ghost"] });
+  assert.ok(
+    errors.some((e) =>
+      e.includes("COLLECTIONS: lists `ghost` which does not exist"),
+    ),
+    errors.join("\n"),
+  );
+});
+
+test("flags a collection wrapper without a skills directory", async (t) => {
+  const root = await buildFixture(t);
+  await rm(join(root, "plugins/workflow/skills"), {
+    recursive: true,
+    force: true,
+  });
+  const errors = await validateFixture(root);
+  assert.ok(
+    errors.some((e) =>
+      e.includes("plugins/workflow/skills: directory not found"),
     ),
     errors.join("\n"),
   );
@@ -236,7 +360,7 @@ test("flags an action that uses a mutable tag", async (t) => {
     join(root, "skills/demo/rules/foo.md"),
     "# Foo\n\n```yaml\n- uses: actions/checkout@v7\n```\n",
   );
-  const errors = await validate(root);
+  const errors = await validateFixture(root);
   assert.ok(
     errors.some(
       (e) =>
@@ -253,7 +377,7 @@ test("flags a pinned action without a readable ref comment", async (t) => {
     join(root, "skills/demo/rules/foo.md"),
     "# Foo\n\n```yaml\n- uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0\n```\n",
   );
-  const errors = await validate(root);
+  const errors = await validateFixture(root);
   assert.ok(
     errors.some(
       (e) =>
@@ -279,7 +403,7 @@ test("accepts pinned actions and full-SHA placeholders", async (t) => {
       "",
     ].join("\n"),
   );
-  const errors = await validate(root);
+  const errors = await validateFixture(root);
   assert.deepEqual(
     errors,
     [],
@@ -311,7 +435,13 @@ test("allows mutable refs only in the action-pinning incorrect section", async (
       "",
     ].join("\n"),
   );
-  const errors = await validate(root);
+  await symlink(
+    "../../../skills/github-actions",
+    join(root, "plugins/workflow/skills/github-actions"),
+  );
+  const errors = await validateFixture(root, {
+    workflow: ["demo", "github-actions"],
+  });
   assert.deepEqual(
     errors,
     [],
@@ -325,7 +455,7 @@ test("scans yaml workflow files for mutable action refs", async (t) => {
     join(root, ".github/workflows/ci.yaml"),
     "steps:\n  - uses: actions/checkout@v7\n",
   );
-  const errors = await validate(root);
+  const errors = await validateFixture(root);
   assert.ok(
     errors.some(
       (e) =>

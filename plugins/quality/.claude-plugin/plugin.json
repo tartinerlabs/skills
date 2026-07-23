@@ -1,9 +1,9 @@
 {
   "$schema": "https://cdn.jsdelivr.net/npm/@anthropic-ai/claude-code@latest/resources/plugin.schema.json",
-  "name": "tartinerlabs",
-  "displayName": "tartiner-labs",
+  "name": "quality",
+  "displayName": "quality",
   "version": "1.29.0",
-  "description": "Language-agnostic agent skills for git/GitHub workflows, code quality, and project tooling, with first-class JS/TS support. Deprecated: install the workflow, quality, security, and tooling plugins instead.",
+  "description": "Code quality skills — refactoring, naming conventions, project structure, and Tailwind CSS audits",
   "author": {
     "name": "Tartiner Labs",
     "url": "https://github.com/tartinerlabs"
@@ -12,19 +12,11 @@
   "repository": "https://github.com/tartinerlabs/skills",
   "license": "MIT",
   "keywords": [
-    "git",
-    "github",
-    "security",
     "refactoring",
-    "testing",
-    "tailwind",
-    "commit",
-    "pull-request",
-    "branch",
     "naming",
     "project-structure",
-    "deps",
-    "supply-chain"
+    "tailwind",
+    "code-quality"
   ],
   "skills": "./skills/"
 }
