@@ -17,7 +17,7 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "security",
+    "displayName": "Security",
     "shortDescription": "Security and supply-chain skills.",
     "developerName": "Tartiner Labs",
     "category": "Coding",

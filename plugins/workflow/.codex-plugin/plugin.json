@@ -20,7 +20,7 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "workflow",
+    "displayName": "Workflow",
     "shortDescription": "Git and GitHub workflow skills.",
     "developerName": "Tartiner Labs",
     "category": "Coding",

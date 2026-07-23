@@ -17,7 +17,7 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "quality",
+    "displayName": "Quality",
     "shortDescription": "Code quality and refactoring skills.",
     "developerName": "Tartiner Labs",
     "category": "Coding",
