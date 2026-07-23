@@ -1,0 +1,24 @@
+{
+  "name": "tooling",
+  "displayName": "tooling",
+  "version": "1.29.0",
+  "description": "Project tooling skills — linting/formatting setup, testing, and documentation sync",
+  "author": {
+    "name": "Tartiner Labs",
+    "email": "ruchern.chong@tartinerlabs.com"
+  },
+  "homepage": "https://github.com/tartinerlabs/skills",
+  "repository": "https://github.com/tartinerlabs/skills",
+  "license": "MIT",
+  "keywords": [
+    "setup",
+    "linting",
+    "formatting",
+    "testing",
+    "git-hooks",
+    "docs"
+  ],
+  "category": "Coding",
+  "tags": ["setup", "testing", "linting", "formatting", "docs"],
+  "skills": "./skills/"
+}

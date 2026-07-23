@@ -1,0 +1,23 @@
+{
+  "name": "quality",
+  "displayName": "quality",
+  "version": "1.29.0",
+  "description": "Code quality skills — refactoring, naming conventions, project structure, and Tailwind CSS audits",
+  "author": {
+    "name": "Tartiner Labs",
+    "email": "ruchern.chong@tartinerlabs.com"
+  },
+  "homepage": "https://github.com/tartinerlabs/skills",
+  "repository": "https://github.com/tartinerlabs/skills",
+  "license": "MIT",
+  "keywords": [
+    "refactoring",
+    "naming",
+    "project-structure",
+    "tailwind",
+    "code-quality"
+  ],
+  "category": "Coding",
+  "tags": ["refactoring", "naming", "project-structure", "tailwind"],
+  "skills": "./skills/"
+}

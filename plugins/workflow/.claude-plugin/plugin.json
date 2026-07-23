@@ -1,0 +1,25 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "workflow",
+  "displayName": "workflow",
+  "version": "1.29.0",
+  "description": "Git and GitHub workflow skills — commits, branches, pull requests, issues, and CI actions",
+  "author": {
+    "name": "Tartiner Labs",
+    "url": "https://github.com/tartinerlabs"
+  },
+  "homepage": "https://github.com/tartinerlabs/skills",
+  "repository": "https://github.com/tartinerlabs/skills",
+  "license": "MIT",
+  "keywords": [
+    "git",
+    "github",
+    "commit",
+    "branch",
+    "pull-request",
+    "issues",
+    "github-actions",
+    "ci"
+  ],
+  "skills": "./skills/"
+}

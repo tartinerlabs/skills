@@ -15,17 +15,40 @@ import (
 	"strings"
 )
 
+// Skill collections: each entry is a `plugins/<name>/` wrapper exposing the
+// listed skills through per-skill symlinks (`skills/<skill>` →
+// `../../../skills/<skill>`). Every directory under `skills/` must belong to
+// exactly one collection — validated in validateCollections.
+type collection struct {
+	name   string
+	skills []string
+}
+
+var collections = []collection{
+	{name: "workflow", skills: []string{"commit", "create-branch", "create-pr", "github-actions", "github-issues"}},
+	{name: "quality", skills: []string{"refactor", "naming-format", "project-structure", "tailwind"}},
+	{name: "security", skills: []string{"security", "deps"}},
+	{name: "tooling", skills: []string{"setup", "testing", "update-project"}},
+}
+
 // Plugin manifests whose `version` release-please keeps in sync with the
 // released version (via `extra-files` in release-please-config.json).
-var pluginManifests = []string{
-	"plugins/tartinerlabs/.codex-plugin/plugin.json",
-	"plugins/tartinerlabs/.claude-plugin/plugin.json",
-	"plugins/tartinerlabs/.cursor-plugin/plugin.json",
-	"plugins/tartinerlabs/.antigravity-plugin/plugin.json",
-	"plugins/xcode-skills/.codex-plugin/plugin.json",
-	"plugins/xcode-skills/.claude-plugin/plugin.json",
-	"plugins/xcode-skills/.cursor-plugin/plugin.json",
-	"plugins/xcode-skills/.antigravity-plugin/plugin.json",
+var pluginManifests = manifestPaths()
+
+func manifestPaths() []string {
+	plugins := make([]string, 0, len(collections)+2)
+	for _, coll := range collections {
+		plugins = append(plugins, coll.name)
+	}
+	plugins = append(plugins, "tartinerlabs", "xcode-skills")
+
+	var manifests []string
+	for _, plugin := range plugins {
+		for _, channel := range []string{".codex-plugin", ".claude-plugin", ".cursor-plugin", ".antigravity-plugin"} {
+			manifests = append(manifests, fmt.Sprintf("plugins/%s/%s/plugin.json", plugin, channel))
+		}
+	}
+	return manifests
 }
 
 // Marketplace manifests distributed alongside the plugin manifests.
@@ -35,9 +58,11 @@ var marketplaces = []string{
 	".agents/plugins/marketplace.json",
 }
 
-// Plugin wrappers expose their skill source through a `skills` symlink that
-// must point at a specific collection — swapping the targets would publish the
-// wrong skills through that wrapper, so the exact destination is checked.
+// Whole-directory wrappers expose their skill source through a `skills`
+// symlink that must point at a specific source — swapping the targets would
+// publish the wrong skills through that wrapper, so the exact destination is
+// checked. Collection wrappers instead use per-skill symlinks derived from
+// the collections table (validated in validateCollections).
 var wrapperSymlinks = []struct {
 	path   string
 	target string
@@ -310,50 +335,113 @@ func validatePlugins(root string, errors *[]string) {
 	}
 }
 
+func checkSymlink(root, linkPath, expectedTarget string, errors *[]string) {
+	fullPath := filepath.Join(root, linkPath)
+
+	info, err := os.Lstat(fullPath)
+	if err != nil {
+		*errors = append(*errors, fmt.Sprintf("%s: broken or missing symlink", linkPath))
+		return
+	}
+	if info.Mode()&os.ModeSymlink == 0 {
+		*errors = append(*errors, fmt.Sprintf("%s: expected a symlink", linkPath))
+		return
+	}
+	actualTarget, err := os.Readlink(fullPath)
+	if err != nil {
+		*errors = append(*errors, fmt.Sprintf("%s: broken or missing symlink", linkPath))
+		return
+	}
+	if actualTarget != expectedTarget {
+		*errors = append(*errors, fmt.Sprintf(
+			"%s: points at `%s`, expected `%s`", linkPath, actualTarget, expectedTarget))
+		return
+	}
+	targetInfo, err := os.Stat(fullPath)
+	if err != nil {
+		*errors = append(*errors, fmt.Sprintf("%s: broken or missing symlink", linkPath))
+		return
+	}
+	if !targetInfo.IsDir() {
+		*errors = append(*errors, fmt.Sprintf("%s: symlink target is not a directory", linkPath))
+	}
+}
+
 func validateSymlinks(root string, errors *[]string) {
 	for _, link := range wrapperSymlinks {
-		fullPath := filepath.Join(root, link.path)
+		checkSymlink(root, link.path, link.target, errors)
+	}
+}
 
-		info, err := os.Lstat(fullPath)
-		if err != nil {
-			*errors = append(*errors, fmt.Sprintf("%s: broken or missing symlink", link.path))
-			continue
+// Collection wrappers must expose exactly their assigned skills, each through
+// a per-skill symlink into the flat `skills/` source. Every skill in the
+// source must belong to exactly one collection so a newly added skill cannot
+// silently ship in none (or two) of the collection plugins.
+func validateCollections(root string, skillNames []string, colls []collection, errors *[]string) {
+	assigned := map[string]string{}
+	for _, coll := range colls {
+		for _, skill := range coll.skills {
+			if previous, ok := assigned[skill]; ok {
+				*errors = append(*errors, fmt.Sprintf(
+					"%s/%s: assigned to both `%s` and `%s` collections",
+					skillsDir, skill, previous, coll.name))
+			}
+			assigned[skill] = coll.name
 		}
-		if info.Mode()&os.ModeSymlink == 0 {
-			*errors = append(*errors, fmt.Sprintf("%s: expected a symlink", link.path))
-			continue
-		}
-		actualTarget, err := os.Readlink(fullPath)
-		if err != nil {
-			*errors = append(*errors, fmt.Sprintf("%s: broken or missing symlink", link.path))
-			continue
-		}
-		if actualTarget != link.target {
+	}
+
+	skillSet := map[string]bool{}
+	for _, skill := range skillNames {
+		skillSet[skill] = true
+		if _, ok := assigned[skill]; !ok {
 			*errors = append(*errors, fmt.Sprintf(
-				"%s: points at `%s`, expected `%s`", link.path, actualTarget, link.target))
-			continue
+				"%s/%s: not assigned to any collection", skillsDir, skill))
 		}
-		targetInfo, err := os.Stat(fullPath)
+	}
+	assignedSet := map[string]bool{}
+	for skill := range assigned {
+		assignedSet[skill] = true
+	}
+	for _, skill := range sortedKeys(assignedSet) {
+		if !skillSet[skill] {
+			*errors = append(*errors, fmt.Sprintf(
+				"collections: lists `%s` which does not exist in %s/", skill, skillsDir))
+		}
+	}
+
+	for _, coll := range colls {
+		wrapperDir := fmt.Sprintf("plugins/%s/skills", coll.name)
+		entries, err := os.ReadDir(filepath.Join(root, wrapperDir))
 		if err != nil {
-			*errors = append(*errors, fmt.Sprintf("%s: broken or missing symlink", link.path))
+			*errors = append(*errors, fmt.Sprintf("%s: directory not found", wrapperDir))
 			continue
 		}
-		if !targetInfo.IsDir() {
-			*errors = append(*errors, fmt.Sprintf("%s: symlink target is not a directory", link.path))
+		expected := map[string]bool{}
+		for _, skill := range coll.skills {
+			expected[skill] = true
+		}
+		for _, entry := range entries {
+			if !expected[entry.Name()] {
+				*errors = append(*errors, fmt.Sprintf(
+					"%s/%s: not part of the `%s` collection", wrapperDir, entry.Name(), coll.name))
+			}
+		}
+		for _, skill := range coll.skills {
+			checkSymlink(root, wrapperDir+"/"+skill, "../../../skills/"+skill, errors)
 		}
 	}
 }
 
-func validate(root string) []string {
+func validate(root string, colls []collection) []string {
 	errors := []string{}
 
+	var skillNames []string
 	skillsRoot := filepath.Join(root, skillsDir)
 	if pathExists(skillsRoot) {
 		entries, err := os.ReadDir(skillsRoot)
 		if err != nil {
 			errors = append(errors, fmt.Sprintf("%s/: %s", skillsDir, err))
 		}
-		var skillNames []string
 		for _, entry := range entries {
 			if entry.IsDir() {
 				skillNames = append(skillNames, entry.Name())
@@ -369,6 +457,7 @@ func validate(root string) []string {
 
 	validatePlugins(root, &errors)
 	validateSymlinks(root, &errors)
+	validateCollections(root, skillNames, colls, &errors)
 	validateActionPinning(root, &errors)
 
 	return errors
@@ -379,7 +468,7 @@ func main() {
 	if len(os.Args) > 1 {
 		root = os.Args[1]
 	}
-	errors := validate(root)
+	errors := validate(root, collections)
 	if len(errors) > 0 {
 		fmt.Fprintf(os.Stderr, "✖ Skill validation failed with %d error(s):\n\n", len(errors))
 		for _, err := range errors {

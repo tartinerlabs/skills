@@ -17,41 +17,51 @@ Language-agnostic agent skills for git/GitHub workflows, code quality, and proje
 
 ## Skills
 
-Install the plugin for your agent, then invoke skills through that agent's native skill or command interface.
+The skills ship as four themed collections, each installable as its own plugin (`workflow@tartinerlabs`, `quality@tartinerlabs`, `security@tartinerlabs`, `tooling@tartinerlabs`). Install the collections you need, then invoke skills through your agent's native skill or command interface — e.g. `/workflow:commit` in Claude Code.
 
-### Git
+### workflow
+
+Git and GitHub workflow skills — commits, branches, pull requests, issues, and CI actions.
 
 | Skill | Description |
 |-------|-------------|
 | [commit](skills/commit) | Clean git commits with conventional commit detection and secret scanning |
 | [create-branch](skills/create-branch) | Create and checkout a branch with naming validation and GitHub/GitLab issue linking |
-
-### GitHub
-
-| Skill | Description |
-|-------|-------------|
 | [create-pr](skills/create-pr) | Push branch and create a pull/merge request (GitHub or GitLab) with structured description and auto-assignment |
-| [github-issues](skills/github-issues) | Create, update, query, and comment on issues (GitHub, or GitLab via glab) |
 | [github-actions](skills/github-actions) | Create and audit GitHub Actions workflows with SHA pinning, permissions, and caching checks |
+| [github-issues](skills/github-issues) | Create, update, query, and comment on issues (GitHub, or GitLab via glab) |
 
-### Code Quality
+### quality
+
+Code quality skills — refactoring, naming conventions, project structure, and Tailwind CSS audits.
 
 | Skill | Description |
 |-------|-------------|
-| [deps](skills/deps) | Harden the dependency supply chain — detects the ecosystem (JS/TS, Python, Go) for pinning, vulnerability scanning, and CI gates |
 | [refactor](skills/refactor) | Audit and refactor code for dead code, deep nesting, and design patterns (language-agnostic; TS/JS idiom rules for TS/JS files) |
-| [security](skills/security) | OWASP Top 10 security audit with secret detection and dependency vulnerability scanning |
+| [naming-format](skills/naming-format) | Audit and fix filename and export naming conventions for consistency |
+| [project-structure](skills/project-structure) | Audit project directory structure for colocation, grouping, and anti-pattern detection |
 | [tailwind](skills/tailwind) | Audit and fix Tailwind CSS v4 anti-patterns for spacing, 8px grid, mobile-first, and GPU animations |
-| [testing](skills/testing) | Write and run unit/component tests — detects the language and test runner (JS/TS, Python, Go) |
 
-### Project
+### security
+
+Security skills — OWASP audits, secret scanning, and dependency supply-chain hardening.
+
+| Skill | Description |
+|-------|-------------|
+| [security](skills/security) | OWASP Top 10 security audit with secret detection and dependency vulnerability scanning |
+| [deps](skills/deps) | Harden the dependency supply chain — detects the ecosystem (JS/TS, Python, Go) for pinning, vulnerability scanning, and CI gates |
+
+### tooling
+
+Project tooling skills — linting/formatting setup, testing, and documentation sync.
 
 | Skill | Description |
 |-------|-------------|
 | [setup](skills/setup) | Set up the ecosystem's lint/format/git-hooks/secret-scanning toolchain — detects the language (JS/TS, Python, Go) |
-| [project-structure](skills/project-structure) | Audit project directory structure for colocation, grouping, and anti-pattern detection |
-| [naming-format](skills/naming-format) | Audit and fix filename and export naming conventions for consistency |
+| [testing](skills/testing) | Write and run unit/component tests — detects the language and test runner (JS/TS, Python, Go) |
 | [update-project](skills/update-project) | Update and maintain CLAUDE.md, AGENTS.md, README.md, agents, skills, and rules to match current project state |
+
+> **Migrating from the `tartinerlabs` plugin?** The original all-in-one `tartinerlabs` plugin is deprecated but still published for a transition period. Install the collection plugins above and uninstall the monolith when ready — the skills are identical, only the namespace changes (e.g. `/tartinerlabs:commit` → `/workflow:commit`).
 
 ## Xcode Skills
 
@@ -96,23 +106,32 @@ Agents invoke skills autonomously with an isolated worktree. Invoke with `claude
 
 ### [Claude Code Plugin](https://docs.anthropic.com/en/docs/claude-code/plugins)
 
+Add the marketplace, then install the collections you need:
+
 ```bash
-claude plugin install tartinerlabs/skills
+claude plugin marketplace add tartinerlabs/skills
+
+claude plugin install workflow@tartinerlabs
+claude plugin install quality@tartinerlabs
+claude plugin install security@tartinerlabs
+claude plugin install tooling@tartinerlabs
 ```
+
+The deprecated all-in-one plugin remains installable as `tartinerlabs@tartinerlabs` during the transition period.
 
 ### Codex Plugin
 
-This repository includes repo-scoped Codex plugin metadata in `plugins/tartinerlabs/.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`.
+This repository includes repo-scoped Codex plugin metadata in `plugins/<collection>/.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`.
 
 To use it in Codex:
 
 1. Open this repository in Codex
 2. Restart Codex if needed so it reloads the repo marketplace
-3. Open the plugin directory and install `tartinerlabs` from the repo marketplace
+3. Open the plugin directory and install `workflow`, `quality`, `security`, and/or `tooling` from the repo marketplace
 
 ### Cursor Plugin
 
-This repository includes Cursor plugin metadata in `plugins/tartinerlabs/.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`.
+This repository includes Cursor plugin metadata in `plugins/<collection>/.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`.
 
 For local development, install the plugin with Cursor's plugin flow or copy the repository into Cursor's local plugin directory:
 
@@ -166,12 +185,17 @@ pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal
 
 Plugin manifests are maintained manually on purpose.
 
-Each plugin lives in its own `plugins/<name>/` wrapper holding the three per-channel manifests plus a `skills` symlink; both `plugins/tartinerlabs/` and `plugins/xcode-skills/` use this identical shape, and every marketplace references its plugins as `./plugins/<name>`.
+Each plugin lives in its own `plugins/<name>/` wrapper holding the per-channel manifests plus a `skills` directory, and every marketplace references its plugins as `./plugins/<name>`. Two wrapper shapes exist:
 
-- Codex metadata lives in `plugins/tartinerlabs/.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`
-- Claude metadata lives in `plugins/tartinerlabs/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
-- Cursor metadata lives in `plugins/tartinerlabs/.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`
-- Antigravity metadata lives in `plugins/tartinerlabs/.antigravity-plugin/plugin.json`
+- **Collection wrappers** (`plugins/workflow/`, `plugins/quality/`, `plugins/security/`, `plugins/tooling/`) expose a subset of the flat `skills/` source through per-skill symlinks (`skills/<skill>` → `../../../skills/<skill>`). `scripts/validate-skills/main.go` checks that every skill belongs to exactly one collection and that each wrapper exposes exactly its assigned skills.
+- **Whole-directory wrappers** (`plugins/tartinerlabs/` — deprecated, and `plugins/xcode-skills/`) expose an entire source directory through a single `skills` symlink (`../../skills` and `../../xcode-skills` respectively).
+
+Per-channel metadata for every plugin:
+
+- Codex metadata lives in `plugins/<name>/.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`
+- Claude metadata lives in `plugins/<name>/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
+- Cursor metadata lives in `plugins/<name>/.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`
+- Antigravity metadata lives in `plugins/<name>/.antigravity-plugin/plugin.json`
 - The separate Xcode collection is wrapped by `plugins/xcode-skills/`, which links to the untouched `xcode-skills/` export
 - `.release-please-manifest.json` is the shared source of truth across plugin manifests; release-please syncs manifest versions in the release PR
 

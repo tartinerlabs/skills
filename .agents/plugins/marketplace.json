@@ -5,8 +5,60 @@
   },
   "plugins": [
     {
+      "name": "workflow",
+      "description": "Git and GitHub workflow skills — commits, branches, pull requests, issues, and CI actions",
+      "source": {
+        "source": "local",
+        "path": "./plugins/workflow"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Coding"
+    },
+    {
+      "name": "quality",
+      "description": "Code quality skills — refactoring, naming conventions, project structure, and Tailwind CSS audits",
+      "source": {
+        "source": "local",
+        "path": "./plugins/quality"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Coding"
+    },
+    {
+      "name": "security",
+      "description": "Security skills — OWASP audits, secret scanning, and dependency supply-chain hardening",
+      "source": {
+        "source": "local",
+        "path": "./plugins/security"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Coding"
+    },
+    {
+      "name": "tooling",
+      "description": "Project tooling skills — linting/formatting setup, testing, and documentation sync",
+      "source": {
+        "source": "local",
+        "path": "./plugins/tooling"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Coding"
+    },
+    {
       "name": "tartinerlabs",
-      "description": "Language-agnostic agent skills for git/GitHub workflows, code quality, and project tooling, with first-class JS/TS support",
+      "description": "Deprecated: install the workflow, quality, security, and tooling plugins instead. Language-agnostic agent skills for git/GitHub workflows, code quality, and project tooling, with first-class JS/TS support.",
       "source": {
         "source": "local",
         "path": "./plugins/tartinerlabs"
