@@ -1,7 +1,7 @@
 {
   "name": "workflow",
   "displayName": "workflow",
-  "version": "1.29.0",
+  "version": "1.30.0",
   "description": "Git and GitHub workflow skills — commits, branches, pull requests, issues, and CI actions",
   "author": {
     "name": "Tartiner Labs",
