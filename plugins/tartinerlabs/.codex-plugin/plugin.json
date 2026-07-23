@@ -25,7 +25,7 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "tartiner-labs (deprecated)",
+    "displayName": "Tartiner Labs (deprecated)",
     "shortDescription": "Deprecated — use the workflow, quality, security, and tooling plugins.",
     "developerName": "Tartiner Labs",
     "category": "Coding",

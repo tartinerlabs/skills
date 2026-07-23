@@ -18,7 +18,7 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "tooling",
+    "displayName": "Tooling",
     "shortDescription": "Project setup, testing, and docs skills.",
     "developerName": "Tartiner Labs",
     "category": "Coding",
