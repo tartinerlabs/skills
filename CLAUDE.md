@@ -14,7 +14,7 @@ A collection of agent skills distributed via Claude Code, Codex, Cursor, and [sk
 - **Package manager:** pnpm (v11+) — use `pnx` instead of `npx` or `pnpm dlx`
 - **Git hooks:** Husky with commitlint (conventional commits via `@commitlint/config-conventional`) and GitLeaks secrets detection on pre-commit
 - **No build/test/lint steps** — this is a content-only repo of markdown skill files
-- **Releases:** Automated via semantic-release on push to `main` — bumps version in `package.json`, updates `CHANGELOG.md`, creates GitHub release
+- **Releases:** Automated via release-please on push to `main` — maintains a release PR from conventional commits; merging it bumps versions, updates `CHANGELOG.md`, and creates the GitHub release
 
 ## Skill Format
 
@@ -71,7 +71,7 @@ Every plugin lives in its own `plugins/<name>/` wrapper holding the three per-ch
 
 The repo root's `.claude-plugin/` and `.cursor-plugin/` hold **only** their `marketplace.json`; the Codex marketplace is `.agents/plugins/marketplace.json`. Each marketplace references both plugins as `./plugins/<name>`. Keeping every plugin subdirectory-sourced (no `source: "./"` at the marketplace root) is required — the Claude Code loader silently drops a root-sourced plugin when another plugin exists.
 
-Plugin metadata is intentionally hand-maintained. `package.json.version` is the shared source of truth between plugin manifests, and semantic-release (`scripts/sync-plugin-versions.mjs`) syncs the six `plugins/**/plugin.json` manifest versions during release.
+Plugin metadata is intentionally hand-maintained. `.release-please-manifest.json` is the shared source of truth for the released version, and release-please (`extra-files` in `release-please-config.json`) syncs `package.json` and the `plugins/**/plugin.json` manifest versions in the release PR.
 
 ## Xcode Skill Export
 

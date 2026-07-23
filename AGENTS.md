@@ -14,7 +14,7 @@ A collection of agent skills distributed via Codex, Claude Code, Cursor, Antigra
 - **Package manager:** pnpm (v10.29.3)
 - **Git hooks:** Husky with commitlint (conventional commits via `@commitlint/config-conventional`) and GitLeaks secrets detection on pre-commit
 - **Checks:** `pnpm run build` and `pnpm run check`
-- **Releases:** Automated via semantic-release on push to `main` — bumps version in `package.json`, updates `CHANGELOG.md`, creates GitHub release
+- **Releases:** Automated via release-please on push to `main` — maintains a release PR from conventional commits; merging it bumps versions, updates `CHANGELOG.md`, and creates the GitHub release
 
 ## Skill Format
 

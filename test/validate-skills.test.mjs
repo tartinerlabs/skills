@@ -11,8 +11,7 @@ import {
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { MANIFESTS } from "../scripts/sync-plugin-versions.mjs";
-import { validate } from "../scripts/validate-skills.mjs";
+import { MANIFESTS, validate } from "../scripts/validate-skills.mjs";
 
 const VERSION = "1.0.0";
 
@@ -52,6 +51,9 @@ async function buildFixture(t) {
   const root = await mkdtemp(join(tmpdir(), "validate-skills-"));
   t.after(() => rm(root, { recursive: true, force: true }));
 
+  await writeJson(join(root, ".release-please-manifest.json"), {
+    ".": VERSION,
+  });
   await writeJson(join(root, "package.json"), { version: VERSION });
 
   await writeText(join(root, "skills/demo/SKILL.md"), VALID_SKILL);
@@ -174,17 +176,23 @@ test("flags plugin manifest version drift", async (t) => {
   );
 });
 
-test("semantic-release commits every synced plugin manifest", async () => {
+test("release-please syncs every plugin manifest via extra-files", async () => {
   const releaseConfig = JSON.parse(
-    await readFile(new URL("../.releaserc.json", import.meta.url), "utf8"),
+    await readFile(
+      new URL("../release-please-config.json", import.meta.url),
+      "utf8",
+    ),
   );
-  const gitPlugin = releaseConfig.plugins.find(
-    (plugin) => Array.isArray(plugin) && plugin[0] === "@semantic-release/git",
-  );
-  const assets = gitPlugin?.[1]?.assets ?? [];
+  const extraFiles = releaseConfig.packages?.["."]?.["extra-files"] ?? [];
+  const syncedJsonPaths = extraFiles
+    .filter((file) => file.type === "json" && file.jsonpath === "$.version")
+    .map((file) => file.path);
 
-  for (const manifest of MANIFESTS) {
-    assert.ok(assets.includes(manifest), `${manifest} is missing from assets`);
+  for (const manifest of [...MANIFESTS, "package.json"]) {
+    assert.ok(
+      syncedJsonPaths.includes(manifest),
+      `${manifest} is missing from extra-files`,
+    );
   }
 });
 

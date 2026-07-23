@@ -81,9 +81,9 @@ Plugin metadata is maintained manually by design.
 - Cursor files:
   - `.cursor-plugin/plugin.json`
   - `.cursor-plugin/marketplace.json`
-- `package.json.version` is the canonical shared field
+- `.release-please-manifest.json` is the canonical shared version
 
-When releasing a new version, update `package.json.version` first. The semantic-release prepare step syncs plugin manifest versions.
+Releases are cut by merging the release-please PR — never bump versions by hand. release-please syncs `package.json` and the plugin manifest versions automatically.
 
 When plugin copy changes, update the Codex, Claude, and Cursor plugin files intentionally. There is no generator for these files.
 
@@ -107,8 +107,8 @@ This repository uses [conventional commits](https://www.conventionalcommits.org/
 - Use a descriptive, natural-language title (no conventional commit prefixes like `feat:` or `fix:`)
 - CI runs two checks on push to `main`:
   - **Skills** — validates distribution via [skills.sh](https://skills.sh) and [Context7](https://context7.com)
-  - **Release** — automated via semantic-release (bumps version, updates changelog, creates GitHub release)
-- The repo is also distributed as **Codex**, **Claude Code**, and **Cursor** plugins. Keep the plugin manifests aligned manually and treat `package.json.version` as the shared version source.
+  - **Release** — automated via release-please (maintains a release PR; merging it bumps versions, updates the changelog, and creates the GitHub release)
+- The repo is also distributed as **Codex**, **Claude Code**, and **Cursor** plugins. Keep the plugin manifests aligned manually and treat `.release-please-manifest.json` as the shared version source.
 
 ## Reporting Issues
 

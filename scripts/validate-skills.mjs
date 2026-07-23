@@ -8,7 +8,19 @@ import {
 } from "node:fs/promises";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
-import { MANIFESTS } from "./sync-plugin-versions.mjs";
+
+// Plugin manifests whose `version` release-please keeps in sync with the
+// released version (via `extra-files` in release-please-config.json).
+export const MANIFESTS = [
+  "plugins/tartinerlabs/.codex-plugin/plugin.json",
+  "plugins/tartinerlabs/.claude-plugin/plugin.json",
+  "plugins/tartinerlabs/.cursor-plugin/plugin.json",
+  "plugins/tartinerlabs/.antigravity-plugin/plugin.json",
+  "plugins/xcode-skills/.codex-plugin/plugin.json",
+  "plugins/xcode-skills/.claude-plugin/plugin.json",
+  "plugins/xcode-skills/.cursor-plugin/plugin.json",
+  "plugins/xcode-skills/.antigravity-plugin/plugin.json",
+];
 
 // Marketplace manifests distributed alongside the plugin manifests.
 const MARKETPLACES = [
@@ -223,20 +235,26 @@ async function validateSkill(root, skillName, errors) {
 }
 
 async function validatePlugins(root, errors) {
-  const pkg = await readJson(root, "package.json", errors);
-  const expectedVersion = pkg?.version;
+  const releaseManifest = await readJson(
+    root,
+    ".release-please-manifest.json",
+    errors,
+  );
+  const expectedVersion = releaseManifest?.["."];
   if (!expectedVersion) {
-    errors.push("package.json: missing version");
+    errors.push(".release-please-manifest.json: missing `.` version");
   }
 
-  for (const manifestPath of MANIFESTS) {
+  // package.json is synced by release-please as an extra-file for as long as
+  // it exists; MANIFESTS are the per-channel plugin manifests.
+  for (const manifestPath of [...MANIFESTS, "package.json"]) {
     const manifest = await readJson(root, manifestPath, errors);
     if (!manifest) continue;
     if (!manifest.version) {
       errors.push(`${manifestPath}: missing version field`);
     } else if (expectedVersion && manifest.version !== expectedVersion) {
       errors.push(
-        `${manifestPath}: version \`${manifest.version}\` does not match package.json \`${expectedVersion}\``,
+        `${manifestPath}: version \`${manifest.version}\` does not match .release-please-manifest.json \`${expectedVersion}\``,
       );
     }
   }
