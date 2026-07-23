@@ -37,6 +37,10 @@ jobs:
 
       - run: pnpm run check
 
-      - run: pnpm run validate
+      # Go is preinstalled on GitHub-hosted runners; the validator has no
+      # dependencies beyond the standard library.
+      - run: go vet ./...
 
-      - run: pnpm test
+      - run: go run ./scripts/validate-skills
+
+      - run: go test ./...

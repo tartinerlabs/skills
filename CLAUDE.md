@@ -13,7 +13,7 @@ A collection of agent skills distributed via Claude Code, Codex, Cursor, and [sk
 
 - **Package manager:** pnpm (v11+) — use `pnx` instead of `npx` or `pnpm dlx`
 - **Git hooks:** Husky with commitlint (conventional commits via `@commitlint/config-conventional`) and GitLeaks secrets detection on pre-commit
-- **No build/test/lint steps** — this is a content-only repo of markdown skill files
+- **Validation:** `go run ./scripts/validate-skills` checks skill structure, manifest versions, symlinks, and action pinning; `go test ./...` runs its test suite. Stdlib-only Go — no module dependencies to install
 - **Releases:** Automated via release-please on push to `main` — maintains a release PR from conventional commits; merging it bumps versions, updates `CHANGELOG.md`, and creates the GitHub release
 
 ## Skill Format
@@ -49,7 +49,7 @@ Every skill is **language-aware with JS/TS as the first-class default** — no s
 
 Skills with multiple checks use a `rules/` subdirectory alongside `SKILL.md`. The main skill file references rules via a table and tells Claude to read them at runtime. Each rule file is a standalone markdown document with severity, examples, and fix instructions. This keeps skills modular — rules can be added, removed, or edited independently.
 
-Polyglot skills add a `references/` subdirectory for **progressive disclosure**: SKILL.md detects the language and loads **only** the matching `references/<lang>.md` (e.g. `references/python.md`, `references/go.md`), so a JS project never loads Go content. The asymmetry is intentional — the first-class JS/TS path stays in modular `rules/`; other ecosystems live in `references/<lang>.md`; truly universal checks stay in `rules/` and are cross-linked from each language guide. `references/` is also the most portable component across distribution channels. `scripts/validate-skills.mjs` enforces the same existence + orphan discipline on both `rules/*.md` and `references/*.md` (template placeholders like `references/<lang>.md` are ignored).
+Polyglot skills add a `references/` subdirectory for **progressive disclosure**: SKILL.md detects the language and loads **only** the matching `references/<lang>.md` (e.g. `references/python.md`, `references/go.md`), so a JS project never loads Go content. The asymmetry is intentional — the first-class JS/TS path stays in modular `rules/`; other ecosystems live in `references/<lang>.md`; truly universal checks stay in `rules/` and are cross-linked from each language guide. `references/` is also the most portable component across distribution channels. The Go validator (`scripts/validate-skills/`, run with `go run ./scripts/validate-skills`) enforces the same existence + orphan discipline on both `rules/*.md` and `references/*.md` (template placeholders like `references/<lang>.md` are ignored).
 
 ## Distribution
 

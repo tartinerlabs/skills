@@ -13,7 +13,7 @@ A collection of agent skills distributed via Codex, Claude Code, Cursor, Antigra
 
 - **Package manager:** pnpm (v10.29.3)
 - **Git hooks:** Husky with commitlint (conventional commits via `@commitlint/config-conventional`) and GitLeaks secrets detection on pre-commit
-- **Checks:** `pnpm run build`, `pnpm run check`, `pnpm run validate`, and `pnpm test`
+- **Checks:** `pnpm run build`, `pnpm run check`, `go run ./scripts/validate-skills`, and `go test ./...` (the validator is dependency-free Go — stdlib only)
 - **Releases:** Automated via release-please on push to `main` — maintains a release PR from conventional commits; merging it bumps versions, updates `CHANGELOG.md`, and creates the GitHub release
 
 ## Skill Format
@@ -66,7 +66,7 @@ Plugin metadata is maintained manually by design. Every plugin lives in its own 
 - `plugins/tartinerlabs/.cursor-plugin/plugin.json` is the Cursor plugin manifest; the root `.cursor-plugin/marketplace.json` is the Cursor marketplace
 - `plugins/tartinerlabs/.antigravity-plugin/plugin.json` is the Antigravity plugin manifest
 - Each marketplace references both plugins as `./plugins/<name>`. Keep every plugin subdirectory-sourced — the Claude Code loader silently drops a plugin sourced at the marketplace root (`source: "./"`) when another plugin exists
-- `package.json.version` is the canonical shared field; semantic-release (`scripts/sync-plugin-versions.mjs`) syncs the six `plugins/**/plugin.json` manifest versions during release
+- `.release-please-manifest.json` is the canonical version source; release-please (`extra-files` in `release-please-config.json`) syncs `package.json` and the `plugins/**/plugin.json` manifest versions in the release PR
 
 When plugin copy changes, update Codex, Claude, Cursor, and Antigravity plugin manifests intentionally. Do not expose Claude-only hooks in Cursor metadata unless they have been ported to Cursor's runtime.
 

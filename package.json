@@ -25,11 +25,11 @@
     "LICENSE"
   ],
   "scripts": {
-    "test": "node --test",
+    "test": "go test ./...",
     "build": "tsc",
     "check": "biome check",
     "format": "biome check --write",
-    "validate": "node scripts/validate-skills.mjs",
+    "validate": "go run ./scripts/validate-skills",
     "prepare": "husky",
     "prepublishOnly": "pnpm run build"
   },
