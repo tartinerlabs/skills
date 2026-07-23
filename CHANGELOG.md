@@ -14,6 +14,13 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [1.30.1](https://github.com/tartinerlabs/skills/compare/v1.30.0...v1.30.1) (2026-07-23)
+
+
+### Bug Fixes
+
+* capitalise plugin display names ([7de1528](https://github.com/tartinerlabs/skills/commit/7de1528a55f281154b668bb9aa97e3bf4c24e6bc))
+
 ## [1.30.0](https://github.com/tartinerlabs/skills/compare/v1.29.0...v1.30.0) (2026-07-23)
 
 
