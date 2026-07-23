@@ -11,7 +11,7 @@ A collection of agent skills distributed via Codex, Claude Code, Cursor, Antigra
 
 ## Development
 
-- **No JS/TS toolchain:** the repo intentionally has no npm dependencies (supply-chain surface); tooling is stdlib-only Go plus shell git hooks
+- **Tooling:** stdlib-only Go plus plain shell git hooks — the repo deliberately avoids npm dependencies to keep the supply-chain surface minimal
 - **Git hooks:** plain shell hooks in `.githooks/` (enable with `git config core.hooksPath .githooks`) — `commit-msg` enforces conventional commits (no scope, max 50-char header), `pre-commit` runs GitLeaks secrets detection
 - **Checks:** `go run ./scripts/validate-skills` and `go test ./...` (stdlib-only Go — no module dependencies)
 - **Releases:** Automated via release-please on push to `main` — maintains a release PR from conventional commits; merging it bumps versions, updates `CHANGELOG.md`, and creates the GitHub release
