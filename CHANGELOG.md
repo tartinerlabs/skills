@@ -14,6 +14,20 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [1.30.0](https://github.com/tartinerlabs/skills/compare/v1.29.0...v1.30.0) (2026-07-23)
+
+
+### Features
+
+* correct antigravity manifest skills paths ([0ebe70d](https://github.com/tartinerlabs/skills/commit/0ebe70dbb81414d62b599e91092b10ca550fb722))
+* split skills into collection plugins ([44be789](https://github.com/tartinerlabs/skills/commit/44be78936ffd1431e990a406d21e7a08d1d9994b))
+* surface monolith deprecation in metadata ([40396c8](https://github.com/tartinerlabs/skills/commit/40396c813a526a271e6e8f75d4094536c88a9f05))
+
+
+### Bug Fixes
+
+* update plugin manifest schema URL ([945bdff](https://github.com/tartinerlabs/skills/commit/945bdffee240166bcbd9200532887a1c73a96d6e))
+
 ## [1.27.1](https://github.com/tartinerlabs/skills/compare/v1.27.0...v1.27.1) (2026-07-18)
 
 

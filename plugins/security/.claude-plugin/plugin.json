@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "security",
   "displayName": "security",
-  "version": "1.29.0",
+  "version": "1.30.0",
   "description": "Security skills — OWASP audits, secret scanning, and dependency supply-chain hardening",
   "author": {
     "name": "Tartiner Labs",
@@ -11,6 +11,12 @@
   "homepage": "https://github.com/tartinerlabs/skills",
   "repository": "https://github.com/tartinerlabs/skills",
   "license": "MIT",
-  "keywords": ["security", "owasp", "secrets", "deps", "supply-chain"],
+  "keywords": [
+    "security",
+    "owasp",
+    "secrets",
+    "deps",
+    "supply-chain"
+  ],
   "skills": "./skills/"
 }

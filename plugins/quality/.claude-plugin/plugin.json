@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "quality",
   "displayName": "quality",
-  "version": "1.29.0",
+  "version": "1.30.0",
   "description": "Code quality skills — refactoring, naming conventions, project structure, and Tailwind CSS audits",
   "author": {
     "name": "Tartiner Labs",
