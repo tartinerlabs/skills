@@ -1,3 +1,12 @@
+# [1.29.0](https://github.com/tartinerlabs/skills/compare/v1.28.0...v1.29.0) (2026-07-23)
+
+
+### Features
+
+* add issue fields to github-issues skill ([7aa7c16](https://github.com/tartinerlabs/skills/commit/7aa7c1642608fe6ccb165b137e49bf8008c94187))
+* grant only read MCP tools in github-issues ([56df479](https://github.com/tartinerlabs/skills/commit/56df479cfe2026d02eada9b362dcdecde9364152))
+* let user approve MCP tools in github-issues ([380c6db](https://github.com/tartinerlabs/skills/commit/380c6db2c72d863789c9d225757b0bfdd21b01d6))
+
 # [1.28.0](https://github.com/tartinerlabs/skills/compare/v1.27.1...v1.28.0) (2026-07-23)
 
 
