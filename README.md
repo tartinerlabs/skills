@@ -160,7 +160,7 @@ pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal
 
 ### [OpenCode](https://opencode.ai)
 
-> **Note:** The OpenCode plugin is paused — OpenCode's TypeScript plugin system differs too much from the manifest-based Claude Code/Codex/Cursor plugins to maintain alongside them. The plugin source stays in the repository, but no further versions of the `@tartinerlabs/skills` npm package will be published. OpenCode users can install the skills directly via [skills.sh](#skills), which copies them into OpenCode's skill discovery directories.
+> **Note:** The OpenCode plugin has been retired — OpenCode's TypeScript plugin system differs too much from the manifest-based Claude Code/Codex/Cursor plugins to maintain alongside them, and the repository no longer carries a JS/TS toolchain (npm dependencies are a supply-chain surface this repo deliberately avoids). OpenCode users can install the skills directly via [skills.sh](#skills), which copies them into OpenCode's skill discovery directories.
 
 ## Plugin Metadata
 
