@@ -1,6 +1,6 @@
 {
   "name": "security",
-  "displayName": "security",
+  "displayName": "Security",
   "version": "1.30.0",
   "description": "Security skills — OWASP audits, secret scanning, and dependency supply-chain hardening",
   "author": {

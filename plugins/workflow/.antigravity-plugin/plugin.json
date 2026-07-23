@@ -1,6 +1,6 @@
 {
   "name": "workflow",
-  "displayName": "workflow",
+  "displayName": "Workflow",
   "version": "1.30.0",
   "description": "Git and GitHub workflow skills — commits, branches, pull requests, issues, and CI actions",
   "author": {
