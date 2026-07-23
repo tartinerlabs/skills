@@ -3,3 +3,15 @@ set -e
 
 # Secrets detection - fail fast if secrets found
 gitleaks protect --staged --verbose
+
+# Go formatting - reject staged .go files whose working-tree copy is
+# unformatted (run `gofmt -w .` to fix)
+staged_go=$(git diff --cached --name-only --diff-filter=ACMR -- '*.go')
+if [ -n "$staged_go" ]; then
+  unformatted=$(gofmt -l $staged_go)
+  if [ -n "$unformatted" ]; then
+    echo "pre-commit: unformatted Go files (run gofmt -w .):" >&2
+    echo "$unformatted" >&2
+    exit 1
+  fi
+fi
