@@ -1,7 +1,7 @@
 {
   "name": "tartinerlabs",
   "version": "1.29.0",
-  "description": "Language-agnostic agent skills for git/GitHub workflows, code quality, and project tooling, with first-class JS/TS support. Deprecated: install the workflow, quality, security, and tooling plugins instead.",
+  "description": "Deprecated: install the workflow, quality, security, and tooling plugins instead. Language-agnostic agent skills for git/GitHub workflows, code quality, and project tooling, with first-class JS/TS support.",
   "author": {
     "name": "Tartiner Labs",
     "url": "https://github.com/tartinerlabs"
@@ -25,8 +25,8 @@
   ],
   "skills": "./skills/",
   "interface": {
-    "displayName": "tartiner-labs",
-    "shortDescription": "Git, GitHub, security, refactor, and project tooling skills.",
+    "displayName": "tartiner-labs (deprecated)",
+    "shortDescription": "Deprecated — use the workflow, quality, security, and tooling plugins.",
     "developerName": "Tartiner Labs",
     "category": "Coding",
     "websiteURL": "https://github.com/tartinerlabs/skills",
