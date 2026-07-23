@@ -98,7 +98,7 @@ When plugin copy changes, update the Codex, Claude, and Cursor plugin files inte
 This repository uses [conventional commits](https://www.conventionalcommits.org/) enforced by the `commit-msg` hook in `.githooks/`.
 
 - **Max 50 characters** for the subject line
-- Format: `type(scope): description` (e.g. `feat: add deploy skill`, `fix: correct frontmatter field`)
+- Format: `type: description` — no scope (e.g. `feat: add deploy skill`, `fix: correct frontmatter field`)
 - A GitLeaks pre-commit hook runs on every commit to detect secrets — do not bypass it
 
 ## Pull Requests
