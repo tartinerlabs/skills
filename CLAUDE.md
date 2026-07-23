@@ -11,8 +11,8 @@ A collection of agent skills distributed via Claude Code, Codex, Cursor, and [sk
 
 ## Development
 
-- **Package manager:** pnpm (v11+) — use `pnx` instead of `npx` or `pnpm dlx`
-- **Git hooks:** Husky with commitlint (conventional commits via `@commitlint/config-conventional`) and GitLeaks secrets detection on pre-commit
+- **No JS/TS toolchain:** the repo intentionally has no npm dependencies (supply-chain surface); tooling is stdlib-only Go plus shell git hooks
+- **Git hooks:** plain shell hooks in `.githooks/` (enable with `git config core.hooksPath .githooks`) — `commit-msg` enforces conventional commits (no scope, max 50-char header), `pre-commit` runs GitLeaks secrets detection
 - **Validation:** `go run ./scripts/validate-skills` checks skill structure, manifest versions, symlinks, and action pinning; `go test ./...` runs its test suite. Stdlib-only Go — no module dependencies to install
 - **Releases:** Automated via release-please on push to `main` — maintains a release PR from conventional commits; merging it bumps versions, updates `CHANGELOG.md`, and creates the GitHub release
 
@@ -71,7 +71,7 @@ Every plugin lives in its own `plugins/<name>/` wrapper holding the three per-ch
 
 The repo root's `.claude-plugin/` and `.cursor-plugin/` hold **only** their `marketplace.json`; the Codex marketplace is `.agents/plugins/marketplace.json`. Each marketplace references both plugins as `./plugins/<name>`. Keeping every plugin subdirectory-sourced (no `source: "./"` at the marketplace root) is required — the Claude Code loader silently drops a root-sourced plugin when another plugin exists.
 
-Plugin metadata is intentionally hand-maintained. `.release-please-manifest.json` is the shared source of truth for the released version, and release-please (`extra-files` in `release-please-config.json`) syncs `package.json` and the `plugins/**/plugin.json` manifest versions in the release PR.
+Plugin metadata is intentionally hand-maintained. `.release-please-manifest.json` is the shared source of truth for the released version, and release-please (`extra-files` in `release-please-config.json`) syncs the `plugins/**/plugin.json` manifest versions in the release PR.
 
 ## Xcode Skill Export
 

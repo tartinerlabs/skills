@@ -1,0 +1,21 @@
+#!/usr/bin/env sh
+# Conventional commit check (replaces commitlint): `type: description`,
+# no scope, header at most 50 characters.
+
+header=$(head -n1 "$1")
+
+# Same messages commitlint ignores by default.
+case "$header" in
+"Merge "* | "Revert "* | "fixup! "* | "squash! "*) exit 0 ;;
+esac
+
+if [ "${#header}" -gt 50 ]; then
+  echo "commit-msg: header exceeds 50 characters (got ${#header})" >&2
+  exit 1
+fi
+
+if ! printf '%s' "$header" | grep -Eq '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)!?: [^[:space:]]'; then
+  echo "commit-msg: header must be 'type: description' (no scope)" >&2
+  echo "  types: feat fix docs style refactor perf test build ci chore revert" >&2
+  exit 1
+fi

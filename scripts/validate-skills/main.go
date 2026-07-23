@@ -290,9 +290,7 @@ func validatePlugins(root string, errors *[]string) {
 		*errors = append(*errors, ".release-please-manifest.json: missing `.` version")
 	}
 
-	// package.json is synced by release-please as an extra-file for as long as
-	// it exists; pluginManifests are the per-channel plugin manifests.
-	for _, manifestPath := range append(append([]string{}, pluginManifests...), "package.json") {
+	for _, manifestPath := range pluginManifests {
 		manifest := readJSON(root, manifestPath, errors)
 		if manifest == nil {
 			continue

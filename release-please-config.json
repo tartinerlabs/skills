@@ -7,11 +7,6 @@
       "extra-files": [
         {
           "type": "json",
-          "path": "package.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "json",
           "path": "plugins/tartinerlabs/.codex-plugin/plugin.json",
           "jsonpath": "$.version"
         },

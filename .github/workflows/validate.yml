@@ -24,21 +24,16 @@ jobs:
         with:
           persist-credentials: false
 
-      - uses: pnpm/action-setup@b307475762933b98ed359c036b0e51f26b63b74b  # v5.0.0
-
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e  # v6
-        with:
-          node-version: lts/*
-          cache: pnpm
-
-      - run: pnpm install --frozen-lockfile
-
-      - run: pnpm run build
-
-      - run: pnpm run check
-
       # Go is preinstalled on GitHub-hosted runners; the validator has no
       # dependencies beyond the standard library.
+      - name: gofmt
+        run: |
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "$unformatted"
+            exit 1
+          fi
+
       - run: go vet ./...
 
       - run: go run ./scripts/validate-skills

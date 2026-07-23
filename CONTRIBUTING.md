@@ -11,10 +11,10 @@ Thanks for your interest in contributing to `@tartinerlabs/skills`! This guide c
    cd skills
    ```
 
-2. Install dependencies (sets up Husky git hooks):
+2. Enable the git hooks (GitLeaks secrets scan on pre-commit, conventional commit check on commit-msg). [GitLeaks](https://github.com/gitleaks/gitleaks) must be installed (`brew install gitleaks`):
 
    ```sh
-   pnpm install
+   git config core.hooksPath .githooks
    ```
 
 3. If you update plugin metadata, keep the manual Codex, Claude, and Cursor manifests in sync.
@@ -83,7 +83,7 @@ Plugin metadata is maintained manually by design.
   - `.cursor-plugin/marketplace.json`
 - `.release-please-manifest.json` is the canonical shared version
 
-Releases are cut by merging the release-please PR — never bump versions by hand. release-please syncs `package.json` and the plugin manifest versions automatically.
+Releases are cut by merging the release-please PR — never bump versions by hand. release-please syncs the plugin manifest versions automatically.
 
 When plugin copy changes, update the Codex, Claude, and Cursor plugin files intentionally. There is no generator for these files.
 
@@ -95,7 +95,7 @@ When plugin copy changes, update the Codex, Claude, and Cursor plugin files inte
 
 ## Commits
 
-This repository uses [conventional commits](https://www.conventionalcommits.org/) enforced by commitlint.
+This repository uses [conventional commits](https://www.conventionalcommits.org/) enforced by the `commit-msg` hook in `.githooks/`.
 
 - **Max 50 characters** for the subject line
 - Format: `type(scope): description` (e.g. `feat: add deploy skill`, `fix: correct frontmatter field`)

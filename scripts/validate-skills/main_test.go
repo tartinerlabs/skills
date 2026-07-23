@@ -66,7 +66,6 @@ func buildFixture(t *testing.T) string {
 	root := t.TempDir()
 
 	writeJSONFile(t, filepath.Join(root, ".release-please-manifest.json"), map[string]string{".": version})
-	writeJSONFile(t, filepath.Join(root, "package.json"), map[string]string{"version": version})
 
 	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), validSkill)
 	writeTextFile(t, filepath.Join(root, "skills/demo/rules/foo.md"), "# Foo\n")
@@ -195,7 +194,7 @@ func TestReleasePleaseSyncsEveryPluginManifestViaExtraFiles(t *testing.T) {
 		}
 	}
 
-	for _, manifest := range append(append([]string{}, pluginManifests...), "package.json") {
+	for _, manifest := range pluginManifests {
 		if !syncedJSONPaths[manifest] {
 			t.Errorf("%s is missing from extra-files", manifest)
 		}
