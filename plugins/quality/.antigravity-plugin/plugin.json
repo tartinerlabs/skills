@@ -16,5 +16,5 @@
     "tailwind",
     "code-quality"
   ],
-  "skills": "./skills/"
+  "skills": "../skills/"
 }

@@ -10,5 +10,5 @@
   "repository": "https://github.com/tartinerlabs/skills",
   "license": "MIT",
   "keywords": ["security", "owasp", "secrets", "deps", "supply-chain"],
-  "skills": "./skills/"
+  "skills": "../skills/"
 }

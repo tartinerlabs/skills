@@ -17,5 +17,5 @@
     "git-hooks",
     "docs"
   ],
-  "skills": "./skills/"
+  "skills": "../skills/"
 }

@@ -19,5 +19,5 @@
     "github-actions",
     "ci"
   ],
-  "skills": "./skills/"
+  "skills": "../skills/"
 }
