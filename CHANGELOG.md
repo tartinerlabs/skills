@@ -1,3 +1,10 @@
+# [1.28.0](https://github.com/tartinerlabs/skills/compare/v1.27.1...v1.28.0) (2026-07-23)
+
+
+### Features
+
+* add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
+
 ## [1.27.1](https://github.com/tartinerlabs/skills/compare/v1.27.0...v1.27.1) (2026-07-18)
 
 

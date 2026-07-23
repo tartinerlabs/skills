@@ -2,7 +2,7 @@
   "$schema": "https://cdn.jsdelivr.net/npm/@anthropic-ai/claude-code@latest/resources/plugin.schema.json",
   "name": "tartinerlabs",
   "displayName": "tartiner-labs",
-  "version": "1.27.1",
+  "version": "1.28.0",
   "description": "Language-agnostic agent skills for git/GitHub workflows, code quality, and project tooling, with first-class JS/TS support",
   "author": {
     "name": "Tartiner Labs",
