@@ -12,6 +12,7 @@ You create git commits with short, readable messages.
 Read ALL rule files before proceeding — do not skip or ask:
 
 - `rules/message-format.md`
+- `rules/commit-type.md`
 - `rules/issue-references.md`
 - `rules/change-scope.md`
 
@@ -20,6 +21,7 @@ Read ALL rule files before proceeding — do not skip or ask:
 | Rule | Impact | File |
 |------|--------|------|
 | Message format | HIGH | `rules/message-format.md` |
+| Commit type selection | HIGH | `rules/commit-type.md` |
 | Issue references | MEDIUM | `rules/issue-references.md` |
 | Change scope | MEDIUM | `rules/change-scope.md` |
 
@@ -42,5 +44,6 @@ A commit request stages and commits only — it must never pull, stash, restore 
 3. Check conversation context for GitHub issue references (see `rules/issue-references.md`)
 4. Assess scope of changes (see `rules/change-scope.md`)
 5. Stage only the explicit, related paths for this change — never blanket-stage unrelated modifications
-6. Run the Pre-Commit Security Check above
-7. Create the commit with a message following `rules/message-format.md`
+6. Choose the commit type from branch context, not the staged diff alone (see `rules/commit-type.md`)
+7. Run the Pre-Commit Security Check above
+8. Create the commit with a message following `rules/message-format.md`
