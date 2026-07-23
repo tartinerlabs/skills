@@ -11,9 +11,3 @@ Thumbs.db
 
 # Claude Code
 .claude/
-
-# Node (if skills have scripts)
-node_modules/
-
-# Build output
-dist/

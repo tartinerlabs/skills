@@ -179,7 +179,7 @@ pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal
 
 ### [OpenCode](https://opencode.ai)
 
-> **Note:** The OpenCode plugin is paused — OpenCode's TypeScript plugin system differs too much from the manifest-based Claude Code/Codex/Cursor plugins to maintain alongside them. The plugin source stays in the repository, but no further versions of the `@tartinerlabs/skills` npm package will be published. OpenCode users can install the skills directly via [skills.sh](#skills), which copies them into OpenCode's skill discovery directories.
+> **Note:** The OpenCode plugin has been retired — OpenCode's TypeScript plugin system differs too much from the manifest-based Claude Code/Codex/Cursor plugins to maintain alongside them, and the repository no longer carries a JS/TS toolchain (npm dependencies are a supply-chain surface this repo deliberately avoids). OpenCode users can install the skills directly via [skills.sh](#skills), which copies them into OpenCode's skill discovery directories.
 
 ## Plugin Metadata
 
@@ -187,7 +187,7 @@ Plugin manifests are maintained manually on purpose.
 
 Each plugin lives in its own `plugins/<name>/` wrapper holding the per-channel manifests plus a `skills` directory, and every marketplace references its plugins as `./plugins/<name>`. Two wrapper shapes exist:
 
-- **Collection wrappers** (`plugins/workflow/`, `plugins/quality/`, `plugins/security/`, `plugins/tooling/`) expose a subset of the flat `skills/` source through per-skill symlinks (`skills/<skill>` → `../../../skills/<skill>`). `scripts/validate-skills.mjs` checks that every skill belongs to exactly one collection and that each wrapper exposes exactly its assigned skills.
+- **Collection wrappers** (`plugins/workflow/`, `plugins/quality/`, `plugins/security/`, `plugins/tooling/`) expose a subset of the flat `skills/` source through per-skill symlinks (`skills/<skill>` → `../../../skills/<skill>`). `scripts/validate-skills/main.go` checks that every skill belongs to exactly one collection and that each wrapper exposes exactly its assigned skills.
 - **Whole-directory wrappers** (`plugins/tartinerlabs/` — deprecated, and `plugins/xcode-skills/`) expose an entire source directory through a single `skills` symlink (`../../skills` and `../../xcode-skills` respectively).
 
 Per-channel metadata for every plugin:

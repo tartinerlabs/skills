@@ -32,10 +32,11 @@ jobs:
 
       - uses: pnpm/action-setup@b307475762933b98ed359c036b0e51f26b63b74b  # v5.0.0
 
+      # No pnpm cache: the repo has no pnpm-lock.yaml (the install commands
+      # below exercise consumer-side `pnpm dlx` tools, not repo dependencies).
       - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e  # v6
         with:
           node-version: lts/*
-          cache: pnpm
 
       - name: Install
         run: ${{ matrix.command }}

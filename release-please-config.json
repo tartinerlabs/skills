@@ -7,11 +7,6 @@
       "extra-files": [
         {
           "type": "json",
-          "path": "package.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "json",
           "path": "plugins/workflow/.codex-plugin/plugin.json",
           "jsonpath": "$.version"
         },

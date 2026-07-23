@@ -11,9 +11,9 @@ A collection of agent skills distributed via Claude Code, Codex, Cursor, and [sk
 
 ## Development
 
-- **Package manager:** pnpm (v11+) — use `pnx` instead of `npx` or `pnpm dlx`
-- **Git hooks:** Husky with commitlint (conventional commits via `@commitlint/config-conventional`) and GitLeaks secrets detection on pre-commit
-- **No build/test/lint steps** — this is a content-only repo of markdown skill files
+- **Tooling:** stdlib-only Go plus plain shell git hooks — the repo deliberately avoids npm dependencies to keep the supply-chain surface minimal
+- **Git hooks:** plain shell hooks in `.githooks/` (enable with `git config core.hooksPath .githooks`) — `commit-msg` enforces conventional commits (no scope, max 50-char header), `pre-commit` runs GitLeaks secrets detection
+- **Validation:** `go run ./scripts/validate-skills` checks skill structure, manifest versions, symlinks, and action pinning; `go test ./...` runs its test suite. Stdlib-only Go — no module dependencies to install
 - **Releases:** Automated via release-please on push to `main` — maintains a release PR from conventional commits; merging it bumps versions, updates `CHANGELOG.md`, and creates the GitHub release
 
 ## Skill Format
@@ -49,11 +49,11 @@ Every skill is **language-aware with JS/TS as the first-class default** — no s
 
 Skills with multiple checks use a `rules/` subdirectory alongside `SKILL.md`. The main skill file references rules via a table and tells Claude to read them at runtime. Each rule file is a standalone markdown document with severity, examples, and fix instructions. This keeps skills modular — rules can be added, removed, or edited independently.
 
-Polyglot skills add a `references/` subdirectory for **progressive disclosure**: SKILL.md detects the language and loads **only** the matching `references/<lang>.md` (e.g. `references/python.md`, `references/go.md`), so a JS project never loads Go content. The asymmetry is intentional — the first-class JS/TS path stays in modular `rules/`; other ecosystems live in `references/<lang>.md`; truly universal checks stay in `rules/` and are cross-linked from each language guide. `references/` is also the most portable component across distribution channels. `scripts/validate-skills.mjs` enforces the same existence + orphan discipline on both `rules/*.md` and `references/*.md` (template placeholders like `references/<lang>.md` are ignored).
+Polyglot skills add a `references/` subdirectory for **progressive disclosure**: SKILL.md detects the language and loads **only** the matching `references/<lang>.md` (e.g. `references/python.md`, `references/go.md`), so a JS project never loads Go content. The asymmetry is intentional — the first-class JS/TS path stays in modular `rules/`; other ecosystems live in `references/<lang>.md`; truly universal checks stay in `rules/` and are cross-linked from each language guide. `references/` is also the most portable component across distribution channels. The Go validator (`scripts/validate-skills/`, run with `go run ./scripts/validate-skills`) enforces the same existence + orphan discipline on both `rules/*.md` and `references/*.md` (template placeholders like `references/<lang>.md` are ignored).
 
 ## Distribution
 
-The skills ship as four themed **collection plugins** — `workflow` (commit, create-branch, create-pr, github-actions, github-issues), `quality` (refactor, naming-format, project-structure, tailwind), `security` (security, deps), and `tooling` (setup, testing, update-project). The original all-in-one `tartinerlabs` plugin is **deprecated** but still published for a transition period; its removal is a future release. The collection assignment is the `COLLECTIONS` map in `scripts/validate-skills.mjs` — every skill must belong to exactly one collection (validated in CI).
+The skills ship as four themed **collection plugins** — `workflow` (commit, create-branch, create-pr, github-actions, github-issues), `quality` (refactor, naming-format, project-structure, tailwind), `security` (security, deps), and `tooling` (setup, testing, update-project). The original all-in-one `tartinerlabs` plugin is **deprecated** but still published for a transition period; its removal is a future release. The collection assignment is the `collections` table in `scripts/validate-skills/main.go` — every skill must belong to exactly one collection (validated in CI).
 
 Skills are distributed through five channels:
 - **Claude Code plugin** — `claude plugin marketplace add tartinerlabs/skills`, then `claude plugin install <collection>@tartinerlabs` (skills invoked as `/<collection>:<skill-name>`, e.g. `/workflow:commit`)
@@ -73,7 +73,7 @@ Every plugin lives in its own `plugins/<name>/` wrapper holding the four per-cha
 
 The repo root's `.claude-plugin/` and `.cursor-plugin/` hold **only** their `marketplace.json`; the Codex marketplace is `.agents/plugins/marketplace.json`. Each marketplace references every plugin as `./plugins/<name>`. Keeping every plugin subdirectory-sourced (no `source: "./"` at the marketplace root) is required — the Claude Code loader silently drops a root-sourced plugin when another plugin exists.
 
-Plugin metadata is intentionally hand-maintained. `.release-please-manifest.json` is the shared source of truth for the released version, and release-please (`extra-files` in `release-please-config.json`) syncs `package.json` and the `plugins/**/plugin.json` manifest versions in the release PR.
+Plugin metadata is intentionally hand-maintained. `.release-please-manifest.json` is the shared source of truth for the released version, and release-please (`extra-files` in `release-please-config.json`) syncs the `plugins/**/plugin.json` manifest versions in the release PR.
 
 ## Xcode Skill Export
 
