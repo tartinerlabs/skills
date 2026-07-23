@@ -160,16 +160,7 @@ pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal
 
 ### [OpenCode](https://opencode.ai)
 
-> **Note:** The OpenCode plugin is currently in Beta and might not work.
-
-Add to `opencode.json`:
-
-```json
-{
-  "$schema": "https://opencode.ai/config.json",
-  "plugin": ["@tartinerlabs/skills"]
-}
-```
+> **Note:** The OpenCode plugin is paused — OpenCode's TypeScript plugin system differs too much from the manifest-based Claude Code/Codex/Cursor plugins to maintain alongside them. The plugin source stays in the repository, but no further versions of the `@tartinerlabs/skills` npm package will be published. OpenCode users can install the skills directly via [skills.sh](#skills), which copies them into OpenCode's skill discovery directories.
 
 ## Plugin Metadata
 
@@ -182,7 +173,7 @@ Each plugin lives in its own `plugins/<name>/` wrapper holding the three per-cha
 - Cursor metadata lives in `plugins/tartinerlabs/.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`
 - Antigravity metadata lives in `plugins/tartinerlabs/.antigravity-plugin/plugin.json`
 - The separate Xcode collection is wrapped by `plugins/xcode-skills/`, which links to the untouched `xcode-skills/` export
-- `package.json.version` is the shared source of truth across plugin manifests; semantic-release syncs manifest versions during release
+- `.release-please-manifest.json` is the shared source of truth across plugin manifests; release-please syncs manifest versions in the release PR
 
 ## Architecture
 
