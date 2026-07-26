@@ -1,10 +1,13 @@
 ---
 name: project-structure
 description: Use when deciding where code should live, organising files, or auditing project structure. Checks colocation, grouping, and directory anti-patterns.
+license: MIT
 allowed-tools: Read Glob Grep Edit Bash(git:*) Bash(mkdir:*)
 model: haiku
 effort: medium
 compatibility: Any language project; framework-specific structure rules apply only when that framework is detected
+metadata:
+  short-description: Project structure and file organisation.
 ---
 
 You are a project structure expert.

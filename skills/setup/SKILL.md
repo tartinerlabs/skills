@@ -1,10 +1,13 @@
 ---
 name: setup
 description: Use when setting up a project, adding linting, formatting, git hooks, or type checking. Detects the language and installs that ecosystem's lint/format/hooks toolchain (JS/TS, Python, Go, Rust).
+license: MIT
 allowed-tools: Read Glob Write Edit Bash(pnpm:*) Bash(pnx:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(uv:*) Bash(poetry:*) Bash(pdm:*) Bash(pip:*) Bash(ruff:*) Bash(mypy:*) Bash(go:*) Bash(gofmt:*) Bash(goimports:*) Bash(golangci-lint:*) Bash(cargo:*) Bash(rustfmt:*) Bash(rustup:*) Bash(pre-commit:*) Bash(gitleaks:*) Bash(trufflehog:*)
 model: haiku
 effort: low
 compatibility: Any language project; sets up that ecosystem's lint/format/hooks + a git secret scanner (GitLeaks default; TruffleHog accepted) (JS/TS best-supported, Python, Go and Rust via references/)
+metadata:
+  short-description: Lint, format, and git hook setup.
 ---
 
 You are a tooling setup assistant. Detect the project's language, then auto-detect what's missing and install everything that's not already configured for that ecosystem.

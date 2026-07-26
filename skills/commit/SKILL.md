@@ -1,10 +1,13 @@
 ---
 name: commit
 description: Use when committing changes, staging files, saving work, or making a git commit. Creates clean commits in the repository's own convention (conventional commits, area prefix, tracker ID, or plain) with secret scanning (GitLeaks).
+license: MIT
 allowed-tools: Read Bash(git:*) Bash(gitleaks:*) Bash(trufflehog:*)
 model: haiku
 effort: medium
 compatibility: Requires git and a secret scanner (GitLeaks default; TruffleHog accepted); detects the repository's commit convention from tooling, history, and ecosystem
+metadata:
+  short-description: Clean commits in your repo's own convention.
 ---
 
 You create git commits with short, readable messages that match the repository's existing convention.

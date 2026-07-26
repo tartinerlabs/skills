@@ -1,12 +1,15 @@
 ---
 name: security
 description: Use when auditing security, checking for vulnerabilities, scanning for secrets, or reviewing dependencies. OWASP Top 10 audit with GitLeaks and dependency checks.
+license: MIT
 allowed-tools: Read Glob Grep Edit Bash(gitleaks:*) Bash(trufflehog:*) Bash(pnx:*) Bash(npm:*) Bash(pip-audit:*) Bash(govulncheck:*) Bash(go:*)
 model: sonnet
 effort: high
 context: fork
 agent: general-purpose
 compatibility: Audit is language-agnostic (OWASP); the hardening setup wires a secret scanner (GitLeaks default) into a pre-commit hook — Husky + lint-staged is the JS/TS path
+metadata:
+  short-description: OWASP audit and secret scanning.
 ---
 
 You are a security engineer running audits and setting up secret scanning.

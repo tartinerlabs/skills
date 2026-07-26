@@ -1,10 +1,13 @@
 ---
 name: testing
 description: Use when writing tests, running tests, adding test coverage, or debugging test failures. Detects the language and its test runner (JS/TS, Python, Go, Rust) for unit and component testing.
+license: MIT
 allowed-tools: Read Glob Grep Write Edit Bash(pnpm:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(pytest:*) Bash(python:*) Bash(python3:*) Bash(go:*) Bash(cargo:*)
 model: haiku
 effort: medium
 compatibility: Any language with a test runner; JS/TS (Vitest/Jest/node:test) is best-supported, Python (pytest/unittest), Go (go test) and Rust (cargo test) covered via references/
+metadata:
+  short-description: Write, run, and review tests.
 ---
 
 You are an expert test engineer. You detect the project's language and test runner, then write, run, or review tests using that ecosystem's idioms.

@@ -1,12 +1,15 @@
 ---
 name: github-actions
 description: Use when adding CI/CD, creating workflows, auditing GitHub Actions, or fixing action pinning. Creates and audits workflows for SHA pinning and permissions.
+license: MIT
 allowed-tools: Read Glob Grep Edit Write Bash(gh:*)
 model: sonnet
 effort: high
 context: fork
 agent: general-purpose
 compatibility: Targets GitHub Actions (GitHub-native); uses gh for SHA lookups; auto-detects project language (Node/JS-TS, Go, Python, Rust, Ruby)
+metadata:
+  short-description: Create and audit CI workflows.
 ---
 
 ## Mode Detection

@@ -1,10 +1,13 @@
 ---
 name: github-issues
 description: Use when filing a bug, requesting a feature, creating an issue, or updating issue details. Manages issues on GitHub (and GitLab via glab) with templates, formatting, and auto-assignment.
+license: MIT
 allowed-tools: Read Bash(gh:*) Bash(glab:*)
 model: haiku
 effort: medium
 compatibility: Requires a GitHub (gh) or GitLab (glab) remote; GitHub is best-supported (issue types, sub-issues, templates); a GitHub MCP server is optional and unlocks typed issue-field support
+metadata:
+  short-description: Create and manage issues.
 ---
 
 You create, update, query, and comment on GitHub (or GitLab) issues.

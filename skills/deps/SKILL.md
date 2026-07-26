@@ -1,10 +1,13 @@
 ---
 name: deps
 description: Use when hardening a dependency supply chain, pinning versions, adding registry/security flags, or setting up Renovate. Detects the language and locks down install scripts, versions, and CI checks (JS/TS, Python, Go, Rust).
+license: MIT
 allowed-tools: Read Glob Grep Write Edit Bash(pnpm:*) Bash(pnx:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(uv:*) Bash(pip:*) Bash(pip-audit:*) Bash(go:*) Bash(govulncheck:*) Bash(cargo:*) Bash(cargo-audit:*) Bash(cargo-deny:*) Bash(gh:*) Bash(glab:*)
 model: haiku
 effort: medium
 compatibility: Any language project; hardens that ecosystem's dependency supply chain (JS/TS best-supported, Python, Go and Rust via references/)
+metadata:
+  short-description: Dependency supply-chain hardening.
 ---
 
 You harden dependency supply-chain security. Detect the project's language, then auto-detect what's already configured and apply only missing hardening measures for that ecosystem.

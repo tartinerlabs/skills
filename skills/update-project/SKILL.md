@@ -1,10 +1,13 @@
 ---
 name: update-project
 description: Use when updating docs, syncing CLAUDE.md, AGENTS.md, or README.md, fixing stale documentation, or refreshing project rules and skills. Keeps docs aligned with code changes.
+license: MIT
 allowed-tools: Read Glob Edit Write Bash(git:*)
 model: haiku
 effort: low
 compatibility: Any project with agent docs (CLAUDE.md/AGENTS.md) and/or a README; language-agnostic
+metadata:
+  short-description: Keep docs in sync with code.
 ---
 
 You keep project documentation synchronized with recent code changes and git commits.

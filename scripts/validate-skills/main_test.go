@@ -26,9 +26,13 @@ var validSkill = strings.Join([]string{
 	"---",
 	"name: demo",
 	"description: A demo skill for tests.",
+	"license: MIT",
 	"allowed-tools: Read Bash(git:*)",
 	"model: haiku",
 	"effort: low",
+	"compatibility: Requires git",
+	"metadata:",
+	"  short-description: A demo skill.",
 	"---",
 	"",
 	"You are a demo skill. Read `rules/foo.md` before proceeding.",
@@ -140,6 +144,65 @@ func assertSomeError(t *testing.T, errors []string, substrings ...string) {
 
 func TestPassesOnValidFixture(t *testing.T) {
 	root := buildFixture(t)
+	assertNoErrors(t, validateFixture(root))
+}
+
+// writeDemoSkill rewrites the fixture's demo SKILL.md with one frontmatter
+// line replaced (or dropped, when replacement is empty).
+func writeDemoSkill(t *testing.T, root, line, replacement string) {
+	t.Helper()
+	if !strings.Contains(validSkill, line+"\n") {
+		t.Fatalf("fixture skill has no line %q", line)
+	}
+	source := strings.Replace(validSkill, line+"\n", replacement, 1)
+	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), source)
+}
+
+func TestFlagsSkillMissingPortableFrontmatter(t *testing.T) {
+	for _, testCase := range []struct {
+		name    string
+		line    string
+		wantErr string
+	}{
+		{"license", "license: MIT", "frontmatter missing `license`"},
+		{"compatibility", "compatibility: Requires git", "frontmatter missing `compatibility`"},
+		{"description", "description: A demo skill for tests.", "frontmatter missing `description`"},
+		{"short-description", "  short-description: A demo skill.", "frontmatter missing `metadata.short-description`"},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			root := buildFixture(t)
+			writeDemoSkill(t, root, testCase.line, "")
+			assertSomeError(t, validateFixture(root), testCase.wantErr)
+		})
+	}
+}
+
+func TestFlagsSkillNameNotMatchingDirectory(t *testing.T) {
+	root := buildFixture(t)
+	writeDemoSkill(t, root, "name: demo", "name: not-demo\n")
+	assertSomeError(t, validateFixture(root),
+		"frontmatter `name: not-demo` does not match directory name")
+}
+
+func TestFlagsSkillWithoutFrontmatterBlock(t *testing.T) {
+	root := buildFixture(t)
+	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"),
+		"Read `rules/foo.md` before proceeding.\n")
+	assertSomeError(t, validateFixture(root), "SKILL.md has no YAML frontmatter block")
+}
+
+func TestFlagsOverlongCompatibility(t *testing.T) {
+	root := buildFixture(t)
+	writeDemoSkill(t, root, "compatibility: Requires git",
+		"compatibility: "+strings.Repeat("x", maxCompatibilityLen+1)+"\n")
+	assertSomeError(t, validateFixture(root), "frontmatter `compatibility` is 501 characters")
+}
+
+// Claude-only fields are ignored by other channels, so their absence must not
+// fail validation.
+func TestAllowsSkillWithoutClaudeOnlyFields(t *testing.T) {
+	root := buildFixture(t)
+	writeDemoSkill(t, root, "model: haiku", "")
 	assertNoErrors(t, validateFixture(root))
 }
 

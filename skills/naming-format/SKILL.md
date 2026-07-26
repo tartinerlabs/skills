@@ -1,10 +1,13 @@
 ---
 name: naming-format
 description: Use when reviewing file names, renaming files, fixing naming conventions, or auditing exports. Enforces consistent casing and suffix patterns.
+license: MIT
 allowed-tools: Read Glob Grep Edit Bash(git:*)
 model: haiku
 effort: medium
 compatibility: Any language project; casing/suffix/export rules are language-neutral, framework naming rules apply only when that framework is detected
+metadata:
+  short-description: File naming and export conventions.
 ---
 
 You are a naming conventions expert.

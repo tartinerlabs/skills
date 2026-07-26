@@ -13,7 +13,7 @@ A collection of agent skills distributed via Claude Code, Codex, Cursor, and [sk
 
 - **Tooling:** stdlib-only Go plus plain shell git hooks — the repo deliberately avoids npm dependencies to keep the supply-chain surface minimal
 - **Git hooks:** plain shell hooks in `.githooks/` (enable with `git config core.hooksPath .githooks`) — `commit-msg` enforces conventional commits (no scope, max 50-char header), `pre-commit` runs GitLeaks secrets detection
-- **Validation:** `go run ./scripts/validate-skills` checks skill structure, manifest versions, symlinks, and action pinning; `go test ./...` runs its test suite. Stdlib-only Go — no module dependencies to install
+- **Validation:** `go run ./scripts/validate-skills` checks skill structure, frontmatter, manifest versions, symlinks, and action pinning; `go test ./...` runs its test suite. Stdlib-only Go — no module dependencies to install
 - **Releases:** Automated via release-please on push to `main` — maintains a release PR from conventional commits; merging it bumps versions, updates `CHANGELOG.md`, and creates the GitHub release
 
 ## Skill Format
@@ -24,9 +24,13 @@ Each skill lives in `skills/<name>/SKILL.md` with this structure:
 ---
 name: skill-name
 description: What it does and when to use it
+license: MIT
 allowed-tools: Space-delimited list of permitted tools
 model: sonnet
 effort: medium
+compatibility: What the skill really requires
+metadata:
+  short-description: Short display name for Codex
 ---
 
 [Instructions Claude follows when the skill is active]
@@ -34,12 +38,17 @@ effort: medium
 
 ### Frontmatter Fields
 
-- `name` — Skill identifier, invoked as `/skill-name` in Claude Code
-- `description` — Purpose and trigger conditions
-- `allowed-tools` — Scoped tool permissions (e.g., `Bash(git status)` for specific commands, `Read` for full tool access)
+Fields split into two groups. **Portable** fields (`name`, `description`, `license`, `compatibility`, `metadata`, `allowed-tools`) come from the [Agent Skills spec](https://agentskills.io/specification) and are the only ones non-Claude channels can act on. **Claude-Code-only** fields (`model`, `effort`, `context`, `agent`) are ignored gracefully everywhere else. `go run ./scripts/validate-skills` enforces the portable group — every skill must carry `name`, `description`, `license`, `compatibility`, and `metadata.short-description`.
+
+- `name` — Skill identifier, invoked as `/skill-name` in Claude Code. Must match the directory name
+- `description` — Purpose and trigger conditions. This is the routing key agents match against, so it is written for retrieval rather than display
+- `license` — SPDX identifier; `MIT` across the collection, matching the repo licence
+- `compatibility` — The skill's real requirements (e.g. `Requires git`, `Any language project; detects the ecosystem`). Max 500 characters. Every skill carries one
+- `metadata` — Spec-sanctioned extension point (arbitrary string map). We set `metadata.short-description`, a human-readable display string — the only field beyond `name`/`description` that Codex's skill loader parses, so it is what Codex surfaces in its UI instead of the retrieval-optimised `description`
+- `allowed-tools` — Scoped tool permissions (e.g., `Bash(git status)` for specific commands, `Read` for full tool access). Spec-optional and marked experimental; Claude Code honours it, Cursor and Codex ignore it
 - `model` — Model preference. Low/medium-effort skills default to `haiku` (cheaper, separate rate-limit bucket); high-effort skills that need deeper reasoning (forked subagents, complex audits) use `sonnet`
 - `effort` — Reasoning effort level (`low`, `medium`, `high`, `max`). Overrides the session effort level while the skill is active
-- `compatibility` — Portable Agent-Skills-spec field declaring the skill's real requirements (e.g. `Requires git`, `Any language project; detects the ecosystem`). Every in-scope skill carries one. Unlike `model`/`effort`/`context: fork` (Claude-Code-only, ignored gracefully elsewhere), `compatibility` is portable across all distribution channels
+- `context: fork` + `agent` — Runs the skill as an isolated subagent with its own context window. Used by the high-effort audit skills (`refactor`, `security`, `github-actions`)
 
 ### Language-aware, JS/TS-first model
 

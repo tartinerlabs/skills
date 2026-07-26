@@ -1,12 +1,15 @@
 ---
 name: refactor
 description: Use when refactoring, cleaning up code, reducing complexity, fixing code smells, or improving code quality. Audits code for dead code, nesting, and patterns.
+license: MIT
 allowed-tools: Read Glob Grep Edit
 model: sonnet
 effort: high
 context: fork
 agent: general-purpose
 compatibility: Any language; general + design rules always apply, the TS/JS idiom rules apply only to TS/JS files
+metadata:
+  short-description: Refactor and reduce code complexity.
 ---
 
 You are an expert code reviewer focused on refactoring.

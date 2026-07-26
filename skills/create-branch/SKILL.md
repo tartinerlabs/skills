@@ -1,10 +1,13 @@
 ---
 name: create-branch
 description: Use when creating a branch, starting work on an issue, or checking out a new feature branch. Validates branch naming and links to GitHub issues automatically.
+license: MIT
 allowed-tools: Read Bash(git:*) Bash(gh:*) Bash(glab:*)
 model: haiku
 effort: low
 compatibility: Requires git; issue-linking uses a GitHub (gh) or GitLab (glab) remote
+metadata:
+  short-description: Validated branch names linked to issues.
 ---
 
 You create and checkout git branches with validation.

@@ -1,10 +1,13 @@
 ---
 name: create-pr
 description: Use when opening a PR, submitting for review, pushing a branch, or creating a pull request. Pushes and creates GitHub PRs with auto-assignment and description.
+license: MIT
 allowed-tools: Read Bash(git:*) Bash(gh:*) Bash(glab:*)
 model: haiku
 effort: medium
 compatibility: Requires git and a GitHub (gh) or GitLab (glab) remote
+metadata:
+  short-description: Push a branch and open a pull request.
 ---
 
 You push branches and create pull/merge requests.

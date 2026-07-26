@@ -87,6 +87,16 @@ var (
 	referencesRefRE = regexp.MustCompile(`references/([A-Za-z0-9][A-Za-z0-9-]*)\.md`)
 	prefixCellRE    = regexp.MustCompile(`^[a-z0-9]+-$`)
 	suffixTokenRE   = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
+	skillNameRE     = regexp.MustCompile(`^[a-z0-9]+(-[a-z0-9]+)*$`)
+	topLevelKeyRE   = regexp.MustCompile(`^([A-Za-z][A-Za-z0-9_-]*):(?:\s+(.*))?$`)
+	nestedKeyRE     = regexp.MustCompile(`^\s+([A-Za-z][A-Za-z0-9_-]*):(?:\s+(.*))?$`)
+)
+
+// Frontmatter limits from the Agent Skills spec (agentskills.io/specification).
+const (
+	maxDescriptionLen   = 1024
+	maxCompatibilityLen = 500
+	maxSkillNameLen     = 64
 )
 
 func pathExists(path string) bool {
@@ -283,9 +293,91 @@ func checkSubdir(skillDir, skillName, subdir string, referenced map[string]bool,
 	}
 }
 
-// Structure check only: SKILL.md exists and its referenced `rules/*.md` and
-// `references/*.md` files resolve (and none are left orphaned). Frontmatter
-// fields are not parsed or validated.
+// parseFrontmatter splits a SKILL.md into its YAML frontmatter keys and the
+// remaining body. Only the shapes this repo actually uses are understood:
+// top-level `key: value` pairs plus one level of indented nesting (used by
+// `metadata:`). Nested keys are returned dotted, e.g. `metadata.short-description`.
+// Returns ok=false when the document has no frontmatter block.
+func parseFrontmatter(source string) (fields map[string]string, ok bool) {
+	if !strings.HasPrefix(source, "---\n") {
+		return nil, false
+	}
+	end := strings.Index(source[3:], "\n---\n")
+	if end < 0 {
+		return nil, false
+	}
+
+	fields = map[string]string{}
+	parent := ""
+	for _, line := range strings.Split(source[4:3+end+1], "\n") {
+		if strings.TrimSpace(line) == "" || strings.HasPrefix(strings.TrimSpace(line), "#") {
+			continue
+		}
+		if match := topLevelKeyRE.FindStringSubmatch(line); match != nil {
+			parent = match[1]
+			fields[match[1]] = strings.TrimSpace(match[2])
+			continue
+		}
+		if match := nestedKeyRE.FindStringSubmatch(line); match != nil && parent != "" {
+			fields[parent+"."+match[1]] = strings.TrimSpace(match[2])
+		}
+	}
+	return fields, true
+}
+
+// Every skill must carry the portable Agent Skills metadata that non-Claude
+// distribution channels actually read: `name`/`description` (universal),
+// `license` and `compatibility` (spec-optional but repo-mandatory), and
+// `metadata.short-description` — the only field beyond name/description that
+// Codex's skill loader parses. The Claude-only fields (`model`, `effort`,
+// `context`, `agent`) are deliberately unchecked; other clients ignore them.
+func validateFrontmatter(skillName, source string, errors *[]string) {
+	report := func(format string, args ...interface{}) {
+		*errors = append(*errors, fmt.Sprintf("%s/%s: %s",
+			skillsDir, skillName, fmt.Sprintf(format, args...)))
+	}
+
+	fields, ok := parseFrontmatter(source)
+	if !ok {
+		report("SKILL.md has no YAML frontmatter block")
+		return
+	}
+
+	switch name := fields["name"]; {
+	case name == "":
+		report("frontmatter missing `name`")
+	case name != skillName:
+		report("frontmatter `name: %s` does not match directory name", name)
+	case len(name) > maxSkillNameLen || !skillNameRE.MatchString(name):
+		report("frontmatter `name: %s` is not a valid Agent Skills name", name)
+	}
+
+	if description := fields["description"]; description == "" {
+		report("frontmatter missing `description`")
+	} else if len(description) > maxDescriptionLen {
+		report("frontmatter `description` is %d characters (max %d)",
+			len(description), maxDescriptionLen)
+	}
+
+	if fields["license"] == "" {
+		report("frontmatter missing `license`")
+	}
+
+	if compatibility := fields["compatibility"]; compatibility == "" {
+		report("frontmatter missing `compatibility`")
+	} else if len(compatibility) > maxCompatibilityLen {
+		report("frontmatter `compatibility` is %d characters (max %d)",
+			len(compatibility), maxCompatibilityLen)
+	}
+
+	if fields["metadata.short-description"] == "" {
+		report("frontmatter missing `metadata.short-description`")
+	}
+}
+
+// SKILL.md must exist, carry the portable frontmatter checked in
+// validateFrontmatter, and have its referenced `rules/*.md` and
+// `references/*.md` files resolve (with none left orphaned).
 func validateSkill(root, skillName string, errors *[]string) {
 	skillDir := filepath.Join(root, skillsDir, skillName)
 	skillFile := filepath.Join(skillDir, "SKILL.md")
@@ -301,6 +393,7 @@ func validateSkill(root, skillName string, errors *[]string) {
 	}
 	source := string(data)
 
+	validateFrontmatter(skillName, source, errors)
 	checkSubdir(skillDir, skillName, "rules", extractReferencedRules(source), errors)
 	checkSubdir(skillDir, skillName, "references", extractReferencedFiles(source), errors)
 }
