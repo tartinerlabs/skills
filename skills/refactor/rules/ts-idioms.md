@@ -73,7 +73,7 @@ export { Input } from "./components/input";
 
 ## Async/await over .then() chains (MEDIUM)
 
-**Rule**: Replace `.then()` chains with async/await.
+**Rule**: Prefer async/await over `.then()` chains — the control flow reads top to bottom and error handling sits in one place. Leave a chain alone when it is a deliberate pipeline of small transforms, or when its `.catch()` placement scopes rejection to one step in a way the rewrite would widen.
 
 ### Incorrect
 

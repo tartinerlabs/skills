@@ -21,7 +21,7 @@ Determine the test type from the user's request:
 
 ## Mode Detection
 
-Review by default: read the tests and source and report gaps, weak assertions, and missing edge cases without editing — stopping after Step 3. Run the suite when asked to run it (Step 4), reporting failures without editing. Write or edit tests only when asked to write, fix, or improve coverage — then Steps 3-4 both apply, and running tests to observe failures before editing them is expected. When the ask is unclear, review and offer to write or run them.
+Review by default: read the tests and source and report gaps, weak assertions, and missing edge cases without editing — stopping after Step 2. Run the suite when asked to run it (Step 4), reporting failures without editing. Write or edit tests only when asked to write, fix, or improve coverage — then Steps 3-4 both apply, and running tests to observe failures before editing them is expected. When the ask is unclear, review and offer to write or run them.
 
 ## Universal Rules (apply to every language)
 

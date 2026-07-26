@@ -92,8 +92,11 @@ var (
 	// Up-front "read everything" phrasing defeats progressive disclosure: the
 	// rules table plus the workflow steps already say what to read when.
 	// Deliberately narrow — "read each rule file" is legitimate in the
-	// install/generate skills, which genuinely apply every rule.
-	eagerLoadRE = regexp.MustCompile(`(?i)\bread (all|every) [^.\n]{0,40}\b(rule|reference) files?\b|\bdo not skip or ask\b`)
+	// install/generate skills, which genuinely apply every rule. The second
+	// alternative stays bound to a read instruction on the same line: hard-stop
+	// phrasing like "do not skip or ask" is sanctioned on its own, and commit's
+	// refusal on a secret-scanner hit relies on it.
+	eagerLoadRE = regexp.MustCompile(`(?i)\bread (all|every) [^.\n]{0,40}\b(rule|reference) files?\b|\bread\b[^\n]{0,60}\bdo not skip or ask\b`)
 )
 
 // Frontmatter limits from the Agent Skills spec (agentskills.io/specification).
@@ -602,10 +605,14 @@ func validateDuplicateBlocks(root string, skillNames []string, errors *[]string)
 			if err != nil {
 				continue
 			}
+			// Blank the frontmatter rather than cutting it, so reported line
+			// numbers stay anchored to the real file. stripFences below does
+			// the same for fenced code.
 			source := string(data)
 			if _, ok := parseFrontmatter(source); ok {
 				if end := strings.Index(source[3:], "\n---\n"); end >= 0 {
-					source = source[3+end+len("\n---\n"):]
+					cut := 3 + end + len("\n---\n")
+					source = strings.Repeat("\n", strings.Count(source[:cut], "\n")) + source[cut:]
 				}
 			}
 

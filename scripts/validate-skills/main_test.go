@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -470,6 +471,17 @@ func TestAllowsPerStepRuleReferences(t *testing.T) {
 	assertNoErrors(t, validateFixture(root))
 }
 
+// Hard-stop phrasing is sanctioned on its own — commit refuses to proceed on a
+// secret-scanner hit — so it is only eager loading when a read instruction
+// shares the line.
+func TestAllowsHardStopPhrasingWithoutReadInstruction(t *testing.T) {
+	root := buildFixture(t)
+	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), strings.Replace(validSkill,
+		"You are a demo skill. Read `rules/foo.md` before proceeding.",
+		"STOP if the scanner reports a leak. Do not skip or ask — the commit is refused.", 1))
+	assertNoErrors(t, validateFixture(root))
+}
+
 func TestFlagsSkillFileOverLineBudget(t *testing.T) {
 	root := buildFixture(t)
 	padding := strings.Repeat("\nFiller prose line.", maxSkillLines)
@@ -507,6 +519,24 @@ func TestFlagsBlockDuplicatedAcrossSkills(t *testing.T) {
 	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), validSkill+"\n"+shared+"\n")
 	addSecondSkill(t, root, "other", shared)
 	assertSomeError(t, validate(root, twoSkillCollections("other")), "block duplicated from")
+}
+
+// Frontmatter is blanked rather than cut, so the reported offset points at the
+// block's real line in the file rather than several lines above it.
+func TestDuplicateBlockReportsRealLineNumber(t *testing.T) {
+	root := buildFixture(t)
+	shared := strings.Join([]string{
+		"Classify the request before acting, and default to read-only when the",
+		"intent is ambiguous or diagnostic. Produce an evidence-backed report",
+		"and make no file edits at all.",
+	}, "\n")
+	source := validSkill + "\n" + shared + "\n"
+	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), source)
+	addSecondSkill(t, root, "other", shared)
+
+	want := 1 + strings.Count(source[:strings.Index(source, shared)], "\n")
+	assertSomeError(t, validate(root, twoSkillCollections("other")),
+		fmt.Sprintf("skills/demo/SKILL.md:%d", want))
 }
 
 // Within one skill, repetition is legitimate — the per-language references/
