@@ -85,11 +85,15 @@ var (
 	refCommentRE    = regexp.MustCompile(`^\s+#\s+\S`)
 	rulesRefRE      = regexp.MustCompile(`rules/([A-Za-z0-9][A-Za-z0-9-]*)\.md`)
 	referencesRefRE = regexp.MustCompile(`references/([A-Za-z0-9][A-Za-z0-9-]*)\.md`)
-	prefixCellRE    = regexp.MustCompile(`^[a-z0-9]+-$`)
-	suffixTokenRE   = regexp.MustCompile(`^[a-z0-9][a-z0-9-]*$`)
 	skillNameRE     = regexp.MustCompile(`^[a-z0-9]+(-[a-z0-9]+)*$`)
 	topLevelKeyRE   = regexp.MustCompile(`^([A-Za-z][A-Za-z0-9_-]*):(?:\s+(.*))?$`)
 	nestedKeyRE     = regexp.MustCompile(`^\s+([A-Za-z][A-Za-z0-9_-]*):(?:\s+(.*))?$`)
+
+	// Up-front "read everything" phrasing defeats progressive disclosure: the
+	// rules table plus the workflow steps already say what to read when.
+	// Deliberately narrow — "read each rule file" is legitimate in the
+	// install/generate skills, which genuinely apply every rule.
+	eagerLoadRE = regexp.MustCompile(`(?i)\bread (all|every) [^.\n]{0,40}\b(rule|reference) files?\b|\bdo not skip or ask\b`)
 )
 
 // Frontmatter limits from the Agent Skills spec (agentskills.io/specification).
@@ -97,6 +101,30 @@ const (
 	maxDescriptionLen   = 1024
 	maxCompatibilityLen = 500
 	maxSkillNameLen     = 64
+)
+
+// Content budgets, measured like `wc -l`. SKILL.md is the always-loaded entry
+// point, so detail belongs in rules/ or references/ instead. Both ceilings sit
+// just above the current maxima — raise them only with a reason, since the
+// point is to make growth deliberate. Scoped to skillsDir: the generated
+// xcode-skills/ export carries much larger Apple-authored files.
+const (
+	maxSkillLines = 125
+	maxRuleLines  = 150
+)
+
+// Thresholds for the cross-skill duplicate-block check. Below these a repeated
+// block is a shared command or a table row, not a duplicated instruction.
+//
+// dupMinLines is what keeps the check honest. The target is copy-pasted policy
+// and report templates — multi-line blocks. Two skills stating the same
+// one-line fact ("detect the package manager from the lockfile") are sharing
+// vocabulary, not duplicating an instruction, and they cannot factor it out
+// anyway: each skill ships on its own.
+const (
+	dupMinChars  = 80
+	dupMinTokens = 12
+	dupMinLines  = 3
 )
 
 func pathExists(path string) bool {
@@ -190,52 +218,13 @@ func validateActionPinning(root string, errors *[]string) {
 	}
 }
 
-// Collect every rule file name a SKILL.md refers to. Two patterns are used
-// across the collection:
-//  1. Explicit `rules/<name>.md` paths in a table's File column.
-//  2. Compact prefix tables (e.g. refactor) with a `general-` prefix cell and
-//     a comma-separated suffix list — reconstructed as prefix+suffix.
+// Collect every rule file name a SKILL.md refers to, from explicit
+// `rules/<name>.md` paths in a table's File column.
 func extractReferencedRules(source string) map[string]bool {
 	names := map[string]bool{}
-
 	for _, match := range rulesRefRE.FindAllStringSubmatch(source, -1) {
 		names[match[1]] = true
 	}
-
-	for _, line := range strings.Split(source, "\n") {
-		if !strings.HasPrefix(strings.TrimLeft(line, " \t"), "|") {
-			continue
-		}
-		var prefixes []string
-		var suffixLists [][]string
-		for _, cell := range strings.Split(line, "|") {
-			cell = strings.TrimSpace(strings.ReplaceAll(cell, "`", ""))
-			if prefixCellRE.MatchString(cell) {
-				prefixes = append(prefixes, cell)
-			} else if strings.Contains(cell, ",") {
-				tokens := strings.Split(cell, ",")
-				valid := true
-				for i, token := range tokens {
-					tokens[i] = strings.TrimSpace(token)
-					if !suffixTokenRE.MatchString(tokens[i]) {
-						valid = false
-						break
-					}
-				}
-				if valid {
-					suffixLists = append(suffixLists, tokens)
-				}
-			}
-		}
-		for _, prefix := range prefixes {
-			for _, tokens := range suffixLists {
-				for _, token := range tokens {
-					names[prefix+token] = true
-				}
-			}
-		}
-	}
-
 	return names
 }
 
@@ -270,8 +259,16 @@ func checkSubdir(skillDir, skillName, subdir string, referenced map[string]bool,
 		entries, err := os.ReadDir(dir)
 		if err == nil {
 			for _, entry := range entries {
-				if strings.HasSuffix(entry.Name(), ".md") {
-					fileSet[strings.TrimSuffix(entry.Name(), ".md")] = true
+				if !strings.HasSuffix(entry.Name(), ".md") {
+					continue
+				}
+				fileSet[strings.TrimSuffix(entry.Name(), ".md")] = true
+				if data, err := os.ReadFile(filepath.Join(dir, entry.Name())); err == nil {
+					if lines := countLines(string(data)); lines > maxRuleLines {
+						*errors = append(*errors, fmt.Sprintf(
+							"%s/%s: %s/%s is %d lines (max %d) — split it or trim the examples",
+							skillsDir, skillName, subdir, entry.Name(), lines, maxRuleLines))
+					}
 				}
 			}
 		}
@@ -375,9 +372,27 @@ func validateFrontmatter(skillName, source string, errors *[]string) {
 	}
 }
 
+// countLines matches `wc -l` for newline-terminated files.
+func countLines(source string) int {
+	return len(strings.Split(strings.TrimRight(source, "\n"), "\n"))
+}
+
+// Flag phrasing that tells the agent to read every rule file up front, which
+// loads a skill's whole rules/ directory on every invocation.
+func checkEagerLoad(skillName, source string, errors *[]string) {
+	for index, line := range strings.Split(source, "\n") {
+		if eagerLoadRE.MatchString(line) {
+			*errors = append(*errors, fmt.Sprintf(
+				"%s/%s: SKILL.md:%d instructs an unconditional read of all rule files — reference each rule where the workflow needs it",
+				skillsDir, skillName, index+1))
+		}
+	}
+}
+
 // SKILL.md must exist, carry the portable frontmatter checked in
-// validateFrontmatter, and have its referenced `rules/*.md` and
-// `references/*.md` files resolve (with none left orphaned).
+// validateFrontmatter, stay within maxSkillLines, avoid eager-load phrasing,
+// and have its referenced `rules/*.md` and `references/*.md` files resolve
+// (with none left orphaned).
 func validateSkill(root, skillName string, errors *[]string) {
 	skillDir := filepath.Join(root, skillsDir, skillName)
 	skillFile := filepath.Join(skillDir, "SKILL.md")
@@ -394,6 +409,12 @@ func validateSkill(root, skillName string, errors *[]string) {
 	source := string(data)
 
 	validateFrontmatter(skillName, source, errors)
+	checkEagerLoad(skillName, source, errors)
+	if lines := countLines(source); lines > maxSkillLines {
+		*errors = append(*errors, fmt.Sprintf(
+			"%s/%s: SKILL.md is %d lines (max %d) — move detail into rules/ or references/",
+			skillsDir, skillName, lines, maxSkillLines))
+	}
 	checkSubdir(skillDir, skillName, "rules", extractReferencedRules(source), errors)
 	checkSubdir(skillDir, skillName, "references", extractReferencedFiles(source), errors)
 }
@@ -525,6 +546,110 @@ func validateCollections(root string, skillNames []string, colls []collection, e
 	}
 }
 
+// normaliseBlock collapses whitespace runs so that reflowed copies of the same
+// paragraph still compare equal. Case is kept: exact-after-normalisation is
+// predictable, where fuzzy matching produces false positives faster than it
+// finds real duplication.
+func normaliseBlock(block string) string {
+	return strings.Join(strings.Fields(block), " ")
+}
+
+// stripFences blanks out fenced code blocks, keeping line numbering intact.
+//
+// Prose is the target. Two skills legitimately quote the same command — the
+// `pip-audit` invocation belongs in both the security audit and the Python
+// dependency guide — and neither is a duplicated instruction.
+func stripFences(source string) string {
+	lines := strings.Split(source, "\n")
+	inFence := false
+	for index, line := range lines {
+		if strings.HasPrefix(strings.TrimSpace(line), "```") {
+			inFence = !inFence
+			lines[index] = ""
+			continue
+		}
+		if inFence {
+			lines[index] = ""
+		}
+	}
+	return strings.Join(lines, "\n")
+}
+
+// Report prose blocks repeated verbatim across two different skills. Each skill
+// ships independently (per collection, and individually via skills.sh), so
+// shared text cannot be factored out — it has to be written once, in the skill
+// that owns the rule.
+//
+// Only cross-skill repeats are errors. Within a single skill, repetition is
+// often legitimate: the per-language references/ guides restate a caveat with
+// local context on purpose.
+//
+// Two limitations to accept rather than engineer around. Only byte-identical
+// blocks are caught, so a reworded near-duplicate (six report templates with
+// different row labels) still needs a human eye. And fenced code is excluded,
+// so a shared command is never reported. Both bounds keep the check quiet
+// enough to be trusted; widening either produces false positives faster than
+// true ones.
+func validateDuplicateBlocks(root string, skillNames []string, errors *[]string) {
+	type location struct{ skill, where string }
+	seen := map[string]location{}
+
+	for _, skillName := range skillNames {
+		files := collectFiles(filepath.Join(root, skillsDir, skillName), []string{".md"})
+		sort.Strings(files)
+		for _, file := range files {
+			data, err := os.ReadFile(file)
+			if err != nil {
+				continue
+			}
+			source := string(data)
+			if _, ok := parseFrontmatter(source); ok {
+				if end := strings.Index(source[3:], "\n---\n"); end >= 0 {
+					source = source[3+end+len("\n---\n"):]
+				}
+			}
+
+			source = stripFences(source)
+
+			relPath, err := filepath.Rel(root, file)
+			if err != nil {
+				relPath = file
+			}
+
+			lineNumber := 1
+			for _, block := range strings.Split(source, "\n\n") {
+				startLine := lineNumber
+				lineNumber += strings.Count(block, "\n") + 2
+
+				normalised := normaliseBlock(block)
+				if len(normalised) < dupMinChars || len(strings.Fields(normalised)) < dupMinTokens {
+					continue
+				}
+				if len(strings.Split(strings.TrimSpace(block), "\n")) < dupMinLines {
+					continue
+				}
+
+				where := fmt.Sprintf("%s:%d", relPath, startLine)
+				first, ok := seen[normalised]
+				if !ok {
+					seen[normalised] = location{skill: skillName, where: where}
+					continue
+				}
+				if first.skill == skillName {
+					continue
+				}
+				excerpt := normalised
+				if runes := []rune(excerpt); len(runes) > 60 {
+					excerpt = string(runes[:60])
+				}
+				*errors = append(*errors, fmt.Sprintf(
+					"%s: block duplicated from %s (%q…) — keep one copy where the rule is defined",
+					where, first.where, excerpt))
+			}
+		}
+	}
+}
+
 func validate(root string, colls []collection) []string {
 	errors := []string{}
 
@@ -548,6 +673,7 @@ func validate(root string, colls []collection) []string {
 		errors = append(errors, skillsDir+"/: directory not found")
 	}
 
+	validateDuplicateBlocks(root, skillNames, &errors)
 	validatePlugins(root, &errors)
 	validateSymlinks(root, &errors)
 	validateCollections(root, skillNames, colls, &errors)
