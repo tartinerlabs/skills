@@ -68,7 +68,7 @@ Skills are lightweight guides, not procedures. State a preference and its reason
 
 The skills ship as four themed **collection plugins** — `workflow`, `quality`, `security`, and `tooling`. The original all-in-one `tartinerlabs` plugin is **deprecated** but still published for a transition period; its removal is a future release. The `collections` table in `scripts/validate-skills/main.go` is the source of truth for membership — every skill must belong to exactly one collection (validated in CI).
 
-Six channels: Claude Code, Codex, Cursor, and Antigravity plugins (each reading `plugins/<collection>/.<channel>-plugin/plugin.json`), plus [skills.sh](https://skills.sh) and [Context7](https://context7.com). `README.md` has the install commands. The `Skills` CI workflow validates skills.sh and Context7 distribution on push to `main`.
+Five channels: Claude Code, Codex, Cursor, and Antigravity plugins (each reading `plugins/<collection>/.<channel>-plugin/plugin.json`), plus [skills.sh](https://skills.sh). `README.md` has the install commands. The `Skills` CI workflow validates skills.sh distribution on push to `main`. Context7 was a sixth channel until `ctx7 skills install` was deprecated upstream with no successor; Context7 remains a documentation source, not a distribution target.
 
 ## Plugins
 

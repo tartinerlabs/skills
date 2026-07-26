@@ -172,9 +172,7 @@ pnpm dlx skills add tartinerlabs/skills/setup
 
 ### [Context7](https://context7.com)
 
-```bash
-pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal
-```
+> **Note:** The Context7 skills channel has been retired — `ctx7 skills install` is deprecated upstream and stops working in the next major `ctx7` release, with no successor command for installing skills from a repository. Context7 remains a documentation source; for these skills, use [skills.sh](#skills) or one of the plugin channels above.
 
 ### [OpenCode](https://opencode.ai)
 
