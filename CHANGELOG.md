@@ -14,6 +14,19 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [1.31.0](https://github.com/tartinerlabs/skills/compare/v1.30.0...v1.31.0) (2026-07-26)
+
+
+### Features
+
+* add portable skill frontmatter metadata ([40e457e](https://github.com/tartinerlabs/skills/commit/40e457e97c50d683513ed9487ee5bffa3fd7f838))
+* detect commit convention per ecosystem ([6078862](https://github.com/tartinerlabs/skills/commit/6078862c4a3a4708415ee01b51b633b629b86b19))
+
+
+### Bug Fixes
+
+* capitalise plugin display names ([7de1528](https://github.com/tartinerlabs/skills/commit/7de1528a55f281154b668bb9aa97e3bf4c24e6bc))
+
 ## [1.30.0](https://github.com/tartinerlabs/skills/compare/v1.29.0...v1.30.0) (2026-07-23)
 
 
