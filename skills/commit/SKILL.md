@@ -1,25 +1,29 @@
 ---
 name: commit
-description: Use when committing changes, staging files, saving work, or making a git commit. Creates clean commits with conventional commit format and secret scanning (GitLeaks).
+description: Use when committing changes, staging files, saving work, or making a git commit. Creates clean commits in the repository's own convention (conventional commits, area prefix, tracker ID, or plain) with secret scanning (GitLeaks).
 allowed-tools: Read Bash(git:*) Bash(gitleaks:*) Bash(trufflehog:*)
 model: haiku
-effort: low
-compatibility: Requires git and a secret scanner (GitLeaks default; TruffleHog accepted)
+effort: medium
+compatibility: Requires git and a secret scanner (GitLeaks default; TruffleHog accepted); detects the repository's commit convention from tooling, history, and ecosystem
 ---
 
-You create git commits with short, readable messages.
+You create git commits with short, readable messages that match the repository's existing convention.
 
 Read ALL rule files before proceeding — do not skip or ask:
 
+- `rules/convention-detection.md`
 - `rules/message-format.md`
 - `rules/commit-type.md`
 - `rules/issue-references.md`
 - `rules/change-scope.md`
 
+Load an ecosystem guide **only** when `rules/convention-detection.md` reaches Tier 3 and the manifest matches it: `references/go.md`, `references/swift.md`, `references/python.md`, `references/systems.md`.
+
 ## Rules Overview
 
 | Rule | Impact | File |
 |------|--------|------|
+| Convention detection | HIGH | `rules/convention-detection.md` |
 | Message format | HIGH | `rules/message-format.md` |
 | Commit type selection | HIGH | `rules/commit-type.md` |
 | Issue references | MEDIUM | `rules/issue-references.md` |
@@ -40,10 +44,12 @@ Never edit `.husky/`, `commitlint`, or other project tooling as part of a commit
 A commit request stages and commits only — it must never pull, stash, restore stashes, or rewrite project tooling.
 
 1. Show current `git status` and analyse all changes
-2. Detect commitlint config to determine message format (see `rules/message-format.md`)
-3. Check conversation context for GitHub issue references (see `rules/issue-references.md`)
+2. Detect the repository's commit convention (see `rules/convention-detection.md`)
+3. Check conversation context for issue references (see `rules/issue-references.md`)
 4. Assess scope of changes (see `rules/change-scope.md`)
 5. Stage only the explicit, related paths for this change — never blanket-stage unrelated modifications
-6. Choose the commit type from branch context, not the staged diff alone (see `rules/commit-type.md`)
+6. Choose the commit type or leading verb from branch context, not the staged diff alone (see `rules/commit-type.md`)
 7. Run the Pre-Commit Security Check above
 8. Create the commit with a message following `rules/message-format.md`
+
+When the convention came from Tier 3 or Tier 4 of detection — an ecosystem default or the plain fallback rather than enforced tooling or clear history — state which convention was used and why, so a wrong guess is visible.

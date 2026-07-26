@@ -6,7 +6,7 @@ tags: type, fix, feat, branch, pr, base-branch, wip, semver
 
 **Rule**: Choose the commit type from what the change means relative to the base branch, not from the staged diff alone. Adjusting code you introduced earlier in this same, unmerged branch — whether correcting, restructuring, or documenting it — is iteration on that work: use the branch's existing type (usually `feat`), not `fix`, `refactor`, or `docs`.
 
-This rule applies whichever format `rules/message-format.md` detected — it never introduces conventional commits or commitlint where they aren't already in use. In plain format the same logic picks the leading verb: describe WIP iteration as part of the work ("add date parsing utility"), not as a fix.
+This rule applies whichever family `rules/convention-detection.md` identified — it never introduces conventional commits or commitlint where they aren't already in use. Outside conventional commits the same logic picks the leading verb: describe WIP iteration as part of the work ("add date parsing utility"), not as a fix. In an area-prefix or bracket-tag repository it picks the verb the same way, leaving the prefix untouched.
 
 ### Why This Matters
 

@@ -1,64 +1,98 @@
 ---
 title: Commit Message Format
 impact: HIGH
-tags: commit, message, format, 50-char
+tags: commit, message, format, conventional, area-prefix, 50-char
 ---
 
-**Rule**: Subject line maximum 50 characters. Use present tense verbs. Be specific but concise.
+**Rule**: Write the subject in the family `rules/convention-detection.md` identified. Use imperative mood, no trailing period, and keep the subject within that family's length budget.
 
-### Detect commitlint
+Detection comes first — this rule only describes how to render each outcome.
 
-Before formatting the message, check for commitlint in the project:
+### Universal Rules (all families)
 
-1. Look for any of the following (commitlint resolves via cosmiconfig):
-   - `commitlint.config.{ts,cts,mts,js,cjs,mjs}`
-   - `.commitlintrc` or `.commitlintrc.{ts,cts,mts,js,cjs,mjs,json,yaml,yml}`
-   - `commitlint` key in `package.json` or `package.yaml`
-2. If found, use **conventional commit** format: `type: description` (or `type(scope): description`)
-3. If not found, use **plain** format (no prefix)
+- **Imperative mood**: "add", not "added" or "adds". The subject completes "This change will \_\_\_\_".
+- **No trailing period.**
+- **Blank line** between subject and body.
+- **Body wrapped at 72 columns**, explaining *why*; the diff already shows the how.
+- Subject describes the *what*; never a complete sentence with a full stop.
 
-### Conventional Commit Format (when commitlint is present)
+### Family 1 — Conventional Commits
 
 ```
 fix: handle auth redirect for expired tokens
-```
-
-```
 feat: add user search endpoint
+feat(payments)!: drop support for Stripe v2 tokens
 ```
 
-```
-docs: update API usage examples
-```
+- Structure: `type[(scope)][!]: description`
+- Types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert` — narrowed to the tool's `type-enum` when one is configured
+- **50-character limit including the `type: ` prefix**
+- Description starts with a **lowercase** verb
+- Scope only when it adds clarity: `fix(auth): handle expired token redirect`
+- Breaking changes: `!` after type/scope, or a `BREAKING CHANGE:` footer. `feat` → MINOR, `fix` → PATCH, breaking → MAJOR
 
-**Types**: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`, `revert`
+### Family 2 — Area Prefix
 
-- The 50-character limit includes the `type: ` prefix
-- Use scope only when it adds clarity: `fix(auth): handle expired token redirect`
-- Description starts with lowercase verb
-
-### Plain Format (when no commitlint)
-
-```
-fix auth redirect for expired tokens
-```
+The dominant style in systems, compiler, and language-upstream repositories.
 
 ```
-add user search endpoint
+math: improve Sin, Cos and Tan precision for very large arguments
+refs: HEAD is also treated as a ref
+ext2: improve scalability of bitmap searching
 ```
 
-- Start with a verb: add, fix, update, remove, refactor
-- No conventional commit prefixes
+- Structure: `area: description`, where `area` is the package, subsystem, or file being changed
+- Take the area from the observed prefix vocabulary, not invention
+- **Capitalisation is project-specific and must come from history** — Go and Git require lowercase after the colon (`doc: Clarify …` is explicitly wrong there); Chromium capitalises
+- Length: 50 where history is tight, up to 70–75 in kernel-style repositories
+- See `references/go.md`, `references/systems.md`
 
-### Incorrect (either format)
+### Family 3 — Bracket Tag
+
+```
+[stdlib] Fix Comparable conformance for Optional
+[SILGen] Correctly compute 'is dependent type' bits in 'Type'
+```
+
+- Structure: `[tag] Description`, tag drawn from the project's existing tags
+- Typically capitalised after the tag
+- See `references/swift.md`
+
+### Family 4 — Tracker ID
+
+```
+gh-12345: Make the spam module more spammy
+PROJ-482: Reject expired refresh tokens
+```
+
+- Structure: `<id>: Description`, capitalised, imperative, no period
+- Use only when history shows it and an ID is actually known — never fabricate one
+- See `references/python.md`
+
+### Family 5 — Plain
+
+```
+Fix auth redirect for expired tokens
+Add user search endpoint
+```
+
+- Start with an imperative verb: add, fix, update, remove, refactor
+- 50-character subject, 72-column body
+- Capitalisation follows history; capitalised is the common default
+- No prefixes of any kind
+
+### Incorrect (every family)
 
 ```
 Updated the authentication flow to handle edge cases with expired tokens and added retry logic
 ```
 
+Past tense, far over budget, and describes the diff rather than the change.
+
 ### Commit Body
 
 **Default to a single subject line — no body.** The vast majority of commits should be subject-only. Only add a body for:
+
 - Breaking changes
 - Non-obvious design decisions
 - Security-related context that shouldn't be lost
@@ -73,12 +107,6 @@ manual webhook signature workaround in utils/stripe.ts.
 Closes #412
 ```
 
-- Separate subject from body with a blank line
-- Wrap body at 72 characters
-- Explain *why*, not *how* — the diff shows the how
+### Trailers
 
-### Guidelines
-
-- No trailing period
-- Subject describes the *what*; body explains the *why*
-- Present tense: "add" not "added", "fix" not "fixed"
+Some projects require `Signed-off-by` (Linux, Git, and DCO-gated repositories). If Tier 2 detection found sign-off trailers in recent commit bodies, or the repository has a DCO check, commit with `git commit -s`. Do not add trailers a project does not use.
