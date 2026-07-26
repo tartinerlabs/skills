@@ -14,6 +14,14 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [1.32.0](https://github.com/tartinerlabs/skills/compare/v1.31.0...v1.32.0) (2026-07-26)
+
+
+### Features
+
+* lint skill size and eager rule loading ([2ebdee8](https://github.com/tartinerlabs/skills/commit/2ebdee8b4119da679826e4eea0cbccd8eb450df1))
+* scope eager-load lint and fix skill copy ([570e92c](https://github.com/tartinerlabs/skills/commit/570e92c5e19180574ccbacf51f5a6dc7c311b715))
+
 ## [1.31.0](https://github.com/tartinerlabs/skills/compare/v1.30.0...v1.31.0) (2026-07-26)
 
 
