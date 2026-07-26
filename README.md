@@ -11,7 +11,7 @@ Language-agnostic agent skills for git/GitHub workflows, code quality, and proje
 
 - **Language-aware, JS/TS-first** &mdash; Skills detect the project's language and adapt. The general workflow/audit skills work in any language; the ecosystem tooling (`setup`, `deps`, `testing`) is polyglot &mdash; JS/TS is the best-supported path, with Python and Go covered via per-language `references/`.
 - **Modular rules architecture** &mdash; Each skill ships with standalone rule files in `rules/` directories. Rules can be added, removed, or edited independently without touching the main skill logic.
-- **Opinionated audit workflows** &mdash; Skills like `security`, `github-actions`, `tailwind`, and `refactor` produce structured severity-graded reports, then auto-fix issues.
+- **Opinionated audit workflows** &mdash; Skills like `security`, `github-actions`, and `refactor` produce structured severity-graded reports, then auto-fix issues.
 - **Secret scanning built in** &mdash; The `commit`, `security`, and `setup` skills enforce secret detection as a first-class concern (GitLeaks by default, TruffleHog accepted).
 - **Convention-aware** &mdash; Skills detect your project's existing conventions (language, commit format, package manager, project structure, git host) and adapt automatically.
 
@@ -33,14 +33,13 @@ Git and GitHub workflow skills — commits, branches, pull requests, issues, and
 
 ### quality
 
-Code quality skills — refactoring, naming conventions, project structure, and Tailwind CSS audits.
+Code quality skills — refactoring, naming conventions, and project structure.
 
 | Skill | Description |
 |-------|-------------|
 | [refactor](skills/refactor) | Audit and refactor code for dead code, deep nesting, and design patterns (language-agnostic; TS/JS idiom rules for TS/JS files) |
 | [naming-format](skills/naming-format) | Audit and fix filename and export naming conventions for consistency |
 | [project-structure](skills/project-structure) | Audit project directory structure for colocation, grouping, and anti-pattern detection |
-| [tailwind](skills/tailwind) | Audit and fix Tailwind CSS v4 anti-patterns for spacing, 8px grid, mobile-first, and GPU animations |
 
 ### security
 

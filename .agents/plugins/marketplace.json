@@ -19,7 +19,7 @@
     },
     {
       "name": "quality",
-      "description": "Code quality skills — refactoring, naming conventions, project structure, and Tailwind CSS audits",
+      "description": "Code quality skills — refactoring, naming conventions, and project structure",
       "source": {
         "source": "local",
         "path": "./plugins/quality"

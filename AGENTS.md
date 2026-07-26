@@ -52,7 +52,7 @@ Fields split into two groups. **Portable** fields (`name`, `description`, `licen
 
 ### Language-aware, JS/TS-first model
 
-Every skill is **language-aware with JS/TS as the first-class default** — no skill assumes React or a single framework/host. Skills **detect, don't assume**: read the project's manifest (`package.json`/`pyproject.toml`/`go.mod`/…) as prose (never `!`-shell-injection, which is Claude-Code-only) and adapt. The general workflow/audit skills work in any language, gating framework-specific rules behind detection. The ecosystem tooling (`setup`, `deps`, `testing`) is polyglot. `tailwind` is the one inherent JS/CSS specialist. Secret scanning is abstracted: `commit`/`security`/`setup`/`deps` accept any scanner (GitLeaks default, TruffleHog accepted), not a hard-coded tool.
+Every skill is **language-aware with JS/TS as the first-class default** — no skill assumes React or a single framework/host. Skills **detect, don't assume**: read the project's manifest (`package.json`/`pyproject.toml`/`go.mod`/…) as prose (never `!`-shell-injection, which is Claude-Code-only) and adapt. The general workflow/audit skills work in any language, gating framework-specific rules behind detection. The ecosystem tooling (`setup`, `deps`, `testing`) is polyglot. Secret scanning is abstracted: `commit`/`security`/`setup`/`deps` accept any scanner (GitLeaks default, TruffleHog accepted), not a hard-coded tool.
 
 ### Rules and References Pattern
 
