@@ -3,22 +3,14 @@ name: commit
 description: Use when committing changes, staging files, saving work, or making a git commit. Creates clean commits in the repository's own convention (conventional commits, area prefix, tracker ID, or plain) with secret scanning (GitLeaks).
 license: MIT
 allowed-tools: Read Bash(git:*) Bash(gitleaks:*) Bash(trufflehog:*)
-model: haiku
-effort: medium
+model: sonnet
+effort: high
 compatibility: Requires git and a secret scanner (GitLeaks default; TruffleHog accepted); detects the repository's commit convention from tooling, history, and ecosystem
 metadata:
   short-description: Clean commits in your repo's own convention.
 ---
 
 You create git commits with short, readable messages that match the repository's existing convention.
-
-Read ALL rule files before proceeding — do not skip or ask:
-
-- `rules/convention-detection.md`
-- `rules/message-format.md`
-- `rules/commit-type.md`
-- `rules/issue-references.md`
-- `rules/change-scope.md`
 
 Load an ecosystem guide **only** when `rules/convention-detection.md` reaches Tier 3 and the manifest matches it: `references/go.md`, `references/swift.md`, `references/python.md`, `references/systems.md`.
 

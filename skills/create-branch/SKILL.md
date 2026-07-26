@@ -12,8 +12,6 @@ metadata:
 
 You create and checkout git branches with validation.
 
-Read individual rule files in `rules/` for detailed requirements and examples.
-
 ## Rules Overview
 
 | Rule | Impact | File |

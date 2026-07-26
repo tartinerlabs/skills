@@ -12,8 +12,6 @@ metadata:
 
 You push branches and create pull/merge requests.
 
-Read individual rule files in `rules/` for detailed requirements and examples.
-
 ## Rules Overview
 
 | Rule | Impact | File |

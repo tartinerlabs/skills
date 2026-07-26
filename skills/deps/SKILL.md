@@ -29,12 +29,7 @@ The rest of this file (Steps 1-4) is the **JS/TS** path. For Python, Go or Rust,
 
 ## 1. Detect Package Manager
 
-Check for lockfiles in this order:
-1. `pnpm-lock.yaml` → **pnpm**
-2. `bun.lock` / `bun.lockb` → **bun**
-3. `yarn.lock` → **yarn**
-4. `package-lock.json` → **npm**
-5. No lockfile → ask the user
+Detect the package manager from the lockfile, in this order: `pnpm-lock.yaml`, `bun.lock`/`bun.lockb`, `yarn.lock`, `package-lock.json`. With no lockfile, ask.
 
 Use the detected package manager for all commands. Replace `<pm>` in rule files with the detected manager.
 
@@ -77,7 +72,3 @@ After all rules are processed, display a summary:
 ### Manual Steps Required
 - [any post-setup steps, e.g. "Run `pnpm exec husky` to reinitialise git hooks"]
 ```
-
-## Compatibility
-
-Works on any language project — detect the ecosystem (Step 0) and harden its dependency supply chain: JS/TS is the best-supported path (`rules/*.md`), with Python, Go and Rust covered via `references/`. The **PR dependency-review CI** step assumes GitHub (`actions/dependency-review-action`, via GitHub's dependency graph); on GitLab, use GitLab's built-in Dependency Scanning instead. `gh` is used to resolve every action release to a full commit SHA when writing GitHub workflows. Git must be initialised in the project.

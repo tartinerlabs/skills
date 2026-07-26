@@ -14,83 +14,27 @@ metadata:
 
 You are an expert code reviewer focused on refactoring.
 
-Read individual rule files in `rules/` for detailed explanations and code examples.
+Audit and report by default; edit files only when the user asks you to fix, refactor, apply, or clean something up. When the ask is unclear, report first and offer to apply the fixes.
 
 ## Rules Overview
 
-| Section | Prefix | Rules |
+| Rules | Scope | File |
 |---|---|---|
-| General Patterns | `general-` | dead-code, deep-nesting, long-functions, magic-values, boolean-params, duplication |
-| TypeScript/JS Idioms | `ts-` | type-assertions, optional-chaining, nullish-coalescing, barrel-reexports, enum-union, async-await |
-| Design Principles | `design-` | single-responsibility, interface-segregation, god-objects, tight-coupling |
-
-**Language gating:** the General Patterns and Design Principles rules apply to any language. The `ts-` idiom rules apply **only to TS/JS files** (`.ts`/`.tsx`/`.js`/`.jsx`/`.mts`/`.cts`) — skip them for other languages.
-
-## Mode Detection
-
-Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
-
-- **Audit (read-only, default)** — "audit", "review", "check", "clean up review", or any unclear request. Produce an evidence-backed report and make NO file edits.
-- **Fix** — the user explicitly asks to fix, refactor, apply, clean up, reduce complexity, improve code quality, or says "audit and fix". Only then apply the scoped changes in the Fix step.
-
-When intent is ambiguous, stay in Audit mode and end the report by offering to apply the fixes.
+| General patterns | any language | `rules/general-patterns.md` |
+| TypeScript/JS idioms | `.ts`/`.tsx`/`.js`/`.jsx`/`.mts`/`.cts` only | `rules/ts-idioms.md` |
+| Design principles | any language | `rules/design-principles.md` |
 
 ## Workflow
 
 ### Step 1: Audit
 
-Scan the target scope (specific files, directory, or full codebase) for violations:
-
-**General Patterns**:
-- Commented-out code blocks
-- Functions exceeding ~40 lines
-- Nesting deeper than 3 levels
-- Hardcoded numbers/strings used in conditions or timeouts
-- Boolean parameters in function signatures
-
-**TypeScript/JS Idioms** (TS/JS files only — skip for other languages):
-- `as` type assertions (excluding test files)
-- Chained `&&` for null checks where `?.` applies
-- `||` used for defaults where `??` is safer
-- Barrel `index.ts` re-export files (hurt tree-shaking, slow bundlers, risk circular deps)
-- String enums that could be union types
-- `.then()` chains in async code
-
-**Design Principles**:
-- Files with >10 named exports
-- Interfaces with >7 methods
-- Files importing from >5 sibling modules in the same layer
+Scan the target scope (specific files, directory, or full codebase) against every rule in `rules/`.
 
 ### Step 2: Report
 
-List all findings grouped by category:
+Report each finding as `path:line` — what is wrong → the fix, grouped by category, and close with a per-category violation count.
 
-```
-## Refactoring Audit Results
-
-### General Patterns
-- `src/services/order.ts:45` - Function `processOrder` is 62 lines → extract validation and submission
-- `src/utils/helpers.ts:12-18` - Commented-out code block → remove
-
-### TypeScript/JS Idioms
-- `src/api/client.ts:23` - `as UserResponse` → add type guard
-- `src/config.ts:8` - `port || 3000` → use `??` (port could be 0)
-
-### Design Principles
-- `src/services/user.ts` - 14 named exports → split into focused modules
-
-### Summary
-| Category             | Violations | Files |
-|----------------------|------------|-------|
-| General Patterns     | X          | N     |
-| TypeScript/JS Idioms | Y          | N     |
-| Design Principles    | Z          | N     |
-| **Total**            | **X+Y+Z** | **N** |
-```
-
-### Step 3: Fix (fix mode only)
-
-Skip this step entirely in Audit mode. Only apply changes when the request is in Fix mode (see Mode Detection).
+### Step 3: Fix
 
 Apply refactorings. For each fix:
 1. Verify the change preserves existing behaviour

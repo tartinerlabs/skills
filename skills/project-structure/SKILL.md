@@ -12,7 +12,7 @@ metadata:
 
 You are a project structure expert.
 
-Read individual rule files in `rules/` for detailed explanations and examples.
+Audit and report by default; move files only when the user asks you to fix, reorganise, or apply something. When the ask is unclear, report first and offer to apply the fixes.
 
 ## Rules Overview
 
@@ -39,34 +39,18 @@ Load `rules/framework-structure.md` **only when a framework it covers is detecte
 
 ### Step 2: Audit
 
-Check the existing structure against all rules. Report violations grouped by rule with directory paths:
+Check the existing structure against all rules.
 
-```
-## Project Structure Audit Results
-
-### HIGH Severity
-- `src/helpers/formatDate.ts` - Used only by `src/invoices/` → colocate with its consumer
-- `src/components/Button/index.tsx` - Barrel-only directory → import the component directly
-
-### MEDIUM Severity
-- `src/` - Flat file dump with no feature or layer grouping → group by feature
-
-### Summary
-| Rule | Violations | Directories |
-|------|-----------|-------------|
-| Colocation | X | N |
-| Anti-patterns | Y | N |
-| **Total** | **X+Y** | **N** |
-```
+Report each finding as `path` — what is wrong → the fix, grouped under `### HIGH` / `### MEDIUM` / `### LOW`, and close with a per-rule violation count.
 
 ### Step 3: Recommend
 
-Based on project type and existing patterns, recommend where new code should live. Always prioritise colocation.
+Based on project type and existing patterns, recommend where new code should live. Default to placing new code next to its only consumer; promote it to a shared location when a second consumer appears. Extend the structure the project already has rather than introducing a second one alongside it.
 
 ### Step 4: Fix
 
 Apply fixes for each violation:
 1. Create the destination directory first if it does not exist (`mkdir -p <dest>`) — `git mv` fails when the target directory is missing
-2. Move files to their correct location using `git mv` to preserve git history
+2. Move files to their correct location with `git mv`
 3. Update all import paths in dependent files
 4. Verify no broken imports remain after moves

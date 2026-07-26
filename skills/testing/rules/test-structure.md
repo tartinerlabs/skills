@@ -10,28 +10,12 @@ These principles are language-neutral (the examples are JS/TS, but the AAA struc
 
 ### AAA Pattern
 
-Every test should have three distinct phases:
-
-```ts
-it('should return the sum of two numbers', () => {
-  // Arrange
-  const a = 2;
-  const b = 3;
-
-  // Act
-  const result = add(a, b);
-
-  // Assert
-  expect(result).toBe(5);
-});
-```
-
-Comments are optional when the phases are obvious, but keep the logical separation.
+Keep the three phases — arrange the inputs, act on the unit, assert the outcome — visually distinct. `// Arrange` / `// Act` / `// Assert` comments are optional and usually unnecessary; the separation is what matters, not the labels. A test that interleaves setup and assertions is the finding.
 
 ### Naming
 
-- **`describe` blocks**: Name after the unit being tested (function, component, or class)
-- **`it` blocks**: Always start with "should" and describe the expected behaviour
+- **`describe` blocks**: name the unit under test — the function, component, or class
+- **`it` blocks**: state the expected behaviour as a claim about the unit. `it('formats USD with two decimal places')` and `it('should format USD with two decimal places')` both do this; `it('test 1')` and `it('works')` do not. Follow whichever phrasing the existing suite uses rather than converting it
 
 #### Incorrect
 
@@ -39,7 +23,6 @@ Comments are optional when the phases are obvious, but keep the logical separati
 describe('tests', () => {
   it('test 1', () => { ... });
   it('works', () => { ... });
-  it('formats USD with two decimal places', () => { ... });
 });
 ```
 
@@ -47,9 +30,9 @@ describe('tests', () => {
 
 ```ts
 describe('formatCurrency', () => {
-  it('should format USD with two decimal places', () => { ... });
-  it('should return "0.00" for zero input', () => { ... });
-  it('should throw for negative amounts', () => { ... });
+  it('formats USD with two decimal places', () => { ... });
+  it('returns "0.00" for zero input', () => { ... });
+  it('throws for negative amounts', () => { ... });
 });
 ```
 

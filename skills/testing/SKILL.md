@@ -21,13 +21,7 @@ Determine the test type from the user's request:
 
 ## Mode Detection
 
-Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
-
-- **Review (read-only, default)** — "review", "audit", "check", or "assess" test quality or coverage. Read the tests and source, then produce an evidence-backed report (gaps, weak assertions, missing edge cases) and make NO file edits. Skip Steps 4-5.
-- **Run** — the user explicitly asks to run or execute the existing tests. Run Step 5 (run and verify) and report the results; do not write new tests or edit failing ones unless also asked.
-- **Write / Fix** — the user explicitly asks to write, add, create, or fix tests, to debug failing tests, or to increase/improve coverage or cover edge cases. Run Step 4 (write test files) and Step 5 (run and verify). Running tests to observe failures, then editing tests, is allowed in this mode.
-
-When intent is ambiguous, stay in Review mode and end the report by offering to write or run the tests.
+Review by default: read the tests and source and report gaps, weak assertions, and missing edge cases without editing — stopping after Step 3. Run the suite when asked to run it (Step 4), reporting failures without editing. Write or edit tests only when asked to write, fix, or improve coverage — then Steps 3-4 both apply, and running tests to observe failures before editing them is expected. When the ask is unclear, review and offer to write or run them.
 
 ## Universal Rules (apply to every language)
 
@@ -63,13 +57,7 @@ Scan the project to match existing conventions:
 
 Match the project's existing patterns for naming, location, and imports.
 
-### Step 3: Read Relevant Rules
-
-- Always: the Universal Rules (`rules/test-structure.md`, `rules/test-quality.md`)
-- The detected language's ecosystem guide from Step 1
-- For JS/TS UI components: also `rules/component-testing.md`
-
-### Step 4: Write Tests
+### Step 3: Write Tests
 
 Create the test file following project conventions:
 1. Place the file according to the project's test location pattern
@@ -77,19 +65,8 @@ Create the test file following project conventions:
 3. Follow the AAA pattern (Arrange, Act, Assert)
 4. Cover the happy path, edge cases, and error cases — in the detected runner's idioms
 
-### Step 5: Run and Verify
+### Step 4: Run and Verify
 
-Run the tests using the project's test command:
+Run the tests with the project's own test command — the script in its manifest if there is one, otherwise the runner's default (`pytest`, `go test ./...`, `cargo test`).
 
-```bash
-# JS/TS — use the project's package manager
-pnpm run test          # or npm/bun/yarn equivalent
-
-# Python
-pytest                 # or: python -m unittest
-
-# Go
-go test ./...
-```
-
-Report results. In **Write / Fix** mode only, if tests fail, read the error output, fix the test, and re-run. In **Run** mode, report the failures without editing any files.
+Report the results. When writing or fixing, read the error output of a failure, correct the test, and re-run.

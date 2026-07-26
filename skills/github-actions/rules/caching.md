@@ -4,7 +4,7 @@ impact: MEDIUM
 tags: caching, dependencies, setup-actions, performance
 ---
 
-**Rule**: Cache package manager dependencies to speed up workflow runs. Always enable caching when using setup actions for Node.js, Python, Go, or other ecosystems.
+**Rule**: Cache package manager dependencies to speed up workflow runs — enable it on the setup action for Node.js, Python, Go, or whichever ecosystem the workflow uses. A setup action with no caching is worth flagging; caching genuinely does not pay off only where the dependency set is trivial or changes on nearly every run.
 
 ### Incorrect
 

@@ -8,16 +8,7 @@ tags: anti-patterns, catch-all, nesting, barrels, circular
 
 ### Catch-All Files
 
-Avoid generic `utils.ts`, `helpers.ts`, `common.ts`. Split by domain instead.
-
-```
-# Bad
-src/utils.ts          # 500 lines of unrelated helpers
-
-# Good
-src/lib/date.ts       # Date formatting utilities
-src/lib/currency.ts   # Currency formatting utilities
-```
+Avoid generic `utils.ts`, `helpers.ts`, `common.ts` — they accumulate unrelated helpers and give no clue where anything lives. Split by domain (`lib/date.ts`, `lib/currency.ts`).
 
 ### Deep Nesting
 
@@ -33,18 +24,7 @@ src/features/auth/components/auth-text-field.tsx
 
 ### Barrel Files
 
-Avoid `index.ts` re-export files. They hurt tree-shaking, slow down TypeScript and bundlers, and create circular dependency risks. Import directly from source files instead.
-
-```
-# Bad — barrel file
-src/components/index.ts       # re-exports from 15 files
-import { Button } from './components'
-
-# Good — direct imports
-import { Button } from './components/button'
-```
-
-Only acceptable use: package entry points (`packages/ui/index.ts`) where a public API boundary is intentional.
+Avoid `index.ts` re-export files; import directly from source modules. Acceptable at package entry points, where a public API boundary is intentional.
 
 ### Circular Dependencies
 
