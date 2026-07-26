@@ -183,21 +183,7 @@ pnpm dlx ctx7 skills install /tartinerlabs/skills --all --universal
 
 ## Plugin Metadata
 
-Plugin manifests are maintained manually on purpose.
-
-Each plugin lives in its own `plugins/<name>/` wrapper holding the per-channel manifests plus a `skills` directory, and every marketplace references its plugins as `./plugins/<name>`. Two wrapper shapes exist:
-
-- **Collection wrappers** (`plugins/workflow/`, `plugins/quality/`, `plugins/security/`, `plugins/tooling/`) expose a subset of the flat `skills/` source through per-skill symlinks (`skills/<skill>` → `../../../skills/<skill>`). `scripts/validate-skills/main.go` checks that every skill belongs to exactly one collection and that each wrapper exposes exactly its assigned skills.
-- **Whole-directory wrappers** (`plugins/tartinerlabs/` — deprecated, and `plugins/xcode-skills/`) expose an entire source directory through a single `skills` symlink (`../../skills` and `../../xcode-skills` respectively).
-
-Per-channel metadata for every plugin:
-
-- Codex metadata lives in `plugins/<name>/.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`
-- Claude metadata lives in `plugins/<name>/.claude-plugin/plugin.json` and `.claude-plugin/marketplace.json`
-- Cursor metadata lives in `plugins/<name>/.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`
-- Antigravity metadata lives in `plugins/<name>/.antigravity-plugin/plugin.json`
-- The separate Xcode collection is wrapped by `plugins/xcode-skills/`, which links to the untouched `xcode-skills/` export
-- `.release-please-manifest.json` is the shared source of truth across plugin manifests; release-please syncs manifest versions in the release PR
+Plugin manifests are hand-maintained under `plugins/<name>/`, one per channel, with `.release-please-manifest.json` as the shared version source. See [AGENTS.md](AGENTS.md) for the layout and [CONTRIBUTING.md](CONTRIBUTING.md) to contribute.
 
 ## Architecture
 
@@ -221,10 +207,6 @@ This means you can:
 - **Customise** a rule's severity or examples without forking the skill
 - **Add** project-specific rules by dropping a new `.md` file in `rules/`, or a new language by adding `references/<lang>.md`
 - **Remove** rules you disagree with
-
-## Skill Format
-
-Each skill is a directory with a `SKILL.md` file following the [Agent Skills spec](https://agentskills.io).
 
 ## License
 

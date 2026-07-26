@@ -44,4 +44,4 @@ src/
 
 ### Detection
 
-Check the project for existing suffix patterns. If the project uses `.spec.ts` for tests, flag `.test.ts` files (and vice versa). Never mix both in the same project.
+Check the project for existing suffix patterns and follow the dominant one — in a `.spec.ts` codebase, a new `.test.ts` file is the finding. A project mid-migration will legitimately hold both: report the split and which side is the target, rather than renaming in both directions.

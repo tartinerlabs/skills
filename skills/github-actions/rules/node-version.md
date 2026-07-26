@@ -4,7 +4,7 @@ impact: MEDIUM
 tags: node, lts, setup-node, versioning
 ---
 
-**Rule**: Always use LTS aliases instead of hardcoded version numbers. Use `lts/*` for the current LTS release. This stays current automatically without manual updates.
+**Rule**: Prefer LTS aliases over hardcoded version numbers — `lts/*` tracks the current LTS release without manual bumps, so it does not go stale. Exact versions are right when the project pins one deliberately: a `.nvmrc`/`engines` constraint to honour, a matrix deliberately testing specific majors, or a reproducibility requirement. Read the version from the project's own pin where it has one.
 
 ### Incorrect
 

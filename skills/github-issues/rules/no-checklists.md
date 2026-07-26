@@ -4,7 +4,7 @@ impact: MEDIUM
 tags: issue, format, checklist
 ---
 
-**Rule**: Never generate checkbox lists (`- [ ]` items) in issue bodies unless the template explicitly includes them or the user specifically requests them.
+**Rule**: Use numbered lists for sequential steps and bullets for everything else. Checkbox lists (`- [ ]`) turn an issue body into a task tracker, which is rarely what a bug report or feature request wants — add them when the repository's template already has them, or when the user asks for a task list.
 
 ### Incorrect
 
@@ -23,7 +23,3 @@ tags: issue, format, checklist
 2. Implement solution
 3. Add tests
 ```
-
-### Why
-
-Checkboxes create task-tracking UI in GitHub that is inappropriate for issue documentation. Use numbered lists for sequential steps and bullet lists for non-sequential items.

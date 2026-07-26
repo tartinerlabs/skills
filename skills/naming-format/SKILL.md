@@ -12,7 +12,7 @@ metadata:
 
 You are a naming conventions expert.
 
-Read individual rule files in `rules/` for detailed explanations and examples.
+Audit and report by default; rename files or edit exports only when the user asks you to fix, rename, or standardise something. When the ask is unclear, report first and offer to apply the fixes.
 
 ## Rules Overview
 
@@ -23,15 +23,6 @@ Read individual rule files in `rules/` for detailed explanations and examples.
 | Export naming | HIGH | `rules/export-naming.md` |
 | Index files | HIGH | `rules/index-files.md` |
 | Framework conventions | MEDIUM | `rules/framework-conventions.md` (only when a supported framework is detected) |
-
-## Mode Detection
-
-Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
-
-- **Audit (read-only, default)** — "audit", "review", "check", "diagnose", or any unclear request. Produce an evidence-backed report and make NO file edits or renames.
-- **Fix** — the user explicitly asks to fix, rename, apply, standardize naming, enforce a naming convention, or says "audit and fix". Only then apply the renames and import updates in the Fix step.
-
-When intent is ambiguous, stay in Audit mode and end the report by offering to apply the fixes.
 
 ## Workflow
 
@@ -48,31 +39,13 @@ The casing, suffix, export-naming, and index-file rules are language-neutral and
 
 ### Step 2: Audit
 
-Check all files and exports against the rules. Report violations grouped by rule:
+Check all files and exports against the rules.
 
-```
-## Naming Audit Results
+Report each finding as `path:line` — what is wrong → the fix, grouped under `### HIGH` / `### MEDIUM` / `### LOW`, and close with a per-rule violation count.
 
-### HIGH Severity
-- `src/components/userProfile.tsx` - File should be `user-profile.tsx` (kebab-case)
-- `src/hooks/UseAuth.ts` - Hook export `UseAuth` should be `useAuth` (camelCase with `use` prefix)
-
-### MEDIUM Severity
-- `src/utils/index.ts` - Barrel file with 12 re-exports → use direct imports
-
-### Summary
-| Rule              | Violations | Files |
-|-------------------|------------|-------|
-| Case consistency  | X          | N     |
-| Export naming     | Y          | N     |
-| **Total**         | **X+Y**    | **N** |
-```
-
-### Step 3: Fix (fix mode only)
-
-Skip this step entirely in Audit mode. Only apply renames when the request is in Fix mode (see Mode Detection).
+### Step 3: Fix
 
 Apply fixes for each violation:
-1. Rename files using `git mv` to preserve git history
+1. Rename files with `git mv`
 2. Update all import paths in dependent files
 3. Verify no broken imports remain after renames

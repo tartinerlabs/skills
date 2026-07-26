@@ -34,7 +34,7 @@ const button = screen.getByRole('button', { name: /sign in/i });
 
 ### Use `screen`
 
-Always import and use `screen` rather than destructuring from `render`:
+Prefer `screen` over destructuring queries from `render` — it queries the whole document, so it keeps working when a component portals outside its container, and it stays stable as the render call changes. Follow the project's existing choice where one is established:
 
 ```tsx
 import { render, screen } from '@testing-library/react';

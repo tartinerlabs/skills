@@ -14,15 +14,7 @@ metadata:
 
 ## Mode Detection
 
-Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
-
-- **Create mode**: The user explicitly asks to create, add, generate, scaffold, or set up a workflow, CI, or a CI/CD pipeline (e.g. "set up CI") — regardless of whether a `.github/workflows/` directory already exists. Generates workflows and pins every action to a full commit SHA per `rules/action-pinning.md`.
-- **Audit (read-only, default)**: The user asks to audit/review/check/diagnose existing workflows, or the request is ambiguous. Produce an evidence-backed report and make NO file edits — this holds even when no `.github/workflows/` directory exists (report that none were found rather than generating one).
-- **Fix**: The user explicitly asks to fix, pin, apply, or says "audit and fix". Only then apply the scoped edits in Audit Mode's Auto-Fix step.
-
-When intent is ambiguous, stay in Audit mode and end the report by offering to apply the fixes.
-
----
+Audit and report by default. Generate workflows only when asked to create, add, or set up CI — and **never merely because `.github/workflows/` is absent**; report that none were found instead. Apply fixes only when asked to fix or pin. When the ask is unclear, report and offer to apply the fixes.
 
 ## Create Mode
 
@@ -37,14 +29,11 @@ Scan for project indicators:
 
 ### 2. Detect Package Manager (JS/TS projects)
 
-- `pnpm-lock.yaml` → pnpm
-- `bun.lock` / `bun.lockb` → bun
-- `yarn.lock` → yarn
-- `package-lock.json` → npm
+Detect the package manager from the lockfile, in this order: `pnpm-lock.yaml`, `bun.lock`/`bun.lockb`, `yarn.lock`, `package-lock.json`. With no lockfile, ask.
 
 ### 3. Generate Workflow
 
-Apply all rules from the `rules/` directory when generating workflows. Read each rule file for detailed requirements and examples.
+Read each rule file in `rules/` and apply all of them when generating workflows.
 
 Pin every action per `rules/action-pinning.md` before writing the workflow, including GitHub-owned `actions/*`. Resolve the intended release or source ref to a full commit SHA with `gh api repos/{owner}/{repo}/commits/{ref} --jq '.sha'`, then retain the release or source ref in a comment.
 
@@ -93,8 +82,6 @@ jobs:
       - run: <pm> build
 ```
 
----
-
 ## Audit Mode
 
 ### 1. Scan Workflows
@@ -103,31 +90,15 @@ Read all `.yml` and `.yaml` files in `.github/workflows/` and audit against ever
 
 ### 2. Report Format
 
-```
-## GitHub Actions Audit Results
+Report each finding as `path:line` — what is wrong → the fix, grouped by severity, and close with per-severity counts and the number of files scanned.
 
-### HIGH Severity
-- `.github/workflows/ci.yml:15` - `codecov/codecov-action@v4` → pin to commit SHA
+Report **all** rule violations found, not just pinning and permissions — concurrency, node version, caching, triggers, and matrix too.
 
-### MEDIUM Severity
-- `.github/workflows/ci.yml` - Missing concurrency group → add concurrency block
+### 3. Auto-Fix
 
-### Summary
-- High: X
-- Medium: Y
-- Low: Z
-- Files scanned: N
-```
-
-### 3. Auto-Fix (fix mode only)
-
-Skip this step entirely in Audit mode — report **all** rule violations found in the audit (pinning, permissions, concurrency, node version, caching, triggers, and matrix), not just pinning and permissions. Only apply fixes when the request is in Fix mode (see Mode Detection). When fixing, look up commit SHAs for pinning using `gh api`.
-
----
+When fixing, look up commit SHAs for pinning using `gh api`.
 
 ## Rules
-
-Read individual rule files for detailed checks and examples:
 
 | Rule | Impact | File |
 |------|--------|------|
@@ -138,9 +109,3 @@ Read individual rule files for detailed checks and examples:
 | Caching | MEDIUM | `rules/caching.md` |
 | Triggers | LOW | `rules/triggers.md` |
 | Matrix strategy | LOW | `rules/matrix.md` |
-
----
-
-## Compatibility
-
-GitHub Actions is a GitHub-native CI system — this skill targets it specifically, and `gh` is used to look up action commit SHAs. Project **language** is auto-detected (Node/JS-TS, Go, Python, Rust, Ruby), so the generated workflow adapts across ecosystems — the JS/TS template is inline in Create Mode and per-language templates live in `references/<lang>.md`. GitLab CI and other CI systems are separate and out of scope here.

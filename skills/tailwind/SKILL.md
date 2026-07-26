@@ -14,66 +14,27 @@ You are a Tailwind CSS v4 expert that detects and reports anti-patterns such as 
 
 Targets the current project by default — or specify a path to audit a subset of files.
 
-Read individual rule files in `rules/` for detailed explanations and code examples.
+Audit and report by default; edit files only when the user asks you to fix, apply, or change something. When the ask is unclear, report first and offer to apply the fixes.
 
 ## Rules Overview
 
 | Rule | Impact | File |
 |------|--------|------|
 | Spacing direction | HIGH | `rules/spacing-direction.md` |
-| Equal dimensions | HIGH | `rules/equal-dimensions.md` |
-| 8px grid | HIGH | `rules/8px-grid.md` |
-| Mobile-first responsive | MEDIUM | `rules/mobile-first.md` |
-| Logical shorthands | MEDIUM | `rules/logical-shorthands.md` |
-| GPU-accelerated animations | MEDIUM | `rules/gpu-animations.md` |
-
-## Mode Detection
-
-Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
-
-- **Audit (read-only, default)** — "audit", "review", "check", "diagnose", or any unclear request. Produce an evidence-backed report and make NO file edits.
-- **Fix** — the user explicitly asks to write, add, create, fix, change, apply, clean up, or says "audit and fix". Only then apply the scoped changes in the Fix step.
-
-When intent is ambiguous, stay in Audit mode and end the report by offering to apply the fixes.
+| Spacing scale and shorthands | HIGH | `rules/spacing-scale.md` |
+| Sizing, breakpoints, transitions | MEDIUM | `rules/utilities.md` |
 
 ## Workflow
 
 ### Step 1: Audit
 
-Scan the target scope for violations of each rule in `rules/`. Search patterns:
-
-- `mt-*` / `pt-*` classes (spacing direction)
-- `h-X w-X` pairs where both values match (equal dimensions)
-- Odd spacing values like `p-1`, `gap-3`, `m-5` (8px grid)
-- Desktop-first breakpoints (mobile-first)
-- Verbose individual sides where shorthands apply (logical shorthands)
-- `transition-all` usage (GPU animations)
+Scan the target scope against every rule in `rules/`.
 
 ### Step 2: Report
 
-List all findings grouped by rule:
+Report each finding as `path:line` — what is wrong → the fix, grouped under `### HIGH` / `### MEDIUM` / `### LOW`, and close with a per-rule violation count.
 
-```
-## Tailwind CSS Audit Results
-
-### HIGH Severity
-- `src/components/Card.tsx:15` - `mt-4` → use `mb-4` or `gap` on parent
-- `src/components/Avatar.tsx:12` - `h-10 w-10` → `size-10`
-
-### MEDIUM Severity
-- `src/components/Button.tsx:8` - `p-3` (12px) → use `p-2` (8px) or `p-4` (16px)
-
-### Summary
-| Rule | Violations | Files |
-|------|-----------|-------|
-| Spacing direction | X | N |
-| Equal dimensions | Y | N |
-| **Total** | **Z** | **N** |
-```
-
-### Step 3: Fix (fix mode only)
-
-Skip this step entirely in Audit mode. Only apply changes when the request is in Fix mode (see Mode Detection).
+### Step 3: Fix
 
 Apply fixes. For each fix:
 1. Verify the change preserves visual appearance

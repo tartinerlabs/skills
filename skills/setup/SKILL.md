@@ -29,12 +29,7 @@ The rest of this file (Steps 1-5) is the **JS/TS** path. For Python, Go or Rust,
 
 ## 1. Detect Package Manager
 
-Check for lockfiles in this order:
-1. `pnpm-lock.yaml` → **pnpm**
-2. `bun.lock` / `bun.lockb` → **bun**
-3. `yarn.lock` → **yarn**
-4. `package-lock.json` → **npm**
-5. No lockfile → ask the user
+Detect the package manager from the lockfile, in this order: `pnpm-lock.yaml`, `bun.lock`/`bun.lockb`, `yarn.lock`, `package-lock.json`. With no lockfile, ask.
 
 Use the detected package manager for all install commands. Replace `<pm>` in rule files with the detected manager.
 
@@ -55,8 +50,6 @@ Before installing anything, scan for existing configurations:
 ## 3. Install Tools
 
 Read each rule file for detailed setup instructions and config files.
-
-> These tables use a `Purpose` column rather than the `Impact` column found in audit skills — setup rules are install guides for tools to add, not severity-ranked findings, so there is no impact level to report.
 
 > **This stack is opinionated by design.** Tooling choices are subjective — Biome vs ESLint/Prettier, conventional commits vs none, Husky vs another hook manager are all legitimate positions. Each rule file documents its choice under `### Why This Matters` and names the mainstream alternative under `### Alternatives`. Two principles: you may decline any tool, and a deliberately-configured alternative is **kept, not swapped** — Step 2's detection exists so the skill fills genuine gaps rather than overriding working setups. Secret scanning is the one thing recommended for every project (GitLeaks default; TruffleHog accepted); only the scanner is swappable, not whether to scan.
 
@@ -99,6 +92,4 @@ After all tools are installed, display a summary:
 
 After tooling setup is complete, check if the `deps` skill is available by looking for `skills/deps/SKILL.md` relative to this skill's directory. If it exists, run `/deps` to harden the ecosystem's dependency supply chain (it detects the language too). If it does not exist, skip this step silently.
 
-## Compatibility
-
-Works on any language project — detect the ecosystem (Step 0) and install its lint/format/hooks toolchain: JS/TS is the best-supported path (`rules/*.md`), with Python, Go and Rust covered via `references/`. Requirements: Git is initialised in the project, and a secret scanner (GitLeaks default; TruffleHog accepted) is installed on the system (`brew install gitleaks` or equivalent) — the scanner is wired into the pre-commit hook in every ecosystem.
+Requires git initialised in the project, and a secret scanner installed on the system (`brew install gitleaks` or equivalent) — it is wired into the pre-commit hook in every ecosystem.

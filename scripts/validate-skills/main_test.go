@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -413,4 +414,173 @@ func TestScansYamlWorkflowFilesForMutableActionRefs(t *testing.T) {
 	writeTextFile(t, filepath.Join(root, ".github/workflows/ci.yaml"),
 		"steps:\n  - uses: actions/checkout@v7\n")
 	assertSomeError(t, validateFixture(root), ".github/workflows/ci.yaml:2", "full 40-character commit SHA")
+}
+
+// secondSkill builds a valid SKILL.md for an extra fixture skill, so the
+// cross-skill checks have two skills to compare.
+func secondSkill(name, body string) string {
+	return strings.Join([]string{
+		"---",
+		"name: " + name,
+		"description: Another demo skill for tests.",
+		"license: MIT",
+		"allowed-tools: Read",
+		"model: haiku",
+		"effort: low",
+		"compatibility: Requires nothing",
+		"metadata:",
+		"  short-description: Another demo skill.",
+		"---",
+		"",
+		body,
+		"",
+		"| Rule | File |",
+		"|------|------|",
+		"| Bar | `rules/bar.md` |",
+		"",
+	}, "\n")
+}
+
+// addSecondSkill writes a second skill and wires up its collection symlink.
+func addSecondSkill(t *testing.T, root, name, body string) {
+	t.Helper()
+	writeTextFile(t, filepath.Join(root, "skills", name, "SKILL.md"), secondSkill(name, body))
+	writeTextFile(t, filepath.Join(root, "skills", name, "rules/bar.md"), "# Bar\n")
+	mustSymlink(t, "../../../skills/"+name, filepath.Join(root, "plugins/workflow/skills/"+name))
+}
+
+func twoSkillCollections(name string) []collection {
+	return []collection{{name: "workflow", skills: []string{"demo", name}}}
+}
+
+func TestFlagsEagerLoadAllRulesPhrasing(t *testing.T) {
+	root := buildFixture(t)
+	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), strings.Replace(validSkill,
+		"You are a demo skill. Read `rules/foo.md` before proceeding.",
+		"Read ALL rule files before proceeding — do not skip or ask:", 1))
+	assertSomeError(t, validateFixture(root), "skills/demo", "instructs an unconditional read")
+}
+
+// The false-positive boundary: the install and generate skills legitimately
+// tell the agent to read each rule file, because they apply every one.
+func TestAllowsPerStepRuleReferences(t *testing.T) {
+	root := buildFixture(t)
+	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), strings.Replace(validSkill,
+		"You are a demo skill. Read `rules/foo.md` before proceeding.",
+		"Read each rule file in `rules/` for detailed setup instructions.", 1))
+	assertNoErrors(t, validateFixture(root))
+}
+
+// Hard-stop phrasing is sanctioned on its own — commit refuses to proceed on a
+// secret-scanner hit — so it is only eager loading when a read instruction
+// shares the line.
+func TestAllowsHardStopPhrasingWithoutReadInstruction(t *testing.T) {
+	root := buildFixture(t)
+	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), strings.Replace(validSkill,
+		"You are a demo skill. Read `rules/foo.md` before proceeding.",
+		"STOP if the scanner reports a leak. Do not skip or ask — the commit is refused.", 1))
+	assertNoErrors(t, validateFixture(root))
+}
+
+func TestFlagsSkillFileOverLineBudget(t *testing.T) {
+	root := buildFixture(t)
+	padding := strings.Repeat("\nFiller prose line.", maxSkillLines)
+	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), validSkill+padding+"\n")
+	assertSomeError(t, validateFixture(root), "skills/demo", "SKILL.md is", "max 125")
+}
+
+func TestAllowsSkillFileAtLineBudget(t *testing.T) {
+	root := buildFixture(t)
+	source := validSkill
+	for countLines(source) < maxSkillLines {
+		source += "Filler prose line.\n"
+	}
+	if got := countLines(source); got != maxSkillLines {
+		t.Fatalf("fixture setup: got %d lines, want exactly %d", got, maxSkillLines)
+	}
+	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), source)
+	assertNoErrors(t, validateFixture(root))
+}
+
+func TestFlagsOversizedRuleFile(t *testing.T) {
+	root := buildFixture(t)
+	writeTextFile(t, filepath.Join(root, "skills/demo/rules/foo.md"),
+		"# Foo\n"+strings.Repeat("Filler prose line.\n", maxRuleLines))
+	assertSomeError(t, validateFixture(root), "skills/demo", "rules/foo.md is", "max 150")
+}
+
+func TestFlagsBlockDuplicatedAcrossSkills(t *testing.T) {
+	root := buildFixture(t)
+	shared := strings.Join([]string{
+		"Classify the request before acting, and default to read-only when the",
+		"intent is ambiguous or diagnostic. Produce an evidence-backed report",
+		"and make no file edits at all.",
+	}, "\n")
+	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), validSkill+"\n"+shared+"\n")
+	addSecondSkill(t, root, "other", shared)
+	assertSomeError(t, validate(root, twoSkillCollections("other")), "block duplicated from")
+}
+
+// Frontmatter is blanked rather than cut, so the reported offset points at the
+// block's real line in the file rather than several lines above it.
+func TestDuplicateBlockReportsRealLineNumber(t *testing.T) {
+	root := buildFixture(t)
+	shared := strings.Join([]string{
+		"Classify the request before acting, and default to read-only when the",
+		"intent is ambiguous or diagnostic. Produce an evidence-backed report",
+		"and make no file edits at all.",
+	}, "\n")
+	source := validSkill + "\n" + shared + "\n"
+	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), source)
+	addSecondSkill(t, root, "other", shared)
+
+	want := 1 + strings.Count(source[:strings.Index(source, shared)], "\n")
+	assertSomeError(t, validate(root, twoSkillCollections("other")),
+		fmt.Sprintf("skills/demo/SKILL.md:%d", want))
+}
+
+// Within one skill, repetition is legitimate — the per-language references/
+// guides restate a caveat with local context on purpose.
+func TestAllowsSameBlockRepeatedWithinOneSkill(t *testing.T) {
+	root := buildFixture(t)
+	shared := strings.Join([]string{
+		"Classify the request before acting, and default to read-only when the",
+		"intent is ambiguous or diagnostic. Produce an evidence-backed report",
+		"and make no file edits at all.",
+	}, "\n")
+	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), validSkill+"\n"+shared+"\n")
+	writeTextFile(t, filepath.Join(root, "skills/demo/rules/foo.md"), "# Foo\n\n"+shared+"\n")
+	assertNoErrors(t, validateFixture(root))
+}
+
+// A one-line shared fact is shared vocabulary, not a duplicated instruction.
+func TestAllowsShortSharedLineAcrossSkills(t *testing.T) {
+	root := buildFixture(t)
+	shared := "Detect the package manager from the lockfile, in this order: pnpm, bun, yarn, npm. With no lockfile, ask."
+	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), validSkill+"\n"+shared+"\n")
+	addSecondSkill(t, root, "other", shared)
+	assertNoErrors(t, validate(root, twoSkillCollections("other")))
+}
+
+// Two skills quoting the same command is not duplicated guidance.
+func TestAllowsSharedFencedCodeAcrossSkills(t *testing.T) {
+	root := buildFixture(t)
+	shared := strings.Join([]string{
+		"```bash",
+		"pip-audit                       # audit the current environment",
+		"pip-audit -r requirements.txt   # audit a requirements file",
+		"```",
+	}, "\n")
+	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), validSkill+"\n"+shared+"\n")
+	addSecondSkill(t, root, "other", shared)
+	assertNoErrors(t, validate(root, twoSkillCollections("other")))
+}
+
+// The content budgets are scoped to skills/; the generated xcode-skills/ export
+// carries much larger Apple-authored files and must never be measured.
+func TestIgnoresContentBudgetsInXcodeExport(t *testing.T) {
+	root := buildFixture(t)
+	writeTextFile(t, filepath.Join(root, "xcode-skills/sample/SKILL.md"),
+		"# Sample\n"+strings.Repeat("Filler prose line.\n", maxSkillLines*3))
+	assertNoErrors(t, validateFixture(root))
 }

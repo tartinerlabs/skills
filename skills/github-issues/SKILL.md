@@ -12,8 +12,6 @@ metadata:
 
 You create, update, query, and comment on GitHub (or GitLab) issues.
 
-Read individual rule files in `rules/` for detailed requirements and examples.
-
 ## Rules Overview
 
 | Rule | Impact | File |

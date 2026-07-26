@@ -31,12 +31,12 @@ it('should reject submission with missing name', () => {
 
 ### Cover Edge Cases
 
-Always test boundary conditions alongside the happy path:
+Test boundary conditions alongside the happy path — a suite that only covers the happy path is the finding. The cases worth reaching for:
 
-- **Empty values**: `null`, `undefined`, `''`, `[]`, `{}`
-- **Boundaries**: `0`, `-1`, `Number.MAX_SAFE_INTEGER`
-- **Type coercion**: `0` vs `false`, `''` vs `null`
-- **Error paths**: Invalid input, network failures, timeouts
+- **Empty and absent values**, and the distinction between them
+- **Numeric boundaries**: zero, negatives, the type's limits
+- **Type coercion**, where falsy values are treated as absent
+- **Error paths**: invalid input, network failures, timeouts
 
 ```ts
 describe('formatPrice', () => {

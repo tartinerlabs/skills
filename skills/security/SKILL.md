@@ -14,7 +14,7 @@ metadata:
 
 You are a security engineer running audits and setting up secret scanning.
 
-Read individual rule files in `rules/` for detailed explanations and examples.
+Audit and report by default — read-only scans like `gitleaks git --redact` are part of auditing. Wire up hooks or edit code only when the user asks you to fix, harden, or set something up; when the ask is unclear, report first and offer to apply the fixes.
 
 ## Rules Overview
 
@@ -26,51 +26,25 @@ Read individual rule files in `rules/` for detailed explanations and examples.
 | Insecure dependencies | MEDIUM | `rules/insecure-dependencies.md` |
 | Data protection | MEDIUM | `rules/data-protection.md` |
 
-## Mode Detection
-
-Classify the request before acting, and default to read-only when intent is ambiguous or diagnostic:
-
-- **Audit (read-only, default)** — "audit", "review", "check", "scan", "diagnose", or any unclear request. Produce an evidence-backed report and make NO file edits. Read-only scans (including `gitleaks git --redact`) are allowed; setting up hooks or editing code is not.
-- **Fix** — the user explicitly asks to fix, set up, harden, apply, or says "audit and fix". Only then run the Secret-Scanner Setup and any remediation steps.
-
-When intent is ambiguous, stay in Audit mode and end the report by offering to apply the fixes.
-
 ## Workflow
 
 ### Step 1: Code Security Audit
 
-Scan the codebase against every rule in `rules/` — these checks are language-agnostic. Search for vulnerability patterns. In Audit mode, also check whether a secret scanner is wired into the pre-commit hook (e.g. does `.husky/pre-commit` exist and contain `gitleaks`?) and report it as a finding if missing — but do not modify any files.
+Scan the codebase against every rule in `rules/` — these checks are language-agnostic. Also check whether a secret scanner is wired into the pre-commit hook (e.g. does `.husky/pre-commit` exist and contain `gitleaks`?) and report it as a finding if missing.
 
 ### Step 2: Report
 
-```
-## Security Audit Results
-
-### HIGH Severity
-- `src/api/users.ts:23` - Unsanitised user input in SQL query
-
-### MEDIUM Severity
-- `package.json` - 3 packages with known vulnerabilities
-
-### Summary
-| Category | Findings |
-|----------|----------|
-| OWASP Top 10 | X |
-| Hardcoded secrets | Y |
-| **Total** | **Z** |
-```
+Report each finding as `path:line` — what is wrong → the fix, grouped by category, and close with a per-category finding count.
 
 ### Step 3: Retrospective History Scan (Optional)
 
-Only when user passes `--scan-history`. This is a read-only scan, allowed in either mode:
+Only when the user passes `--scan-history`. Read-only, so it is allowed while auditing:
 
 ```bash
 gitleaks git --redact --verbose
 ```
 
-### Step 4: Secret-Scanner Setup (fix mode only)
-
-Skip this step entirely in Audit mode. Only run it when the request is in Fix mode (see Mode Detection).
+### Step 4: Secret-Scanner Setup
 
 Ensure a secret scanner runs in the project's pre-commit hook. GitLeaks is the default (TruffleHog accepted if the project already uses it):
 
@@ -79,7 +53,3 @@ Ensure a secret scanner runs in the project's pre-commit hook. GitLeaks is the d
    - **JS/TS** — set up Husky and add `gitleaks git --staged --redact --verbose` before any `lint-staged` command
    - **Other languages** — add the same scanner command to that ecosystem's pre-commit tooling (e.g. a `pre-commit` hook for Python, or a plain `.git/hooks/pre-commit` otherwise)
 3. If the hook uses the legacy `gitleaks protect` command (deprecated and non-redacting), rewrite it to `gitleaks git --staged --redact --verbose`
-
-## Compatibility
-
-The **audit** is language-agnostic — the OWASP, secret, auth, and data-protection rules apply to any codebase. The **hardening setup** (Fix mode) wires a secret scanner into a pre-commit hook: GitLeaks is the default (TruffleHog accepted), and the Husky + lint-staged wiring is the JS/TS path; other ecosystems use their own pre-commit mechanism.
