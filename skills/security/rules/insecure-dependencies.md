@@ -1,6 +1,6 @@
 ---
 title: Insecure Dependencies
-impact: MEDIUM
+impact: HIGH
 tags: dependencies, audit, npm, pnpm, yarn, bun, pip, go, vulnerabilities
 ---
 
