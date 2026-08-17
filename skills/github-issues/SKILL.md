@@ -34,11 +34,12 @@ Use the CLI (`gh`/`glab`) for every operation it natively supports — it is the
 2. Detect the remote host from `git remote get-url origin` (github.com → gh, gitlab.com → glab; default GitHub) and use that CLI throughout. Get owner/repo (or group/project) info. **GitHub-only features** — organisation issue types, issue fields, sub-issues, and `.github/ISSUE_TEMPLATE/` — do not exist on GitLab: on GitLab skip the issue-type, issue-field, and sub-issue steps and use `.gitlab/issue_templates/` plus description checklists instead
 3. Check for issue templates in the host's conventional location: on GitHub `.github/ISSUE_TEMPLATE/` or `.github/`; on GitLab `.gitlab/issue_templates/`
 4. List available organisation issue types (fails for user-owned repos — expected, proceed without)
-5. List available issue fields (organisation-level, inherited by repositories) via the CLI vs MCP precedence above — no native CLI subcommand exists, so use the MCP server or `gh api` (fails for user-owned repos — expected, proceed without)
+5. List available issue fields (organisation-level, inherited by repositories) via the CLI vs MCP precedence above — no native CLI subcommand exists, so use the MCP server or `gh api` (fails for user-owned repos — expected, proceed without). Organisations get four defaults: **Priority** (single-select: Urgent, High, Medium, Low), **Effort** (single-select: High, Medium, Low), **Start date**, and **Target date**. Treat them as likely-present but still discover them at runtime — an organisation may have renamed, removed, or added options
 6. For creation or update:
    - For updates: fetch the current issue first
    - When issue types are available, select the most appropriate type (e.g. Bug for defects, Feature for new functionality, Task for general work)
    - When the user specifies field values (priority, effort, dates, custom), set them via the CLI vs MCP precedence above — values must match the field's declared type (single-select option name, text, number, `YYYY-MM-DD` date)
+   - When Priority and Effort exist but the user did not specify them, propose a value for each from the issue's content — severity and blast radius for Priority, expected scope of the change for Effort — and say what you picked. Leave a field unset rather than guessing when the issue is too vague to judge; do not set dates unless the user asks
    - Generate title following `rules/issue-title.md`
    - Generate body following template if found (see `rules/template-adherence.md`), otherwise use clear structured format
    - For creation: get the current authenticated user and include in assignees
