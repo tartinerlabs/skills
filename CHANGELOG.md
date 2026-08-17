@@ -14,6 +14,14 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [1.33.0](https://github.com/tartinerlabs/skills/compare/v1.32.0...v1.33.0) (2026-08-17)
+
+
+### Features
+
+* set issue priority and effort defaults ([a873993](https://github.com/tartinerlabs/skills/commit/a8739933ddba6c11aa6165d519fe16dd31bef41c))
+* stack-aware branch and PR base selection ([4d3d994](https://github.com/tartinerlabs/skills/commit/4d3d994e771b8da2e493eac0f854c38d2c545ca7))
+
 ## [1.32.0](https://github.com/tartinerlabs/skills/compare/v1.31.0...v1.32.0) (2026-07-26)
 
 
