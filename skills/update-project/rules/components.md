@@ -4,9 +4,9 @@ impact: MEDIUM
 tags: agents, skills, rules, components, documentation
 ---
 
-Covers the structured component files under `.claude/` (Claude Code) and `.agents/` (cross-agent convention). Each has a format the host parses, so preserve the field set the target agent expects rather than forcing one shape.
+Covers the structured component files hosts actually load: `.claude/` for Claude Code, and `.agents/skills/` for Codex and other Agent Skills hosts. Each has a format the host parses, so preserve the field set the target agent expects rather than forcing one shape. `.agents/agents` and `.agents/rules` are not a cross-agent convention — do not create them, and do not document them as scan targets.
 
-## Agents — `.claude/agents/*.md`, `.agents/agents/*.md`
+## Agents — `.claude/agents/*.md`
 
 **Rule**: Keep agent definitions reflecting actual project state. YAML frontmatter plus a markdown body that serves as the agent's system prompt; Claude Code reads `name`, `description`, `tools`, `model`, `permissionMode`, `maxTurns`, `skills`, `mcpServers`, `hooks`, `memory`.
 
@@ -22,7 +22,7 @@ Treat `permissionMode: bypassPermissions` as requiring explicit justification �
 
 A skill's `name` is its invocation identifier (`/skill-name`) — renaming it breaks every existing invocation.
 
-## Rules — `.claude/rules/*.md`, `.agents/rules/*.md`
+## Rules — `.claude/rules/*.md`
 
 **Rule**: Keep rule files matching actual project conventions. Optional frontmatter with a `paths` field (glob patterns scoping when the rule applies) plus markdown content; rules without `paths` apply unconditionally. Rules may live in subdirectories and may be symlinked.
 

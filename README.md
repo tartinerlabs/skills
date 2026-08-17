@@ -95,11 +95,11 @@ The guidance can be read by any compatible agent, but some workflows expect Xcod
 
 ## Agents
 
-Agents invoke skills autonomously with an isolated worktree. Invoke with `claude agent run <name>`.
+Agents invoke skills autonomously with an isolated worktree. The `deps` agent ships with the `security` Claude Code plugin. In a checkout of this repository, invoke with `claude agent run <name>`.
 
 | Agent | Description |
 |-------|-------------|
-| [deps](agents/deps.md) | Autonomous supply chain hardening — runs the deps skill in an isolated worktree and outputs a structured summary |
+| [deps](agents/deps.md) | Autonomous supply-chain hardening — runs the deps skill in an isolated worktree and outputs a structured summary |
 
 ## Installation
 
@@ -130,16 +130,24 @@ To use it in Codex:
 
 ### Cursor Plugin
 
-This repository includes Cursor plugin metadata in `plugins/<collection>/.cursor-plugin/plugin.json` and `.cursor-plugin/marketplace.json`.
+This repository includes Cursor plugin metadata in `plugins/<collection>/.cursor-plugin/plugin.json` and a repo-scoped marketplace at `.cursor-plugin/marketplace.json`.
 
-For local development, install the plugin with Cursor's plugin flow or copy the repository into Cursor's local plugin directory:
+To use it in Cursor:
+
+1. Open this repository in Cursor
+2. Install `workflow`, `quality`, `security`, and/or `tooling` from the repo marketplace
+
+For a local plugin-directory install, symlink each collection wrapper — not the repository root. Cursor loads `plugin.json` from the symlink target, and the wrappers live under `plugins/<collection>/`:
 
 ```bash
 mkdir -p ~/.cursor/plugins/local
-ln -s "$(pwd)" ~/.cursor/plugins/local/tartinerlabs
+ln -s "$(pwd)/plugins/workflow" ~/.cursor/plugins/local/workflow
+ln -s "$(pwd)/plugins/quality" ~/.cursor/plugins/local/quality
+ln -s "$(pwd)/plugins/security" ~/.cursor/plugins/local/security
+ln -s "$(pwd)/plugins/tooling" ~/.cursor/plugins/local/tooling
 ```
 
-The shared `skills/` directory is exposed to Cursor directly. Claude-specific hooks are intentionally not declared in the Cursor manifest.
+Claude-specific hooks are intentionally not declared in the Cursor manifests.
 
 ### [Skills](https://skills.sh)
 

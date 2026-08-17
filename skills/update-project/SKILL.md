@@ -16,7 +16,7 @@ Run after significant code changes, before a release, or whenever docs may be st
 
 Update only what the project actually changed. Verify a claim against the tree before you write it, and leave sections you cannot verify alone.
 
-Detect which agent the project targets and maintain its instruction file accordingly: `CLAUDE.md` (Claude Code), `AGENTS.md` (Codex, OpenCode, and the cross-agent standard), or both. Component directories follow the same split — `.claude/` for Claude Code, `.agents/` for the cross-agent convention.
+Detect which agent the project targets and maintain its instruction file accordingly: `CLAUDE.md` (Claude Code), `AGENTS.md` (Codex and the cross-agent standard), or both. Component directories follow the same split — `.claude/` for Claude Code, `.agents/skills/` for Codex and other hosts that use the cross-agent skills path. Do not invent `.agents/agents` or `.agents/rules`.
 
 ## Rules Overview
 
@@ -31,7 +31,7 @@ Detect which agent the project targets and maintain its instruction file accordi
 
 - Run `git log --oneline -20` and `git diff` to identify recent changes
 - Check which agent instruction files exist (`CLAUDE.md`, `AGENTS.md`) and whether README.md exists (create if missing)
-- Scan both `.claude/` and `.agents/` for `agents/*.md`, `skills/*/SKILL.md`, and `rules/*.md` files
+- Scan `.claude/agents/*.md`, `.claude/skills/*/SKILL.md`, `.claude/rules/*.md`, and `.agents/skills/*/SKILL.md`
 - Compare documented instructions against actual project state to find stale sections
 - Flag any new tools, removed dependencies, changed paths, or renamed commands
 
@@ -39,7 +39,7 @@ Detect which agent the project targets and maintain its instruction file accordi
 
 Read the relevant rule file and apply updates:
 - `rules/agent-docs.md` for CLAUDE.md / AGENTS.md / README.md changes
-- `rules/components.md` for `.claude/` or `.agents/` agents, skills, and rules changes
+- `rules/components.md` for `.claude/` agents, skills, and rules, and for `.agents/skills/`
 
 ### Step 3: Validate
 

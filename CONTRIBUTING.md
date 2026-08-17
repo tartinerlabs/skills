@@ -79,7 +79,7 @@ This repository uses [conventional commits](https://www.conventionalcommits.org/
 - Branch from `main`
 - Use a descriptive, natural-language title (no conventional commit prefixes like `feat:` or `fix:`)
 - CI validates the repository structure on every pull request, and additionally on push to `main`:
-  - **Skills** — validates distribution via [skills.sh](https://skills.sh) and [Context7](https://context7.com)
+  - **Skills** — validates distribution via [skills.sh](https://skills.sh)
   - **Release** — automated via release-please (maintains a release PR; merging it bumps versions, updates the changelog, and creates the GitHub release)
 - The repo is also distributed as **Claude Code**, **Codex**, **Cursor**, and **Antigravity** plugins. Keep the plugin manifests aligned manually and treat `.release-please-manifest.json` as the shared version source
 
