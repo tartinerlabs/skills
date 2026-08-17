@@ -92,7 +92,7 @@ Read all `.yml` and `.yaml` files in `.github/workflows/` and audit against ever
 
 Report each finding as `path:line` — what is wrong → the fix, grouped by severity, and close with per-severity counts and the number of files scanned.
 
-Report **all** rule violations found, not just pinning and permissions — concurrency, node version, caching, triggers, and matrix too.
+Report **all** rule violations found, not just pinning and permissions — concurrency, node version, caching, triggers, matrix, and parallel steps too.
 
 ### 3. Auto-Fix
 
@@ -109,3 +109,4 @@ When fixing, look up commit SHAs for pinning using `gh api`.
 | Caching | MEDIUM | `rules/caching.md` |
 | Triggers | LOW | `rules/triggers.md` |
 | Matrix strategy | LOW | `rules/matrix.md` |
+| Parallel steps | LOW | `rules/parallel-steps.md` |
