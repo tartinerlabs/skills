@@ -14,6 +14,20 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [1.34.0](https://github.com/tartinerlabs/skills/compare/v1.33.0...v1.34.0) (2026-08-20)
+
+
+### Features
+
+* add github-actions parallel steps ([086025e](https://github.com/tartinerlabs/skills/commit/086025ed12c2df085c26e3390d6586c172efedc4)), closes [#52](https://github.com/tartinerlabs/skills/issues/52)
+* apply pr rules to stacked prs ([237c5f6](https://github.com/tartinerlabs/skills/commit/237c5f6d357024f23206baf856f99712b693110f))
+* limit stack rewrite to new prs ([7bc4969](https://github.com/tartinerlabs/skills/commit/7bc4969867a9a1367f6370ce5b9e69c383237ef1))
+
+
+### Bug Fixes
+
+* correct install docs and deps agent ([d88fd50](https://github.com/tartinerlabs/skills/commit/d88fd5002265b3e545ef261fbf93b9e76a82ff3f)), closes [#45](https://github.com/tartinerlabs/skills/issues/45)
+
 ## [1.33.0](https://github.com/tartinerlabs/skills/compare/v1.32.0...v1.33.0) (2026-08-17)
 
 

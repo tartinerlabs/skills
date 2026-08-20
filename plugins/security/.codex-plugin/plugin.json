@@ -1,6 +1,6 @@
 {
   "name": "security",
-  "version": "1.33.0",
+  "version": "1.34.0",
   "description": "Security skills — OWASP audits, secret scanning, and dependency supply-chain hardening",
   "author": {
     "name": "Tartiner Labs",
