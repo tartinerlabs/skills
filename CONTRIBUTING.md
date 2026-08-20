@@ -30,32 +30,33 @@ Thanks for your interest in contributing to `@tartinerlabs/skills`! This guide c
 
 ## Skill Structure
 
-Each skill lives in its own directory under `skills/`:
+Each collection skill lives under `plugins/<collection>/skills/<name>/`, with an inbound symlink at `skills/<name>`:
 
 ```
-skills/
+plugins/<collection>/skills/
   my-skill/
     SKILL.md        # Required — skill definition
     rules/          # Optional — modular rule files
       some-rule.md
     references/     # Optional — per-language guides, loaded on demand
       python.md
+skills/my-skill -> ../plugins/<collection>/skills/my-skill
 ```
 
-See `AGENTS.md` for the frontmatter fields and what each one does; the quickest start is to copy the shape from an existing `skills/*/SKILL.md`. The validator enforces the required fields, so a missing one fails fast with a message naming it.
+See `AGENTS.md` for the frontmatter fields and what each one does; the quickest start is to copy the shape from an existing `plugins/*/skills/*/SKILL.md` (or the inbound `skills/*/SKILL.md`). The validator enforces the required fields, so a missing one fails fast with a message naming it.
 
 ## Writing a New Skill
 
-1. Create a directory: `skills/<skill-name>/` — the directory name must match the `name` field
+1. Create a directory: `plugins/<collection>/skills/<skill-name>/` — the directory name must match the `name` field
 2. Add `SKILL.md` with the required frontmatter
 3. Write the body as a lightweight guide rather than a rigid procedure. State a preference and its reason, then license the exception; `skills/setup/` is the reference for this style
 4. If the skill has multiple checks, add a `rules/` subdirectory with individual rule files and reference each from a table in `SKILL.md`. Every rule file must be referenced — unreferenced files fail validation as orphans
-5. Assign the skill to exactly one collection in the `collections` table in `scripts/validate-skills/main.go`, and add the matching symlink under `plugins/<collection>/skills/`
+5. Assign the skill to exactly one collection in the `collections` table in `scripts/validate-skills/main.go`, and add the inbound symlink `skills/<skill-name>` → `../plugins/<collection>/skills/<skill-name>`
 6. Open a pull request
 
 ## Plugin Metadata
 
-Plugin manifests are hand-maintained under `plugins/<name>/` — one per channel, described in `AGENTS.md`. There is no generator.
+Plugin manifests are hand-maintained under `plugins/<name>/` — root Agent Plugins `plugin.json` plus Claude Code, Cursor, and Antigravity overlays, described in `AGENTS.md`. There is no generator.
 
 Releases are cut by merging the release-please PR — **never bump versions by hand**. release-please syncs the plugin manifest versions from `.release-please-manifest.json` automatically.
 
@@ -71,7 +72,7 @@ This repository uses [conventional commits](https://www.conventionalcommits.org/
 
 - **Max 50 characters** for the subject line
 - Format: `type: description` — no scope (e.g. `feat: add deploy skill`, `fix: correct frontmatter field`)
-- **Skill markdown is the product, not docs.** Changes under `skills/**/*.md` use `feat`/`fix`/`refactor`; reserve `docs:` for `README.md`, `AGENTS.md`, `CLAUDE.md`, and similar meta-documentation
+- **Skill markdown is the product, not docs.** Changes under `plugins/*/skills/**/*.md` (and the inbound `skills/**/*.md` aliases) use `feat`/`fix`/`refactor`; reserve `docs:` for `README.md`, `AGENTS.md`, `CLAUDE.md`, and similar meta-documentation
 - A GitLeaks pre-commit hook runs on every commit to detect secrets — do not bypass it
 
 ## Pull Requests
