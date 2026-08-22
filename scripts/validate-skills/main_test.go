@@ -84,9 +84,9 @@ func buildFixture(t *testing.T) string {
 
 	writeJSONFile(t, filepath.Join(root, ".release-please-manifest.json"), map[string]string{".": version})
 
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), validSkill)
-	writeTextFile(t, filepath.Join(root, "skills/demo/rules/foo.md"), "# Foo\n")
-
+	if err := os.MkdirAll(filepath.Join(root, "skills"), 0o755); err != nil {
+		t.Fatal(err)
+	}
 	if err := os.MkdirAll(filepath.Join(root, "xcode-skills/sample"), 0o755); err != nil {
 		t.Fatal(err)
 	}
@@ -106,12 +106,10 @@ func buildFixture(t *testing.T) string {
 	mustSymlink(t, "../../xcode-skills", filepath.Join(root, "plugins/xcode-skills/skills"))
 
 	for _, coll := range fixtureCollections {
-		wrapperDir := filepath.Join(root, "plugins", coll.name, "skills")
-		if err := os.MkdirAll(wrapperDir, 0o755); err != nil {
-			t.Fatal(err)
-		}
 		for _, skill := range coll.skills {
-			mustSymlink(t, "../../../skills/"+skill, filepath.Join(wrapperDir, skill))
+			writeTextFile(t, filepath.Join(root, "plugins", coll.name, "skills", skill, "SKILL.md"), validSkill)
+			writeTextFile(t, filepath.Join(root, "plugins", coll.name, "skills", skill, "rules/foo.md"), "# Foo\n")
+			mustSymlink(t, "../plugins/"+coll.name+"/skills/"+skill, filepath.Join(root, "skills", skill))
 		}
 	}
 
@@ -300,19 +298,29 @@ func TestFlagsWrapperSymlinkPointingAtWrongCollection(t *testing.T) {
 	assertSomeError(t, validateFixture(root), "plugins/tartinerlabs/skills", "expected `../../skills`")
 }
 
-func TestFlagsMissingPerSkillCollectionSymlink(t *testing.T) {
+func TestFlagsMissingInboundSkillSymlink(t *testing.T) {
 	root := buildFixture(t)
-	mustRemove(t, filepath.Join(root, "plugins/workflow/skills/demo"))
-	assertSomeError(t, validateFixture(root), "plugins/workflow/skills/demo: broken or missing symlink")
+	mustRemove(t, filepath.Join(root, "skills/demo"))
+	assertSomeError(t, validateFixture(root), "skills/demo: broken or missing symlink")
 }
 
-func TestFlagsPerSkillCollectionSymlinkWithWrongTarget(t *testing.T) {
+func TestFlagsInboundSkillSymlinkWithWrongTarget(t *testing.T) {
 	root := buildFixture(t)
 	// Point at a valid, existing directory so only the target comparison can
 	// catch the swap.
-	mustRemove(t, filepath.Join(root, "plugins/workflow/skills/demo"))
-	mustSymlink(t, "../../../skills", filepath.Join(root, "plugins/workflow/skills/demo"))
-	assertSomeError(t, validateFixture(root), "plugins/workflow/skills/demo", "expected `../../../skills/demo`")
+	mustRemove(t, filepath.Join(root, "skills/demo"))
+	mustSymlink(t, "../plugins/workflow/skills", filepath.Join(root, "skills/demo"))
+	assertSomeError(t, validateFixture(root), "skills/demo", "expected `../plugins/workflow/skills/demo`")
+}
+
+func TestFlagsPluginSkillDirThatIsASymlink(t *testing.T) {
+	root := buildFixture(t)
+	pluginSkill := filepath.Join(root, "plugins/workflow/skills/demo")
+	if err := os.RemoveAll(pluginSkill); err != nil {
+		t.Fatal(err)
+	}
+	mustSymlink(t, "../../../skills/demo", pluginSkill)
+	assertSomeError(t, validateFixture(root), "plugins/workflow/skills/demo", "expected a directory, not a symlink")
 }
 
 func TestFlagsEntryACollectionWrapperShouldNotExpose(t *testing.T) {
@@ -388,8 +396,8 @@ func TestAllowsMutableRefsOnlyInActionPinningIncorrectSection(t *testing.T) {
 	root := buildFixture(t)
 	githubActionsSkill := strings.ReplaceAll(validSkill, "demo", "github-actions")
 	githubActionsSkill = strings.ReplaceAll(githubActionsSkill, "rules/foo.md", "rules/action-pinning.md")
-	writeTextFile(t, filepath.Join(root, "skills/github-actions/SKILL.md"), githubActionsSkill)
-	writeTextFile(t, filepath.Join(root, "skills/github-actions/rules/action-pinning.md"), strings.Join([]string{
+	writeTextFile(t, filepath.Join(root, "plugins/workflow/skills/github-actions/SKILL.md"), githubActionsSkill)
+	writeTextFile(t, filepath.Join(root, "plugins/workflow/skills/github-actions/rules/action-pinning.md"), strings.Join([]string{
 		"# Action Pinning",
 		"",
 		"### Incorrect",
@@ -401,8 +409,8 @@ func TestAllowsMutableRefsOnlyInActionPinningIncorrectSection(t *testing.T) {
 		"- uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0",
 		"",
 	}, "\n"))
-	mustSymlink(t, "../../../skills/github-actions",
-		filepath.Join(root, "plugins/workflow/skills/github-actions"))
+	mustSymlink(t, "../plugins/workflow/skills/github-actions",
+		filepath.Join(root, "skills/github-actions"))
 	errors := validate(root, []collection{
 		{name: "workflow", skills: []string{"demo", "github-actions"}},
 	})
@@ -441,12 +449,13 @@ func secondSkill(name, body string) string {
 	}, "\n")
 }
 
-// addSecondSkill writes a second skill and wires up its collection symlink.
+// addSecondSkill writes a second skill into the collection tree and an
+// inbound `skills/<name>` symlink.
 func addSecondSkill(t *testing.T, root, name, body string) {
 	t.Helper()
-	writeTextFile(t, filepath.Join(root, "skills", name, "SKILL.md"), secondSkill(name, body))
-	writeTextFile(t, filepath.Join(root, "skills", name, "rules/bar.md"), "# Bar\n")
-	mustSymlink(t, "../../../skills/"+name, filepath.Join(root, "plugins/workflow/skills/"+name))
+	writeTextFile(t, filepath.Join(root, "plugins/workflow/skills", name, "SKILL.md"), secondSkill(name, body))
+	writeTextFile(t, filepath.Join(root, "plugins/workflow/skills", name, "rules/bar.md"), "# Bar\n")
+	mustSymlink(t, "../plugins/workflow/skills/"+name, filepath.Join(root, "skills", name))
 }
 
 func twoSkillCollections(name string) []collection {
