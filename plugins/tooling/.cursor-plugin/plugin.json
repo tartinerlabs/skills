@@ -25,6 +25,5 @@
     "linting",
     "formatting",
     "docs"
-  ],
-  "skills": "./skills/"
+  ]
 }
