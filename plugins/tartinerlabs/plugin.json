@@ -1,4 +1,5 @@
 {
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "tartinerlabs",
   "version": "1.33.0",
   "description": "Deprecated: install the workflow, quality, security, and tooling plugins instead. Language-agnostic agent skills for git/GitHub workflows, code quality, and project tooling, with first-class JS/TS support.",
@@ -6,6 +7,7 @@
     "name": "Tartiner Labs",
     "url": "https://github.com/tartinerlabs"
   },
+  "homepage": "https://github.com/tartinerlabs/skills",
   "repository": "https://github.com/tartinerlabs/skills",
   "license": "MIT",
   "keywords": [
@@ -22,13 +24,16 @@
     "deps",
     "supply-chain"
   ],
-  "skills": "./skills/",
-  "interface": {
-    "displayName": "Tartiner Labs (deprecated)",
-    "shortDescription": "Deprecated — use the workflow, quality, security, and tooling plugins.",
-    "developerName": "Tartiner Labs",
-    "category": "Coding",
-    "websiteURL": "https://github.com/tartinerlabs/skills",
-    "composerIcon": "./assets/icon.svg"
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "Tartiner Labs (deprecated)",
+        "shortDescription": "Deprecated — use the workflow, quality, security, and tooling plugins.",
+        "developerName": "Tartiner Labs",
+        "category": "Coding",
+        "websiteURL": "https://github.com/tartinerlabs/skills",
+        "composerIcon": "./assets/icon.svg"
+      }
+    }
   }
 }

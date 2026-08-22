@@ -23,6 +23,5 @@
     "owasp",
     "secrets",
     "supply-chain"
-  ],
-  "skills": "./skills/"
+  ]
 }

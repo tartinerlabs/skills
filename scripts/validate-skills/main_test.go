@@ -77,6 +77,42 @@ func mustRemove(t *testing.T, path string) {
 	}
 }
 
+func isRootPluginManifest(path string) bool {
+	parts := strings.Split(path, "/")
+	return len(parts) == 3 && parts[0] == "plugins" && parts[2] == "plugin.json"
+}
+
+func validRootManifest(name string) map[string]interface{} {
+	return map[string]interface{}{
+		"$schema":     agentPluginsSchema,
+		"name":        name,
+		"version":     version,
+		"description": "A demo plugin.",
+		"author": map[string]string{
+			"name": "Tartiner Labs",
+			"url":  "https://example.com",
+		},
+		"homepage":   "https://example.com",
+		"repository": "https://example.com",
+		"license":    "MIT",
+		"keywords":   []string{"demo"},
+		"extensions": map[string]interface{}{
+			"com.openai": map[string]interface{}{
+				"interface": map[string]string{
+					"displayName": name,
+				},
+			},
+		},
+	}
+}
+
+func writeWorkflowRoot(t *testing.T, root string, mutate func(map[string]interface{})) {
+	t.Helper()
+	manifest := validRootManifest("workflow")
+	mutate(manifest)
+	writeJSONFile(t, filepath.Join(root, "plugins/workflow/plugin.json"), manifest)
+}
+
 // Build a minimal but fully valid repo so each test can mutate one thing.
 func buildFixture(t *testing.T) string {
 	t.Helper()
@@ -93,6 +129,10 @@ func buildFixture(t *testing.T) string {
 
 	for _, manifest := range pluginManifests {
 		name := strings.Split(manifest, "/")[1]
+		if isRootPluginManifest(manifest) {
+			writeJSONFile(t, filepath.Join(root, manifest), validRootManifest(name))
+			continue
+		}
 		writeJSONFile(t, filepath.Join(root, manifest), map[string]string{"name": name, "version": version})
 	}
 	for _, marketplace := range marketplaces {
@@ -248,6 +288,46 @@ func TestFlagsPluginManifestVersionDrift(t *testing.T) {
 		"version": "9.9.9",
 	})
 	assertSomeError(t, validateFixture(root), "version `9.9.9`", version)
+}
+
+func TestFlagsRootManifestMissingSchema(t *testing.T) {
+	root := buildFixture(t)
+	writeWorkflowRoot(t, root, func(m map[string]interface{}) { delete(m, "$schema") })
+	assertSomeError(t, validateFixture(root), "plugins/workflow/plugin.json", "missing $schema")
+}
+
+func TestFlagsRootManifestWrongSchema(t *testing.T) {
+	root := buildFixture(t)
+	writeWorkflowRoot(t, root, func(m map[string]interface{}) {
+		m["$schema"] = "https://example.com/plugin.schema.json"
+	})
+	assertSomeError(t, validateFixture(root), "plugins/workflow/plugin.json", "$schema must be")
+}
+
+func TestFlagsRootManifestNameMismatch(t *testing.T) {
+	root := buildFixture(t)
+	writeWorkflowRoot(t, root, func(m map[string]interface{}) { m["name"] = "not-workflow" })
+	assertSomeError(t, validateFixture(root), "plugins/workflow/plugin.json", "does not match plugin directory")
+}
+
+func TestFlagsRootManifestUnknownField(t *testing.T) {
+	root := buildFixture(t)
+	writeWorkflowRoot(t, root, func(m map[string]interface{}) { m["skills"] = "./skills/" })
+	assertSomeError(t, validateFixture(root), "plugins/workflow/plugin.json", "unknown field `skills`")
+}
+
+func TestFlagsRootManifestAuthorUnknownField(t *testing.T) {
+	root := buildFixture(t)
+	writeWorkflowRoot(t, root, func(m map[string]interface{}) {
+		m["author"] = map[string]string{"name": "Tartiner Labs", "twitter": "@x"}
+	})
+	assertSomeError(t, validateFixture(root), "plugins/workflow/plugin.json", "author has unknown field `twitter`")
+}
+
+func TestFlagsRootManifestMissingOpenAIInterface(t *testing.T) {
+	root := buildFixture(t)
+	writeWorkflowRoot(t, root, func(m map[string]interface{}) { delete(m, "extensions") })
+	assertSomeError(t, validateFixture(root), "plugins/workflow/plugin.json", "missing extensions.com.openai.interface")
 }
 
 func TestReleasePleaseSyncsEveryPluginManifestViaExtraFiles(t *testing.T) {

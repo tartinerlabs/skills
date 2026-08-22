@@ -33,19 +33,24 @@ var collections = []collection{
 }
 
 // Plugin manifests whose `version` release-please keeps in sync with the
-// released version (via `extra-files` in release-please-config.json).
+// released version (via `extra-files` in release-please-config.json). Root
+// `plugin.json` files are Agent Plugins 1.0.0; channel overlays stay beside
+// them. Codex no longer has a `.codex-plugin` overlay.
 var pluginManifests = manifestPaths()
 
-func manifestPaths() []string {
-	plugins := make([]string, 0, len(collections)+2)
+func pluginNames() []string {
+	names := make([]string, 0, len(collections)+2)
 	for _, coll := range collections {
-		plugins = append(plugins, coll.name)
+		names = append(names, coll.name)
 	}
-	plugins = append(plugins, "tartinerlabs", "xcode-skills")
+	return append(names, "tartinerlabs", "xcode-skills")
+}
 
+func manifestPaths() []string {
 	var manifests []string
-	for _, plugin := range plugins {
-		for _, channel := range []string{".codex-plugin", ".claude-plugin", ".cursor-plugin", ".antigravity-plugin"} {
+	for _, plugin := range pluginNames() {
+		manifests = append(manifests, fmt.Sprintf("plugins/%s/plugin.json", plugin))
+		for _, channel := range []string{".claude-plugin", ".cursor-plugin", ".antigravity-plugin"} {
 			manifests = append(manifests, fmt.Sprintf("plugins/%s/%s/plugin.json", plugin, channel))
 		}
 	}
@@ -107,6 +112,10 @@ const (
 	maxCompatibilityLen = 500
 	maxSkillNameLen     = 64
 )
+
+// Agent Plugins 1.0.0 root manifest. Channel overlays (`.claude-plugin`,
+// `.cursor-plugin`, `.antigravity-plugin`) are not this schema.
+const agentPluginsSchema = "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"
 
 // Content budgets, measured like `wc -l`. SKILL.md is the always-loaded entry
 // point, so detail belongs in rules/ or references/ instead. Both ceilings sit
@@ -488,6 +497,95 @@ func validatePlugins(root string, errors *[]string) {
 
 	for _, marketplacePath := range marketplaces {
 		readJSON(root, marketplacePath, errors)
+	}
+
+	validateRootManifests(root, errors)
+}
+
+var rootManifestFields = map[string]bool{
+	"$schema":     true,
+	"name":        true,
+	"version":     true,
+	"description": true,
+	"author":      true,
+	"homepage":    true,
+	"repository":  true,
+	"license":     true,
+	"keywords":    true,
+	"extensions":  true,
+}
+
+var authorFields = map[string]bool{
+	"name":  true,
+	"email": true,
+	"url":   true,
+}
+
+func hasOpenAIInterface(manifest map[string]interface{}) bool {
+	extensions, _ := manifest["extensions"].(map[string]interface{})
+	openai, _ := extensions["com.openai"].(map[string]interface{})
+	if openai == nil {
+		return false
+	}
+	_, ok := openai["interface"]
+	return ok
+}
+
+func validateRootManifests(root string, errors *[]string) {
+	for _, plugin := range pluginNames() {
+		manifestPath := fmt.Sprintf("plugins/%s/plugin.json", plugin)
+		manifest := readJSON(root, manifestPath, errors)
+		if manifest == nil {
+			continue
+		}
+
+		schema, _ := manifest["$schema"].(string)
+		switch {
+		case schema == "":
+			*errors = append(*errors, fmt.Sprintf("%s: missing $schema", manifestPath))
+		case schema != agentPluginsSchema:
+			*errors = append(*errors, fmt.Sprintf(
+				"%s: $schema must be `%s`", manifestPath, agentPluginsSchema))
+		}
+
+		name, _ := manifest["name"].(string)
+		if name != plugin {
+			*errors = append(*errors, fmt.Sprintf(
+				"%s: name `%s` does not match plugin directory", manifestPath, name))
+		}
+
+		unknown := map[string]bool{}
+		for key := range manifest {
+			if !rootManifestFields[key] {
+				unknown[key] = true
+			}
+		}
+		for _, key := range sortedKeys(unknown) {
+			*errors = append(*errors, fmt.Sprintf("%s: unknown field `%s`", manifestPath, key))
+		}
+
+		if authorRaw, ok := manifest["author"]; ok {
+			author, ok := authorRaw.(map[string]interface{})
+			if !ok {
+				*errors = append(*errors, fmt.Sprintf("%s: author must be an object", manifestPath))
+			} else {
+				authorUnknown := map[string]bool{}
+				for key := range author {
+					if !authorFields[key] {
+						authorUnknown[key] = true
+					}
+				}
+				for _, key := range sortedKeys(authorUnknown) {
+					*errors = append(*errors, fmt.Sprintf(
+						"%s: author has unknown field `%s`", manifestPath, key))
+				}
+			}
+		}
+
+		if !hasOpenAIInterface(manifest) {
+			*errors = append(*errors, fmt.Sprintf(
+				"%s: missing extensions.com.openai.interface", manifestPath))
+		}
 	}
 }
 
