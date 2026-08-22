@@ -15,10 +15,11 @@ import (
 	"strings"
 )
 
-// Skill collections: each entry is a `plugins/<name>/` wrapper exposing the
-// listed skills through per-skill symlinks (`skills/<skill>` →
-// `../../../skills/<skill>`). Every directory under `skills/` must belong to
-// exactly one collection — validated in validateCollections.
+// Skill collections: each entry is a `plugins/<name>/` wrapper that owns the
+// listed skill trees as real directories. The flat `skills/<skill>` path is
+// an inbound symlink to `../plugins/<collection>/skills/<skill>`. Every
+// skill under `skills/` must belong to exactly one collection — validated
+// in validateCollections.
 type collection struct {
 	name   string
 	skills []string
@@ -61,8 +62,9 @@ var marketplaces = []string{
 // Whole-directory wrappers expose their skill source through a `skills`
 // symlink that must point at a specific source — swapping the targets would
 // publish the wrong skills through that wrapper, so the exact destination is
-// checked. Collection wrappers instead use per-skill symlinks derived from
-// the collections table (validated in validateCollections).
+// checked. Collection wrappers own the real skill trees; inbound
+// `skills/<skill>` links are derived from the collections table (validated
+// in validateCollections).
 var wrapperSymlinks = []struct {
 	path   string
 	target string
@@ -150,23 +152,60 @@ func readJSON(root, relPath string, errors *[]string) map[string]interface{} {
 }
 
 func collectFiles(dir string, extensions []string) []string {
-	if !pathExists(dir) {
-		return nil
-	}
 	var files []string
-	filepath.WalkDir(dir, func(path string, entry fs.DirEntry, err error) error {
-		if err != nil || entry.IsDir() {
+	collectFilesInto(dir, extensions, map[string]bool{}, &files)
+	return files
+}
+
+// collectFilesInto walks dir, following directory symlinks (so inbound
+// `skills/<skill>` links are scanned) while reporting paths under the
+// original dir so callers still see `skills/<skill>/…`.
+func collectFilesInto(dir string, extensions []string, seen map[string]bool, files *[]string) {
+	resolved, err := filepath.EvalSymlinks(dir)
+	if err != nil {
+		return
+	}
+	if seen[resolved] {
+		return
+	}
+	seen[resolved] = true
+
+	info, err := os.Stat(dir)
+	if err != nil || !info.IsDir() {
+		return
+	}
+
+	filepath.WalkDir(resolved, func(path string, entry fs.DirEntry, err error) error {
+		if err != nil {
+			return nil
+		}
+		rel, err := filepath.Rel(resolved, path)
+		if err != nil {
+			return nil
+		}
+		logical := dir
+		if rel != "." {
+			logical = filepath.Join(dir, rel)
+		}
+
+		if entry.Type()&os.ModeSymlink != 0 {
+			targetInfo, err := os.Stat(path)
+			if err == nil && targetInfo.IsDir() {
+				collectFilesInto(logical, extensions, seen, files)
+			}
+			return nil
+		}
+		if entry.IsDir() {
 			return nil
 		}
 		for _, extension := range extensions {
 			if strings.HasSuffix(entry.Name(), extension) {
-				files = append(files, path)
+				*files = append(*files, logical)
 				break
 			}
 		}
 		return nil
 	})
-	return files
 }
 
 func checkActionUses(root, file, source string, errors *[]string) {
@@ -452,6 +491,22 @@ func validatePlugins(root string, errors *[]string) {
 	}
 }
 
+func checkRealDir(root, dirPath string, errors *[]string) {
+	fullPath := filepath.Join(root, dirPath)
+	info, err := os.Lstat(fullPath)
+	if err != nil {
+		*errors = append(*errors, fmt.Sprintf("%s: directory not found", dirPath))
+		return
+	}
+	if info.Mode()&os.ModeSymlink != 0 {
+		*errors = append(*errors, fmt.Sprintf("%s: expected a directory, not a symlink", dirPath))
+		return
+	}
+	if !info.IsDir() {
+		*errors = append(*errors, fmt.Sprintf("%s: expected a directory", dirPath))
+	}
+}
+
 func checkSymlink(root, linkPath, expectedTarget string, errors *[]string) {
 	fullPath := filepath.Join(root, linkPath)
 
@@ -490,10 +545,11 @@ func validateSymlinks(root string, errors *[]string) {
 	}
 }
 
-// Collection wrappers must expose exactly their assigned skills, each through
-// a per-skill symlink into the flat `skills/` source. Every skill in the
-// source must belong to exactly one collection so a newly added skill cannot
-// silently ship in none (or two) of the collection plugins.
+// Collection wrappers must own exactly their assigned skills as real
+// directories. The flat `skills/<skill>` path must be an inbound symlink
+// into that tree. Every skill in `skills/` must belong to exactly one
+// collection so a newly added skill cannot silently ship in none (or two)
+// of the collection plugins.
 func validateCollections(root string, skillNames []string, colls []collection, errors *[]string) {
 	assigned := map[string]string{}
 	for _, coll := range colls {
@@ -544,7 +600,8 @@ func validateCollections(root string, skillNames []string, colls []collection, e
 			}
 		}
 		for _, skill := range coll.skills {
-			checkSymlink(root, wrapperDir+"/"+skill, "../../../skills/"+skill, errors)
+			checkRealDir(root, wrapperDir+"/"+skill, errors)
+			checkSymlink(root, skillsDir+"/"+skill, "../"+wrapperDir+"/"+skill, errors)
 		}
 	}
 }
@@ -668,9 +725,11 @@ func validate(root string, colls []collection) []string {
 			errors = append(errors, fmt.Sprintf("%s/: %s", skillsDir, err))
 		}
 		for _, entry := range entries {
-			if entry.IsDir() {
-				skillNames = append(skillNames, entry.Name())
+			info, err := os.Stat(filepath.Join(skillsRoot, entry.Name()))
+			if err != nil || !info.IsDir() {
+				continue
 			}
+			skillNames = append(skillNames, entry.Name())
 		}
 		sort.Strings(skillNames)
 		for _, skillName := range skillNames {
