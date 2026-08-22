@@ -120,7 +120,7 @@ The deprecated all-in-one plugin remains installable as `tartinerlabs@tartinerla
 
 ### Codex Plugin
 
-This repository includes repo-scoped Codex plugin metadata in `plugins/<collection>/.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`.
+This repository includes Agent Plugins 1.0.0 manifests at `plugins/<collection>/plugin.json` (`extensions.com.openai` for Codex UI) and a repo-scoped marketplace at `.agents/plugins/marketplace.json`.
 
 To use it in Codex:
 
@@ -130,7 +130,7 @@ To use it in Codex:
 
 ### Cursor Plugin
 
-This repository includes Cursor plugin metadata in `plugins/<collection>/.cursor-plugin/plugin.json` and a repo-scoped marketplace at `.cursor-plugin/marketplace.json`.
+This repository includes Agent Plugins 1.0.0 manifests at `plugins/<collection>/plugin.json`, Cursor marketplace metadata in `plugins/<collection>/.cursor-plugin/plugin.json`, and a repo-scoped marketplace at `.cursor-plugin/marketplace.json`.
 
 To use it in Cursor:
 
@@ -188,7 +188,7 @@ pnpm dlx skills add tartinerlabs/skills/setup
 
 ## Plugin Metadata
 
-Plugin manifests are hand-maintained under `plugins/<name>/`, one per channel, with `.release-please-manifest.json` as the shared version source. See [AGENTS.md](AGENTS.md) for the layout and [CONTRIBUTING.md](CONTRIBUTING.md) to contribute.
+Plugin manifests are hand-maintained under `plugins/<name>/` — root Agent Plugins `plugin.json` for Cursor and Codex, plus Claude Code, Cursor, and Antigravity channel overlays — with `.release-please-manifest.json` as the shared version source. See [AGENTS.md](AGENTS.md) for the layout and [CONTRIBUTING.md](CONTRIBUTING.md) to contribute.
 
 ## Architecture
 

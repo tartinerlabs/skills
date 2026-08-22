@@ -18,7 +18,7 @@ A collection of agent skills distributed via Claude Code, Codex, Cursor, Antigra
 
 ## Skill Format
 
-Each skill lives in `skills/<name>/SKILL.md`:
+Each collection skill lives in `plugins/<collection>/skills/<name>/SKILL.md`. The flat `skills/<name>` path is an inbound symlink so skills.sh and whole-directory wrappers keep working:
 
 ```markdown
 ---
@@ -68,15 +68,20 @@ Skills are lightweight guides, not procedures. State a preference and its reason
 
 The skills ship as four themed **collection plugins** — `workflow`, `quality`, `security`, and `tooling`. The original all-in-one `tartinerlabs` plugin is **deprecated** but still published for a transition period; its removal is a future release. The `collections` table in `scripts/validate-skills/main.go` is the source of truth for membership — every skill must belong to exactly one collection (validated in CI).
 
-Five channels: Claude Code, Codex, Cursor, and Antigravity plugins (each reading `plugins/<collection>/.<channel>-plugin/plugin.json`), plus [skills.sh](https://skills.sh). `README.md` has the install commands. The `Skills` CI workflow validates skills.sh distribution on push to `main`. Context7 was a sixth channel until `ctx7 skills install` was deprecated upstream with no successor; Context7 remains a documentation source, not a distribution target.
+Cursor and Codex load the portable [Agent Plugins](https://agent-plugins.org) 1.0.0 floor at `plugins/<name>/plugin.json` (Codex UI copy lives in `extensions.com.openai`). Claude Code and Antigravity keep their channel manifests at `plugins/<name>/.claude-plugin/plugin.json` and `plugins/<name>/.antigravity-plugin/plugin.json`. Cursor marketplace listing still uses `.cursor-plugin/plugin.json`. [skills.sh](https://skills.sh) installs from the inbound `skills/<name>` symlinks. `README.md` has the install commands. The `Skills` CI workflow validates skills.sh distribution on push to `main`. Context7 was a sixth channel until `ctx7 skills install` was deprecated upstream with no successor; Context7 remains a documentation source, not a distribution target.
 
 ## Plugins
 
-Plugin metadata is hand-maintained by design — there is no generator. Every plugin lives in its own `plugins/<name>/` wrapper holding its four per-channel manifests plus a `skills` entry exposing its skill source. Two wrapper shapes exist: **collection wrappers** with a real `skills/` directory of per-skill symlinks, and **whole-directory wrappers** (`tartinerlabs`, `xcode-skills`) exposing a source directory through one dir symlink. The validator checks every symlink target.
+Plugin metadata is hand-maintained by design — there is no generator. Every plugin lives in `plugins/<name>/` with a root Agent Plugins `plugin.json` for Cursor and Codex, plus Claude Code and Antigravity channel overlays. Cursor keeps `.cursor-plugin/` for marketplace listing.
+
+Two wrapper shapes exist:
+
+- **collection wrappers** (`workflow`, `quality`, `security`, `tooling`) own the real skill trees at `plugins/<collection>/skills/<skill>/`. The flat `skills/<skill>` path is an inbound symlink into that tree, which is Agent Plugins containment-conformant.
+- **whole-directory wrappers** (`tartinerlabs`, `xcode-skills`) keep a `skills` symlink that escapes the plugin root (`../../skills` and `../../xcode-skills`). They remain non-conformant for Agent Plugins containment. The validator checks every symlink target.
 
 - Each marketplace references every plugin as `./plugins/<name>`. **Keep every plugin subdirectory-sourced** — the Claude Code loader silently drops a plugin sourced at the marketplace root (`source: "./"`) when another plugin exists
 - `.release-please-manifest.json` is the canonical version source; release-please (`extra-files` in `release-please-config.json`) syncs the `plugins/**/plugin.json` versions in the release PR. Never bump a version by hand
-- When plugin copy changes, update all four channels intentionally. Do not expose Claude-only hooks in Cursor or Codex metadata unless they have been ported to that runtime
+- When plugin copy changes, update the root Agent Plugins manifest and the Claude/Cursor/Antigravity overlays intentionally. Codex UI copy lives in `extensions.com.openai.interface` on the root manifest. Do not expose Claude-only hooks in Cursor or Codex metadata unless they have been ported to that runtime
 
 ## Xcode Skill Export
 
@@ -86,7 +91,7 @@ All plugin metadata for this collection belongs in `plugins/xcode-skills/`, whos
 
 ## Conventions
 
-- **Commit type for skill content:** skill markdown (`skills/**/*.md`) is the product, not documentation. Changes to skill behaviour use `feat`/`fix`/`refactor` — never `docs`. Reserve `docs:` for `README.md`, `AGENTS.md`, `CLAUDE.md`, `CHANGELOG.md`, and similar meta-documentation
+- **Commit type for skill content:** skill markdown (`plugins/*/skills/**/*.md`, plus the inbound `skills/**/*.md` aliases) is the product, not documentation. Changes to skill behaviour use `feat`/`fix`/`refactor` — never `docs`. Reserve `docs:` for `README.md`, `AGENTS.md`, `CLAUDE.md`, `CHANGELOG.md`, and similar meta-documentation
 - Commit subjects are max 50 characters with no scope, enforced by `.githooks/commit-msg`
 - PR and issue titles use natural language, NOT conventional commit prefixes
 - GitHub-related skills auto-assign to the current user via `@me` or `get_me`
