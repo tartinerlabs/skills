@@ -18,8 +18,5 @@
     "deps",
     "supply-chain"
   ],
-  "skills": "./skills/",
-  "agents": [
-    "./agents/deps.md"
-  ]
+  "skills": "./skills/"
 }
