@@ -14,6 +14,24 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [1.34.0](https://github.com/tartinerlabs/skills/compare/v1.33.0...v1.34.0) (2026-08-23)
+
+
+### Features
+
+* add github-actions parallel steps ([086025e](https://github.com/tartinerlabs/skills/commit/086025ed12c2df085c26e3390d6586c172efedc4)), closes [#52](https://github.com/tartinerlabs/skills/issues/52)
+* apply pr rules to stacked prs ([237c5f6](https://github.com/tartinerlabs/skills/commit/237c5f6d357024f23206baf856f99712b693110f))
+* detect the nub package manager ([ba8e2e6](https://github.com/tartinerlabs/skills/commit/ba8e2e6ac5bddeaca207dc80402e6afac1ce43ba))
+* drop the .npmrc hardening rule ([7490cdf](https://github.com/tartinerlabs/skills/commit/7490cdf6ef99f7bc5a8d9b521c68004659d41858))
+* limit stack rewrite to new prs ([7bc4969](https://github.com/tartinerlabs/skills/commit/7bc4969867a9a1367f6370ce5b9e69c383237ef1))
+* prefer present-tense it names over should ([7a3c76f](https://github.com/tartinerlabs/skills/commit/7a3c76fd3b3870b640f792d9f9aa8bb41b0a6c01))
+
+
+### Bug Fixes
+
+* correct install docs and deps agent ([d88fd50](https://github.com/tartinerlabs/skills/commit/d88fd5002265b3e545ef261fbf93b9e76a82ff3f)), closes [#45](https://github.com/tartinerlabs/skills/issues/45)
+* parameterise package runner in skill rules ([351efd0](https://github.com/tartinerlabs/skills/commit/351efd0a88b4041405bf2ddc945e6ea384f34c6e))
+
 ## [1.33.0](https://github.com/tartinerlabs/skills/compare/v1.32.0...v1.33.0) (2026-08-17)
 
 
