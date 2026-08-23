@@ -10,6 +10,7 @@ tags: supply-chain, runner, security, pnpm, bun, npm
 
 | Detected PM | Native runner | Replace these mismatches |
 |-------------|---------------|--------------------------|
+| nub | `nubx` | `npx`, `bunx` → `nubx` |
 | pnpm | `pnx` | `npx`, `bunx` → `pnx` |
 | bun | `bunx` | `npx` → `bunx` |
 | npm | `npx` | `bunx` → `npx` |

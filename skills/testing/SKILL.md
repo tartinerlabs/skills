@@ -2,7 +2,7 @@
 name: testing
 description: Use when writing tests, running tests, adding test coverage, or debugging test failures. Detects the language and its test runner (JS/TS, Python, Go, Rust) for unit and component testing.
 license: MIT
-allowed-tools: Read Glob Grep Write Edit Bash(pnpm:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(pytest:*) Bash(python:*) Bash(python3:*) Bash(go:*) Bash(cargo:*)
+allowed-tools: Read Glob Grep Write Edit Bash(nub:*) Bash(nubx:*) Bash(pnpm:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(pytest:*) Bash(python:*) Bash(python3:*) Bash(go:*) Bash(cargo:*)
 model: haiku
 effort: medium
 compatibility: Any language with a test runner; JS/TS (Vitest/Jest/node:test) is best-supported, Python (pytest/unittest), Go (go test) and Rust (cargo test) covered via references/
@@ -53,7 +53,7 @@ Scan the project to match existing conventions:
 
 1. **Runner**: identify the runner per the ecosystem guide (e.g. Vitest vs Jest vs node:test for JS/TS; pytest vs unittest for Python)
 2. **Existing tests**: find the naming and location convention already in use (`*.test.ts`, `*.spec.ts`, `test_*.py`, `*_test.go`, colocated vs a `tests/` directory)
-3. **Package manager / toolchain**: for JS/TS check `pnpm-lock.yaml`, `bun.lock`, `yarn.lock`, or `package-lock.json`
+3. **Package manager / toolchain**: for JS/TS check `nub.lock`, `pnpm-lock.yaml`, `bun.lock`, `yarn.lock`, or `package-lock.json`
 
 Match the project's existing patterns for naming, location, and imports.
 

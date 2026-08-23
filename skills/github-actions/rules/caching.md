@@ -32,6 +32,7 @@ tags: caching, dependencies, setup-actions, performance
 | Setup Action | Cache Parameter |
 |-------------|----------------|
 | `actions/setup-node` | `cache: 'pnpm'` / `'npm'` / `'yarn'` |
+| `nubjs/setup-nub` | auto-enabled; `cache: false` to disable |
 | `actions/setup-python` | `cache: 'pip'` / `'pipenv'` / `'poetry'` |
 | `actions/setup-go` | `cache: true` |
 | `actions/setup-java` | `cache: 'maven'` / `'gradle'` |

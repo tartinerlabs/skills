@@ -11,10 +11,10 @@ tags: dependencies, audit, npm, pnpm, yarn, bun, pip, go, vulnerabilities
 **JS/TS** (match the package manager):
 
 ```bash
-npm audit        # or: pnpm audit / yarn audit / bun audit
+npm audit        # or: nub audit / pnpm audit / yarn audit / bun audit
 
 # Check for outdated packages
-npm outdated     # or: pnpm outdated / yarn outdated / bun outdated
+npm outdated     # or: nub outdated / pnpm outdated / yarn outdated / bun outdated
 ```
 
 **Python** — `pip-audit`:
