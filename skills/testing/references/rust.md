@@ -26,6 +26,7 @@ mod tests {
 }
 ```
 
+- Test functions: name them for the behaviour in the present tense (`formats_standard_price`), not with a `should` prefix (`should_format_standard_price`) — the prefix hedges the claim and repeats on every line. Match a suite that already uses `should` consistently rather than mixing styles.
 - **Integration tests** live in the top-level `tests/` directory (e.g. `tests/api.rs`); each file is a separate crate that can use only the **public** API, which is the idiomatic way to test the crate's external surface.
 
 ## Table-Driven Tests

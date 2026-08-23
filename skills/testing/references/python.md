@@ -15,7 +15,7 @@ Match the project's existing runner; do not introduce pytest into a unittest-onl
 
 - Test files: `test_<module>.py` (pytest/unittest default) — match the project's existing pattern.
 - Location: a top-level `tests/` directory is the common Python convention; colocated `test_*.py` next to source is also fine. Follow what the project already does.
-- Test functions: `def test_<behaviour>():` — the name describes the expected behaviour.
+- Test functions: `def test_<behaviour>():` — the name describes the expected behaviour. Prefer the present-tense verb after the `test_` prefix (`test_formats_usd_with_two_decimals`) over a `should` prefix (`test_should_format_usd_with_two_decimals`), which hedges the claim and repeats on every line; match a suite that already uses `should` consistently rather than mixing styles.
 
 ## pytest Patterns
 

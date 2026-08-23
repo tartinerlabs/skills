@@ -50,7 +50,7 @@ Use `@testing-library/user-event` over `fireEvent` — it simulates real browser
 ```tsx
 import userEvent from '@testing-library/user-event';
 
-it('should submit the form with user input', async () => {
+it('submits the form with user input', async () => {
   const user = userEvent.setup();
   const onSubmit = vi.fn();
   render(<LoginForm onSubmit={onSubmit} />);
@@ -67,7 +67,7 @@ it('should submit the form with user input', async () => {
 Use `findBy*` queries or `waitFor` for content that appears after async operations:
 
 ```tsx
-it('should display user data after loading', async () => {
+it('displays user data after loading', async () => {
   render(<UserProfile id="1" />);
 
   // findBy* waits for the element to appear
@@ -80,7 +80,7 @@ For assertions that need retrying:
 ```tsx
 import { waitFor } from '@testing-library/react';
 
-it('should remove the item after deletion', async () => {
+it('removes the item after deletion', async () => {
   const user = userEvent.setup();
   render(<TodoList />);
 
