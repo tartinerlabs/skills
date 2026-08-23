@@ -50,7 +50,7 @@ If a config file already exists:
 This blocks ALL lifecycle scripts during install, including the project's own `prepare` script (commonly used by Husky for git hooks).
 
 **Mitigation**: After a fresh clone, run the prepare script manually:
-- `pnpm exec husky` (if using Husky)
+- `<pm> exec husky` (if using Husky)
 - Or `<pm> run prepare`
 
 This is a one-time cost per clone. Git hooks work normally after initialisation.

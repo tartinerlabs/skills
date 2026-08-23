@@ -2,7 +2,7 @@
 name: deps
 description: Use when hardening a dependency supply chain, pinning versions, adding registry/security flags, or setting up Renovate. Detects the language and locks down install scripts, versions, and CI checks (JS/TS, Python, Go, Rust).
 license: MIT
-allowed-tools: Read Glob Grep Write Edit Bash(pnpm:*) Bash(pnx:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(uv:*) Bash(pip:*) Bash(pip-audit:*) Bash(go:*) Bash(govulncheck:*) Bash(cargo:*) Bash(cargo-audit:*) Bash(cargo-deny:*) Bash(gh:*) Bash(glab:*)
+allowed-tools: Read Glob Grep Write Edit Bash(pnpm:*) Bash(pnx:*) Bash(npx:*) Bash(bunx:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(uv:*) Bash(pip:*) Bash(pip-audit:*) Bash(go:*) Bash(govulncheck:*) Bash(cargo:*) Bash(cargo-audit:*) Bash(cargo-deny:*) Bash(gh:*) Bash(glab:*)
 model: haiku
 effort: medium
 compatibility: Any language project; hardens that ecosystem's dependency supply chain (JS/TS best-supported, Python, Go and Rust via references/)
@@ -31,7 +31,7 @@ The rest of this file (Steps 1-4) is the **JS/TS** path. For Python, Go or Rust,
 
 Detect the package manager from the lockfile, in this order: `pnpm-lock.yaml`, `bun.lock`/`bun.lockb`, `yarn.lock`, `package-lock.json`. With no lockfile, ask.
 
-Use the detected package manager for all commands. Replace `<pm>` in rule files with the detected manager.
+Rule files use two placeholders. Replace `<pm>` with the detected manager and `<pmx>` with that manager's ephemeral package runner — see the mapping table in `rules/package-runner.md`.
 
 ## 2. Detect Existing Config
 
@@ -70,5 +70,5 @@ After all rules are processed, display a summary:
 - [list of rules skipped with reason]
 
 ### Manual Steps Required
-- [any post-setup steps, e.g. "Run `pnpm exec husky` to reinitialise git hooks"]
+- [any post-setup steps, e.g. "Run `<pm> exec husky` to reinitialise git hooks"]
 ```

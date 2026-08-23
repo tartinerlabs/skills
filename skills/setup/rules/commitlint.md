@@ -47,8 +47,10 @@ export default config;
 Create `.husky/commit-msg`:
 
 ```bash
-pnx --no -- commitlint --edit $1
+<pmx> commitlint --edit $1
 ```
+
+On npm, write `npx --no -- commitlint --edit $1` instead. The `--no` flag is npx-only and makes the hook fail loudly if commitlint is missing rather than silently fetching it from the registry mid-commit.
 
 ### Why This Matters
 
