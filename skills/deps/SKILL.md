@@ -18,7 +18,7 @@ Detect the project's language from its manifest, then follow the matching harden
 
 | Language | Detected by | Hardening guide |
 |----------|-------------|-----------------|
-| **JS/TS** | `package.json` | the `rules/*.md` files below (`.npmrc` flags · pinning · release quarantine · Renovate · dependency review · package runner) |
+| **JS/TS** | `package.json` | the `rules/*.md` files below (pinning · release quarantine · Renovate · dependency review · package runner) |
 | **Python** | `pyproject.toml`, `requirements*.txt`, `setup.py` | `references/python.md` (pin + hashes · pip-audit · Renovate/Dependabot · dependency review) |
 | **Go** | `go.mod` | `references/go.md` (`go mod verify` · govulncheck · checksum DB · dependency review) |
 | **Rust** | `Cargo.toml` | `references/rust.md` (commit `Cargo.lock` · cargo audit/cargo-deny · source policy · dependency review) |
@@ -38,7 +38,6 @@ Rule files use two placeholders. Replace `<pm>` with the detected manager and `<
 ## 2. Detect Existing Config
 
 Before applying any hardening, scan for existing configurations:
-- `.npmrc` / `.yarnrc.yml` / `bunfig.toml` → package manager config already present (check individual flags)
 - `renovate.json` / `.renovaterc` / `.renovaterc.json` / `renovate` key in `package.json` → Renovate already configured
 - `.github/workflows/*.{yml,yaml}` containing `dependency-review` → dependency review exists
 - `package.json` dependency versions without `^` or `~` prefixes → already pinned
@@ -51,7 +50,6 @@ Read each rule file for detailed instructions and config templates.
 
 | Rule | Impact | File |
 |------|--------|------|
-| .npmrc security flags | HIGH | `rules/npmrc.md` |
 | Release quarantine | MEDIUM | `rules/release-quarantine.md` |
 | Version pinning | HIGH | `rules/version-pinning.md` |
 | Renovate | MEDIUM | `rules/renovate.md` |
