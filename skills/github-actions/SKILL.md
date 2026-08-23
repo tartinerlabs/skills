@@ -29,7 +29,9 @@ Scan for project indicators:
 
 ### 2. Detect Package Manager (JS/TS projects)
 
-Detect the package manager from the lockfile, in this order: `pnpm-lock.yaml`, `bun.lock`/`bun.lockb`, `yarn.lock`, `package-lock.json`. With no lockfile, ask.
+Detect the package manager from the lockfile, in this order: `nub.lock`, `pnpm-lock.yaml`, `bun.lock`/`bun.lockb`, `yarn.lock`, `package-lock.json`. With no lockfile, ask.
+
+A `packageManager` or `devEngines.packageManager` field in `package.json` outranks any lockfile. Nub runs in compat-mode over another manager's lockfile, so `nub.lock` alongside `pnpm-lock.yaml` means nub — check the field before concluding from lockfiles alone.
 
 ### 3. Generate Workflow
 

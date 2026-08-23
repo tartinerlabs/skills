@@ -9,7 +9,7 @@ Go has one canonical runner: the built-in `go test`, driven by the stdlib `testi
 ## File Naming and Location
 
 - Test files: `<source>_test.go`, colocated in the **same package and directory** as the code under test (e.g. `price.go` → `price_test.go`).
-- Test functions: `func TestXxx(t *testing.T)` — the name after `Test` describes the unit or behaviour.
+- Test functions: `func TestXxx(t *testing.T)` — the name after `Test` describes the unit or behaviour. The same applies to `t.Run` subtest names: prefer the present-tense verb (`"formats USD with two decimals"`) over a `should` prefix, which hedges the claim and repeats on every line; match a suite that already uses `should` consistently rather than mixing styles.
 - Use an external test package (`package foo_test`) when you want to test only the exported API.
 
 ## Table-Driven Tests

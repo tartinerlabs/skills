@@ -11,10 +11,10 @@ tags: parallel, background, wait, ci
 ```yaml
 # Sequential after shared setup — each command waits for the last
 steps:
-  - run: pnpm install --frozen-lockfile
-  - run: pnpm check
-  - run: pnpm test
-  - run: pnpm build
+  - run: <pm> install --frozen-lockfile
+  - run: <pm> check
+  - run: <pm> test
+  - run: <pm> build
 ```
 
 ### Correct
@@ -22,11 +22,11 @@ steps:
 ```yaml
 # Shared setup, then independent commands overlap
 steps:
-  - run: pnpm install --frozen-lockfile
+  - run: <pm> install --frozen-lockfile
   - parallel:
-      - run: pnpm check
-      - run: pnpm test
-      - run: pnpm build
+      - run: <pm> check
+      - run: <pm> test
+      - run: <pm> build
 ```
 
 `parallel` runs the group as background steps and waits for all of them before the next step. Prefer it when the job only needs "run these together, then continue".
@@ -39,9 +39,9 @@ Use `background: true` when a step must stay running while later steps work, the
 steps:
   - name: Start server
     id: server
-    run: pnpm start
+    run: <pm> start
     background: true
-  - run: pnpm test
+  - run: <pm> test
   - cancel: server
 ```
 

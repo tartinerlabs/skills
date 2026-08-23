@@ -49,6 +49,8 @@ on:
       - 'pnpm-lock.yaml'
 ```
 
+The lockfile path above is illustrative — use the one the project actually has (`pnpm-lock.yaml`, `bun.lock`, `yarn.lock`, `package-lock.json`). A filter listing a lockfile the repo does not contain silently never matches.
+
 ### Common Trigger Patterns
 
 | Pattern | Use case |

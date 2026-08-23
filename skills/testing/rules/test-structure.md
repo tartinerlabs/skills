@@ -15,7 +15,8 @@ Keep the three phases — arrange the inputs, act on the unit, assert the outcom
 ### Naming
 
 - **`describe` blocks**: name the unit under test — the function, component, or class
-- **`it` blocks**: state the expected behaviour as a claim about the unit. `it('formats USD with two decimal places')` and `it('should format USD with two decimal places')` both do this; `it('test 1')` and `it('works')` do not. Follow whichever phrasing the existing suite uses rather than converting it
+- **`it` blocks**: state the expected behaviour as a claim about the unit — `it('formats USD with two decimal places')`, not `it('test 1')` or `it('works')`
+- **Prefer the present-tense verb over a `should` prefix**: `it('formats USD with two decimal places')` reads as a statement of fact about the unit, while `it('should format USD with two decimal places')` hedges the same claim into an aspiration — and the prefix repeats on every line without adding information. Both describe the same behaviour, so this is a readability preference, not a correctness one: match a suite that already uses `should` consistently rather than mixing styles, and do not convert existing tests unless asked
 
 #### Incorrect
 
@@ -43,12 +44,12 @@ Nest `describe` blocks to group related scenarios. Avoid nesting deeper than 2 l
 ```ts
 describe('UserService', () => {
   describe('create', () => {
-    it('should create a user with valid input', () => { ... });
-    it('should throw for duplicate email', () => { ... });
+    it('creates a user with valid input', () => { ... });
+    it('throws for duplicate email', () => { ... });
   });
 
   describe('delete', () => {
-    it('should remove the user by ID', () => { ... });
+    it('removes the user by ID', () => { ... });
   });
 });
 ```
@@ -60,7 +61,7 @@ Each `it` block should test one logical assertion. Multiple `expect` calls are f
 #### Incorrect
 
 ```ts
-it('should handle user creation', () => {
+it('handles user creation', () => {
   const user = createUser({ name: 'Alice' });
   expect(user.name).toBe('Alice');
   expect(user.id).toBeDefined();
@@ -73,13 +74,13 @@ it('should handle user creation', () => {
 #### Correct
 
 ```ts
-it('should create a user with the given name', () => {
+it('creates a user with the given name', () => {
   const user = createUser({ name: 'Alice' });
   expect(user.name).toBe('Alice');
   expect(user.id).toBeDefined();
 });
 
-it('should throw when creating a duplicate user', () => {
+it('throws when creating a duplicate user', () => {
   createUser({ name: 'Alice' });
   expect(() => createUser({ name: 'Alice' })).toThrow();
 });

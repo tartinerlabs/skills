@@ -2,7 +2,7 @@
 name: deps
 description: Use when hardening a dependency supply chain, pinning versions, adding registry/security flags, or setting up Renovate. Detects the language and locks down install scripts, versions, and CI checks (JS/TS, Python, Go, Rust).
 license: MIT
-allowed-tools: Read Glob Grep Write Edit Bash(pnpm:*) Bash(pnx:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(uv:*) Bash(pip:*) Bash(pip-audit:*) Bash(go:*) Bash(govulncheck:*) Bash(cargo:*) Bash(cargo-audit:*) Bash(cargo-deny:*) Bash(gh:*) Bash(glab:*)
+allowed-tools: Read Glob Grep Write Edit Bash(nub:*) Bash(nubx:*) Bash(pnpm:*) Bash(pnx:*) Bash(npx:*) Bash(bunx:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(uv:*) Bash(pip:*) Bash(pip-audit:*) Bash(go:*) Bash(govulncheck:*) Bash(cargo:*) Bash(cargo-audit:*) Bash(cargo-deny:*) Bash(gh:*) Bash(glab:*)
 model: haiku
 effort: medium
 compatibility: Any language project; hardens that ecosystem's dependency supply chain (JS/TS best-supported, Python, Go and Rust via references/)
@@ -18,7 +18,7 @@ Detect the project's language from its manifest, then follow the matching harden
 
 | Language | Detected by | Hardening guide |
 |----------|-------------|-----------------|
-| **JS/TS** | `package.json` | the `rules/*.md` files below (`.npmrc` flags · pinning · release quarantine · Renovate · dependency review · package runner) |
+| **JS/TS** | `package.json` | the `rules/*.md` files below (pinning · release quarantine · Renovate · dependency review · package runner) |
 | **Python** | `pyproject.toml`, `requirements*.txt`, `setup.py` | `references/python.md` (pin + hashes · pip-audit · Renovate/Dependabot · dependency review) |
 | **Go** | `go.mod` | `references/go.md` (`go mod verify` · govulncheck · checksum DB · dependency review) |
 | **Rust** | `Cargo.toml` | `references/rust.md` (commit `Cargo.lock` · cargo audit/cargo-deny · source policy · dependency review) |
@@ -29,14 +29,15 @@ The rest of this file (Steps 1-4) is the **JS/TS** path. For Python, Go or Rust,
 
 ## 1. Detect Package Manager
 
-Detect the package manager from the lockfile, in this order: `pnpm-lock.yaml`, `bun.lock`/`bun.lockb`, `yarn.lock`, `package-lock.json`. With no lockfile, ask.
+Detect the package manager from the lockfile, in this order: `nub.lock`, `pnpm-lock.yaml`, `bun.lock`/`bun.lockb`, `yarn.lock`, `package-lock.json`. With no lockfile, ask.
 
-Use the detected package manager for all commands. Replace `<pm>` in rule files with the detected manager.
+A `packageManager` or `devEngines.packageManager` field in `package.json` outranks any lockfile. Nub runs in compat-mode over another manager's lockfile, so `nub.lock` alongside `pnpm-lock.yaml` means nub — check the field before concluding from lockfiles alone.
+
+Rule files use two placeholders. Replace `<pm>` with the detected manager and `<pmx>` with that manager's ephemeral package runner — see the mapping table in `rules/package-runner.md`.
 
 ## 2. Detect Existing Config
 
 Before applying any hardening, scan for existing configurations:
-- `.npmrc` / `.yarnrc.yml` / `bunfig.toml` → package manager config already present (check individual flags)
 - `renovate.json` / `.renovaterc` / `.renovaterc.json` / `renovate` key in `package.json` → Renovate already configured
 - `.github/workflows/*.{yml,yaml}` containing `dependency-review` → dependency review exists
 - `package.json` dependency versions without `^` or `~` prefixes → already pinned
@@ -49,7 +50,6 @@ Read each rule file for detailed instructions and config templates.
 
 | Rule | Impact | File |
 |------|--------|------|
-| .npmrc security flags | HIGH | `rules/npmrc.md` |
 | Release quarantine | MEDIUM | `rules/release-quarantine.md` |
 | Version pinning | HIGH | `rules/version-pinning.md` |
 | Renovate | MEDIUM | `rules/renovate.md` |
@@ -70,5 +70,5 @@ After all rules are processed, display a summary:
 - [list of rules skipped with reason]
 
 ### Manual Steps Required
-- [any post-setup steps, e.g. "Run `pnpm exec husky` to reinitialise git hooks"]
+- [any post-setup steps, e.g. "Run `<pm> exec husky` to reinitialise git hooks"]
 ```

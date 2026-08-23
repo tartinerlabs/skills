@@ -68,8 +68,8 @@ Add to `package.json`:
 If ESLint or Prettier are detected, suggest:
 
 ```bash
-pnx @biomejs/biome migrate eslint
-pnx @biomejs/biome migrate prettier
+<pmx> @biomejs/biome migrate eslint
+<pmx> @biomejs/biome migrate prettier
 ```
 
 ### Why This Matters

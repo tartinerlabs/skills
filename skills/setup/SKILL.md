@@ -2,7 +2,7 @@
 name: setup
 description: Use when setting up a project, adding linting, formatting, git hooks, or type checking. Detects the language and installs that ecosystem's lint/format/hooks toolchain (JS/TS, Python, Go, Rust).
 license: MIT
-allowed-tools: Read Glob Write Edit Bash(pnpm:*) Bash(pnx:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(uv:*) Bash(poetry:*) Bash(pdm:*) Bash(pip:*) Bash(ruff:*) Bash(mypy:*) Bash(go:*) Bash(gofmt:*) Bash(goimports:*) Bash(golangci-lint:*) Bash(cargo:*) Bash(rustfmt:*) Bash(rustup:*) Bash(pre-commit:*) Bash(gitleaks:*) Bash(trufflehog:*)
+allowed-tools: Read Glob Write Edit Bash(nub:*) Bash(nubx:*) Bash(pnpm:*) Bash(pnx:*) Bash(npx:*) Bash(bunx:*) Bash(npm:*) Bash(bun:*) Bash(yarn:*) Bash(uv:*) Bash(poetry:*) Bash(pdm:*) Bash(pip:*) Bash(ruff:*) Bash(mypy:*) Bash(go:*) Bash(gofmt:*) Bash(goimports:*) Bash(golangci-lint:*) Bash(cargo:*) Bash(rustfmt:*) Bash(rustup:*) Bash(pre-commit:*) Bash(gitleaks:*) Bash(trufflehog:*)
 model: haiku
 effort: low
 compatibility: Any language project; sets up that ecosystem's lint/format/hooks + a git secret scanner (GitLeaks default; TruffleHog accepted) (JS/TS best-supported, Python, Go and Rust via references/)
@@ -29,9 +29,24 @@ The rest of this file (Steps 1-5) is the **JS/TS** path. For Python, Go or Rust,
 
 ## 1. Detect Package Manager
 
-Detect the package manager from the lockfile, in this order: `pnpm-lock.yaml`, `bun.lock`/`bun.lockb`, `yarn.lock`, `package-lock.json`. With no lockfile, ask.
+Detect the package manager from the lockfile, in this order: `nub.lock`, `pnpm-lock.yaml`, `bun.lock`/`bun.lockb`, `yarn.lock`, `package-lock.json`. With no lockfile, ask.
 
-Use the detected package manager for all install commands. Replace `<pm>` in rule files with the detected manager.
+A `packageManager` or `devEngines.packageManager` field in `package.json` outranks any lockfile. Nub runs in compat-mode over another manager's lockfile, so `nub.lock` alongside `pnpm-lock.yaml` means nub — check the field before concluding from lockfiles alone.
+
+Rule files use two placeholders. Replace `<pm>` with the detected manager and `<pmx>` with that manager's ephemeral package runner:
+
+| Detected PM | `<pm>` | `<pmx>` |
+|-------------|--------|---------|
+| nub | `nub` | `nubx` |
+| pnpm | `pnpm` | `pnx` |
+| bun | `bun` | `bunx` |
+| npm | `npm` | `npx` |
+| yarn (v2+) | `yarn` | `yarn dlx` |
+| yarn (v1) | `yarn` | `npx` |
+
+Detect yarn version: `.yarnrc.yml` present → v2+; only `.yarnrc` or neither → v1.
+
+Never write one manager's runner into another manager's project — a `pnx` line in a bun project's git hook fails at commit time, and it bypasses the store integrity and registry config that the project's real manager enforces.
 
 ## 2. Detect Existing Tooling
 

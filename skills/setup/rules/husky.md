@@ -5,7 +5,7 @@ Git hooks manager for running scripts on git events.
 ## Install
 
 ```bash
-pnx husky init
+<pmx> husky init
 ```
 
 This creates a `.husky/` directory and a default `pre-commit` hook.
@@ -16,7 +16,7 @@ The final `.husky/pre-commit` is assembled by other rules (GitLeaks, lint-staged
 
 ```bash
 gitleaks git --staged --redact --verbose
-pnx lint-staged
+<pmx> lint-staged
 ```
 
 Replace the default content created by `husky init` with the above.

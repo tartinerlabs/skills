@@ -13,7 +13,7 @@ tags: caching, dependencies, setup-actions, performance
 - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
   with:
     node-version: 'lts/*'
-- run: pnpm install --frozen-lockfile
+- run: <pm> install --frozen-lockfile
 ```
 
 ### Correct
@@ -23,8 +23,8 @@ tags: caching, dependencies, setup-actions, performance
 - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
   with:
     node-version: 'lts/*'
-    cache: 'pnpm'
-- run: pnpm install --frozen-lockfile
+    cache: '<pm>'
+- run: <pm> install --frozen-lockfile
 ```
 
 ### Cache Parameters by Ecosystem
@@ -32,6 +32,7 @@ tags: caching, dependencies, setup-actions, performance
 | Setup Action | Cache Parameter |
 |-------------|----------------|
 | `actions/setup-node` | `cache: 'pnpm'` / `'npm'` / `'yarn'` |
+| `nubjs/setup-nub` | auto-enabled; `cache: false` to disable |
 | `actions/setup-python` | `cache: 'pip'` / `'pipenv'` / `'poetry'` |
 | `actions/setup-go` | `cache: true` |
 | `actions/setup-java` | `cache: 'maven'` / `'gradle'` |

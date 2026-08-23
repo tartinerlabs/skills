@@ -25,7 +25,7 @@ Add to `package.json`:
 Add to `.husky/pre-commit` (after GitLeaks, before any other commands):
 
 ```bash
-pnx lint-staged
+<pmx> lint-staged
 ```
 
 ### Why This Matters

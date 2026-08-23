@@ -13,7 +13,7 @@ Tests should verify what a function does, not how it does it. If you refactor in
 #### Incorrect
 
 ```ts
-it('should call the internal _validate method', () => {
+it('calls the internal _validate method', () => {
   const spy = vi.spyOn(form, '_validate');
   form.submit({ name: 'Alice' });
   expect(spy).toHaveBeenCalled();
@@ -23,7 +23,7 @@ it('should call the internal _validate method', () => {
 #### Correct
 
 ```ts
-it('should reject submission with missing name', () => {
+it('rejects submission with missing name', () => {
   const result = form.submit({ name: '' });
   expect(result.error).toBe('Name is required');
 });
@@ -40,19 +40,19 @@ Test boundary conditions alongside the happy path — a suite that only covers t
 
 ```ts
 describe('formatPrice', () => {
-  it('should format a standard price', () => {
+  it('formats a standard price', () => {
     expect(formatPrice(9.99)).toBe('$9.99');
   });
 
-  it('should return "$0.00" for zero', () => {
+  it('returns "$0.00" for zero', () => {
     expect(formatPrice(0)).toBe('$0.00');
   });
 
-  it('should throw for negative values', () => {
+  it('throws for negative values', () => {
     expect(() => formatPrice(-1)).toThrow();
   });
 
-  it('should handle large numbers', () => {
+  it('handles large numbers', () => {
     expect(formatPrice(1_000_000)).toBe('$1,000,000.00');
   });
 });
@@ -65,7 +65,7 @@ Snapshots are useful for catching unexpected changes in serialised output (e.g.,
 #### Incorrect
 
 ```tsx
-it('should render correctly', () => {
+it('renders correctly', () => {
   const { container } = render(<UserCard name="Alice" />);
   expect(container).toMatchSnapshot();
 });
@@ -74,7 +74,7 @@ it('should render correctly', () => {
 #### Correct
 
 ```tsx
-it('should display the user name', () => {
+it('displays the user name', () => {
   render(<UserCard name="Alice" />);
   expect(screen.getByText('Alice')).toBeInTheDocument();
 });
@@ -83,7 +83,7 @@ it('should display the user name', () => {
 Acceptable snapshot use:
 
 ```ts
-it('should generate the expected config', () => {
+it('generates the expected config', () => {
   expect(buildConfig({ env: 'production' })).toMatchInlineSnapshot(`
     {
       "minify": true,
@@ -126,13 +126,13 @@ Committed tests should not contain `test.skip` or `test.todo` without a comment 
 #### Incorrect
 
 ```ts
-it.skip('should handle concurrent requests', () => { ... });
-it.todo('should retry on failure');
+it.skip('handles concurrent requests', () => { ... });
+it.todo('retries on failure');
 ```
 
 #### Correct
 
 ```ts
 // TODO(#123): Flaky due to race condition in CI — investigate timing
-it.skip('should handle concurrent requests', () => { ... });
+it.skip('handles concurrent requests', () => { ... });
 ```

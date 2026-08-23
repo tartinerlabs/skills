@@ -30,7 +30,7 @@ Vitest provides `describe`, `it`, `expect`, `beforeEach`, and `afterEach` global
 import { describe, it, expect } from 'vitest';
 
 describe('add', () => {
-  it('should sum two numbers', () => {
+  it('sums two numbers', () => {
     expect(add(1, 2)).toBe(3);
   });
 });
@@ -41,7 +41,7 @@ describe('add', () => {
 ```ts
 // No imports needed for describe, it, expect
 describe('add', () => {
-  it('should sum two numbers', () => {
+  it('sums two numbers', () => {
     expect(add(1, 2)).toBe(3);
   });
 });
@@ -105,7 +105,7 @@ Use specific matchers over generic ones:
 Use `async/await` directly — Vitest handles promises natively:
 
 ```ts
-it('should fetch user data', async () => {
+it('fetches user data', async () => {
   const user = await fetchUser('1');
   expect(user.name).toBe('Alice');
 });
@@ -114,7 +114,7 @@ it('should fetch user data', async () => {
 For rejected promises:
 
 ```ts
-it('should throw for missing user', async () => {
+it('throws for missing user', async () => {
   await expect(fetchUser('unknown')).rejects.toThrow('Not found');
 });
 ```
