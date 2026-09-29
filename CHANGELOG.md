@@ -14,6 +14,13 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [1.35.0](https://github.com/tartinerlabs/skills/compare/v1.34.1...v1.35.0) (2026-09-29)
+
+
+### Features
+
+* add issue fields REST calls to github-issues ([9e8256e](https://github.com/tartinerlabs/skills/commit/9e8256e2230d321537138015d8555928c52c6825))
+
 ## [1.34.1](https://github.com/tartinerlabs/skills/compare/v1.34.0...v1.34.1) (2026-08-23)
 
 
