@@ -25,7 +25,12 @@ You create, update, query, and comment on GitHub (or GitLab) issues.
 Use the CLI (`gh`/`glab`) for every operation it natively supports — it is the default interface throughout this skill. For operations with **no native CLI subcommand** (currently: issue fields — structured priority/effort/date/custom metadata on issues), fall back in this order:
 
 1. **GitHub MCP server tools**, if such a server is connected. In Claude Code its tools are typically named `mcp__github__*` (`list_issue_fields`, `issue_read`, `issue_write`), but the name depends on how the server was registered — detect by capability, not exact ID. Never assume the server is available. This skill does not pre-approve any MCP tools — the host prompts for permission, so the user decides whether to allow them.
-2. **`gh api`** against the REST/GraphQL API. Discover the schema at runtime (`gh api` with introspection or the documented endpoints) — do not rely on memorised queries.
+2. **`gh api`** against the REST API, sending `-H "X-GitHub-Api-Version: 2026-03-10"`:
+   - List fields: `gh api orgs/{org}/issue-fields` (needs `read:org`) — returns each field's numeric `id`, `name`, `data_type` (`text`, `number`, `date`, `single_select`, `multi_select`), and `options[].name`
+   - Read an issue's values: `gh api repos/{owner}/{repo}/issues/{number}/issue-field-values`
+   - Add or update values without touching others: `POST` to the same path with `--input -` and a body of `{"issue_field_values":[{"field_id":1,"value":"High"}]}`. Single-select takes the option **name**, multi-select an array of names, number a number, date `YYYY-MM-DD`
+   - `PUT` to the same path replaces **all** field values on the issue — avoid it unless that is the intent
+   - Clear one field: `DELETE repos/{owner}/{repo}/issues/{number}/issue-field-values/{field_id}` (404 if the field has no value)
 3. **Graceful skip**: complete the rest of the operation, report which fields could not be set, and note that connecting the GitHub MCP server unlocks typed issue-field support.
 
 ## Workflow
