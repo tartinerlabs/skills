@@ -25,6 +25,7 @@ Git and GitHub workflow skills — commits, branches, pull requests, issues, and
 
 | Skill | Description |
 |-------|-------------|
+| [clean-branches](skills/clean-branches) | Delete local branches that already landed, including squash-merged PRs missed by `git branch --delete-merged` |
 | [commit](skills/commit) | Clean git commits with conventional commit detection and secret scanning |
 | [create-branch](skills/create-branch) | Create and checkout a branch with naming validation and GitHub/GitLab issue linking |
 | [create-pr](skills/create-pr) | Push branch and create a pull/merge request (GitHub or GitLab) with structured description and auto-assignment |
@@ -170,6 +171,7 @@ Install a subset for specific workflows:
 pnpm dlx skills add tartinerlabs/skills/commit
 pnpm dlx skills add tartinerlabs/skills/create-branch
 pnpm dlx skills add tartinerlabs/skills/create-pr
+pnpm dlx skills add tartinerlabs/skills/clean-branches
 pnpm dlx skills add tartinerlabs/skills/github-issues
 
 # Security-focused subset
