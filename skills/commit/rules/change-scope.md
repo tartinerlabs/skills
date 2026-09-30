@@ -24,3 +24,9 @@ Split when distinct, unrelated areas are modified:
 - Stage all related files together
 - Use specific file paths, not `git add .`
 - Review staged changes with `git diff --staged` before committing
+
+### Staging Resolved Conflicts
+
+When committing mid-merge, rebase, or cherry-pick, prefer `git add --resolved` (Git 2.56+). It stages only the unmerged paths and refuses while any still contain conflict markers, so a half-resolved file or an unrelated local edit cannot slip into the commit. Pass a pathspec to limit it further.
+
+On older Git (check `git --version`), stage each resolved path explicitly and confirm none still hold markers with `git diff --check` first.
