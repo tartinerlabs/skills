@@ -25,7 +25,7 @@ type collection struct {
 }
 
 var collections = []collection{
-	{name: "workflow", skills: []string{"commit", "create-branch", "create-pr", "github-actions", "github-issues"}},
+	{name: "workflow", skills: []string{"clean-branches", "commit", "create-branch", "create-pr", "github-actions", "github-issues"}},
 	{name: "quality", skills: []string{"refactor", "naming-format", "project-structure"}},
 	{name: "security", skills: []string{"security", "deps"}},
 	{name: "tooling", skills: []string{"setup", "testing", "update-project"}},
