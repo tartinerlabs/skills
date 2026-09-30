@@ -14,6 +14,14 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [1.36.0](https://github.com/tartinerlabs/skills/compare/v1.35.0...v1.36.0) (2026-09-30)
+
+
+### Features
+
+* add clean-branches skill ([6d2b071](https://github.com/tartinerlabs/skills/commit/6d2b071f7683d7b73edb8888c0f07399ecb27137))
+* add git add --resolved to commit skill ([8207880](https://github.com/tartinerlabs/skills/commit/8207880d3918395dadb5d8a537468cd2ae6f6f9f))
+
 ## [1.35.0](https://github.com/tartinerlabs/skills/compare/v1.34.1...v1.35.0) (2026-09-29)
 
 

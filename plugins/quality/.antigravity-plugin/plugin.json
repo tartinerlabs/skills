@@ -1,7 +1,7 @@
 {
   "name": "quality",
   "displayName": "quality",
-  "version": "1.35.0",
+  "version": "1.36.0",
   "description": "Code quality skills — refactoring, naming conventions, and project structure",
   "author": {
     "name": "Tartiner Labs",
