@@ -4,7 +4,7 @@ impact: HIGH
 tags: migrations, schema, drift, orm, required-check
 ---
 
-**Rule**: In a project with committed migrations, add a dedicated `migration-drift` job that fails when the schema source has changes no committed migration covers. Make it a required status check. Without it, a PR can merge schema changes without the migration, and production then runs code against a schema that was never migrated.
+**Rule**: In a project with committed migrations, add a dedicated drift-check job (e.g. `migration-drift`) that fails when the schema source has changes no committed migration covers. Make it a required status check. Without it, a PR can merge schema changes without the migration, and production then runs code against a schema that was never migrated.
 
 Apply only when the project uses a migration tool and commits its migrations. With no migration tool, or with schema-push-only projects that commit no migrations, skip this rule.
 
@@ -20,6 +20,8 @@ A repository can hold several configs, for example one per database in a monorep
 ### Check Command per Tool
 
 Each tool needs a command that reports what migration it *would* generate and exits non-zero when that migration is non-empty. A command that writes files instead is followed by `git status --porcelain -- <migrations dir>`.
+
+Prefer the project's own generate script (e.g. `db:generate` in `package.json`) over the raw command, since it already carries the right config. Fall back to the raw command only when no script exists.
 
 | Tool | Config | Check | Needs a database |
 |------|--------|-------|------------------|
@@ -61,6 +63,7 @@ concurrency:
 jobs:
   migration-drift:
     runs-on: ubuntu-latest
+    timeout-minutes: 10
     # Only for tools that need a database — a throwaway container, never a real one
     services:
       postgres:
@@ -77,20 +80,37 @@ jobs:
           node-version: 'lts/*'
           cache: '<pm>'
       - run: <pm> install --frozen-lockfile
-      # One step per config
+      # Project script or raw command, one line per config
       - run: <check command>
-        timeout-minutes: 5
+```
+
+For tools that write files (e.g. Drizzle), follow generate with a step that names the drift and says what to do:
+
+```yaml
+      - name: Check for missing migrations
+        run: |
+          drift=$(git status --porcelain -- <migrations dirs>)
+          if [ -n "$drift" ]; then
+            echo "$drift"
+            echo "::error::Schema changed without a committed migration. Once the schema is signed off, run <generate script> and commit the output."
+            exit 1
+          fi
 ```
 
 Use the workflow's existing `permissions`, `concurrency`, pinning, Node version, and caching per the other rules. Drop `services` when the tool needs no database, and point a shadow database at the container only, never at a real database.
 
 ### Required Status Check
 
-The job alone blocks nothing. Tell the user to add `migration-drift` as a required status check in branch protection or a ruleset (Settings → Rules). That is the step that blocks the merge, and the skill cannot do it for them.
+The job alone blocks nothing. Tell the user to add the job, under whatever name it was given, as a required status check in branch protection or a ruleset (Settings → Rules). That is the step that blocks the merge, and the skill cannot do it for them.
 
-### Interactive Prompts (unverified)
+### Ambiguous Changes
 
-Some generators ask interactively when a change is ambiguous. Drizzle, for example, asks whether a column was renamed or dropped and re-created. CI has no TTY, so the step may error or hang instead of reporting a clean diff. The step's `timeout-minutes` bounds the hang. Report a timeout or prompt error as "ambiguous schema change: generate the migration locally", not as a CI fault. This behaviour has not yet been verified in CI.
+Some generators ask interactively when a change is ambiguous, such as whether a column was renamed or dropped and re-created. Without a TTY:
+
+- **Drizzle (drizzle-kit 1.0.0-rc.4 and later)**: generate does not prompt. It exits 2 with a `missing_hints` message, so the job fails cleanly (verified)
+- **drizzle-kit 0.x and other tools**: unverified. A generator may hang waiting for input
+
+Keep the job's `timeout-minutes` as a safety net either way. Report a `missing_hints` failure, prompt error, or timeout as "ambiguous schema change: generate the migration locally", not as a CI fault.
 
 ### Never Generate Migrations
 
