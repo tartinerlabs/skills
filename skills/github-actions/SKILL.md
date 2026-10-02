@@ -39,6 +39,8 @@ Read each rule file in `rules/` and apply all of them when generating workflows.
 
 Pin every action per `rules/action-pinning.md` before writing the workflow, including GitHub-owned `actions/*`. Resolve the intended release or source ref to a full commit SHA with `gh api repos/{owner}/{repo}/commits/{ref} --jq '.sha'`, then retain the release or source ref in a comment.
 
+When the project commits migrations from a migration tool, also add a separate `migration-drift` job per `rules/migration-drift.md`, and tell the user to make it a required status check.
+
 ### 4. Workflow Template
 
 Route by the language detected in Step 1. The template below is the **JS/TS default**; for any other detected language, load `references/<lang>.md` and use its template instead:
@@ -94,7 +96,7 @@ Read all `.yml` and `.yaml` files in `.github/workflows/` and audit against ever
 
 Report each finding as `path:line` — what is wrong → the fix, grouped by severity, and close with per-severity counts and the number of files scanned.
 
-Report **all** rule violations found, not just pinning and permissions — concurrency, node version, caching, triggers, matrix, and parallel steps too.
+Report **all** rule violations found, not just pinning and permissions — migration drift, concurrency, node version, caching, triggers, matrix, and parallel steps too.
 
 ### 3. Auto-Fix
 
@@ -106,6 +108,7 @@ When fixing, look up commit SHAs for pinning using `gh api`.
 |------|--------|------|
 | Action pinning | HIGH | `rules/action-pinning.md` |
 | Permissions | HIGH | `rules/permissions.md` |
+| Migration drift | HIGH | `rules/migration-drift.md` |
 | Concurrency | MEDIUM | `rules/concurrency.md` |
 | Node version | MEDIUM | `rules/node-version.md` |
 | Caching | MEDIUM | `rules/caching.md` |
