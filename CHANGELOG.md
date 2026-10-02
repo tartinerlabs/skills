@@ -14,6 +14,19 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [1.37.0](https://github.com/tartinerlabs/skills/compare/v1.36.0...v1.37.0) (2026-10-02)
+
+
+### Features
+
+* add migration drift check to create-pr ([f5e4644](https://github.com/tartinerlabs/skills/commit/f5e4644ad15038e1ce8447692992ec51a9494596))
+* add migration drift rule to github-actions ([b758a56](https://github.com/tartinerlabs/skills/commit/b758a56f41632a676be2908d6bcf1091032dc37f))
+
+
+### Bug Fixes
+
+* align migration drift rule with verified CI ([92925c1](https://github.com/tartinerlabs/skills/commit/92925c1b883ce76d2d51928e2a72163e29d7b136))
+
 ## [1.36.0](https://github.com/tartinerlabs/skills/compare/v1.35.0...v1.36.0) (2026-09-30)
 
 
