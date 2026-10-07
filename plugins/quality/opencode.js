@@ -1,5 +1,5 @@
 // OpenCode v2 plugin: registers this collection's skills.
-// Installed with `opencode plugin add 'github:tartinerlabs/skills::path:plugins/quality'`.
+// Installed with `opencode plugin add 'github:tartinerlabs/skills#main::path:plugins/quality'`.
 import { readdirSync, readFileSync } from "node:fs"
 import { dirname, join } from "node:path"
 import { fileURLToPath } from "node:url"

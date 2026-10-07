@@ -153,13 +153,13 @@ Claude-specific hooks are intentionally not declared in the Cursor manifests.
 Requires OpenCode v2. Each collection carries a dependency-free OpenCode plugin (`plugins/<collection>/opencode.js` and its `package.json`) that OpenCode installs straight from git:
 
 ```bash
-opencode plugin add 'github:tartinerlabs/skills::path:plugins/workflow'
-opencode plugin add 'github:tartinerlabs/skills::path:plugins/quality'
-opencode plugin add 'github:tartinerlabs/skills::path:plugins/security'
-opencode plugin add 'github:tartinerlabs/skills::path:plugins/tooling'
+opencode plugin add 'github:tartinerlabs/skills#main::path:plugins/workflow'
+opencode plugin add 'github:tartinerlabs/skills#main::path:plugins/quality'
+opencode plugin add 'github:tartinerlabs/skills#main::path:plugins/security'
+opencode plugin add 'github:tartinerlabs/skills#main::path:plugins/tooling'
 ```
 
-To pin a release, add the tag before `::path:` — for example `github:tartinerlabs/skills#v1.37.0::path:plugins/workflow`. The plugins register skills only; the `deps` agent is Claude Code-only.
+OpenCode needs the ref before `::path:` — the form without one fails to install. To pin a release, swap `main` for a tag from v2.0.0 onward, the first release to include these plugins. The plugins register skills only; the `deps` agent is Claude Code-only.
 
 ### [Skills](https://skills.sh)
 
