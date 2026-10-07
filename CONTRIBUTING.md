@@ -81,7 +81,7 @@ This repository uses [conventional commits](https://www.conventionalcommits.org/
 - CI validates the repository structure on every pull request, and additionally on push to `main`:
   - **Skills** — validates distribution via [skills.sh](https://skills.sh)
   - **Release** — automated via release-please (maintains a release PR; merging it bumps versions, updates the changelog, and creates the GitHub release)
-- The repo is also distributed as **Claude Code**, **Codex**, **Cursor**, and **Antigravity** plugins. Keep the plugin manifests aligned manually and treat `.release-please-manifest.json` as the shared version source
+- The repo is also distributed as **Claude Code**, **Codex**, **Cursor**, **Antigravity**, and **OpenCode** plugins. Keep the plugin manifests aligned manually and treat `.release-please-manifest.json` as the shared version source
 
 ## Reporting Issues
 
