@@ -148,6 +148,19 @@ ln -s "$(pwd)/plugins/tooling" ~/.cursor/plugins/local/tooling
 
 Claude-specific hooks are intentionally not declared in the Cursor manifests.
 
+### [OpenCode](https://opencode.ai) Plugin
+
+Requires OpenCode v2. Each collection carries a dependency-free OpenCode plugin (`plugins/<collection>/opencode.js` and its `package.json`) that OpenCode installs straight from git:
+
+```bash
+opencode plugin add 'github:tartinerlabs/skills::path:plugins/workflow'
+opencode plugin add 'github:tartinerlabs/skills::path:plugins/quality'
+opencode plugin add 'github:tartinerlabs/skills::path:plugins/security'
+opencode plugin add 'github:tartinerlabs/skills::path:plugins/tooling'
+```
+
+To pin a release, add the tag before `::path:` — for example `github:tartinerlabs/skills#v1.37.0::path:plugins/workflow`. The plugins register skills only; the `deps` agent is Claude Code-only.
+
 ### [Skills](https://skills.sh)
 
 Install all skills:
@@ -181,10 +194,6 @@ pnpm dlx skills add tartinerlabs/skills/setup
 ### [Context7](https://context7.com)
 
 > **Note:** The Context7 skills channel has been retired — `ctx7 skills install` is deprecated upstream and stops working in the next major `ctx7` release, with no successor command for installing skills from a repository. Context7 remains a documentation source; for these skills, use [skills.sh](#skills) or one of the plugin channels above.
-
-### [OpenCode](https://opencode.ai)
-
-> **Note:** The OpenCode plugin has been retired — OpenCode's TypeScript plugin system differs too much from the manifest-based Claude Code/Codex/Cursor plugins to maintain alongside them, and the repository no longer carries a JS/TS toolchain (npm dependencies are a supply-chain surface this repo deliberately avoids). OpenCode users can install the skills directly via [skills.sh](#skills), which copies them into OpenCode's skill discovery directories.
 
 ## Plugin Metadata
 

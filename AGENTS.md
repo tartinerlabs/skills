@@ -7,7 +7,7 @@ Canonical guidance for coding agents working in this repository. Claude Code add
 **Repository:** https://github.com/tartinerlabs/skills
 **Package:** `@tartinerlabs/skills`
 
-A collection of agent skills distributed via Claude Code, Codex, Cursor, Antigravity, and [skills.sh](https://skills.sh). Each skill is a markdown file with YAML frontmatter following the [Agent Skills spec](https://agentskills.io).
+A collection of agent skills distributed via Claude Code, Codex, Cursor, Antigravity, OpenCode, and [skills.sh](https://skills.sh). Each skill is a markdown file with YAML frontmatter following the [Agent Skills spec](https://agentskills.io).
 
 ## Development
 
@@ -68,7 +68,7 @@ Skills are lightweight guides, not procedures. State a preference and its reason
 
 The skills ship as four themed **collection plugins** — `workflow`, `quality`, `security`, and `tooling`. The original all-in-one `tartinerlabs` plugin has been removed. The `collections` table in `scripts/validate-skills/main.go` is the source of truth for membership — every skill must belong to exactly one collection (validated in CI).
 
-Five channels: Claude Code, Codex, Cursor, and Antigravity plugins (each reading `plugins/<collection>/.<channel>-plugin/plugin.json`), plus [skills.sh](https://skills.sh), which discovers the skills through the marketplace manifests. **Claude Code takes precedence** — a change that helps another channel must not regress Claude Code; install-test it there first. `README.md` has the install commands. The `Skills` CI workflow validates skills.sh distribution on push to `main`. Context7 was a sixth channel until `ctx7 skills install` was deprecated upstream with no successor; Context7 remains a documentation source, not a distribution target.
+Six channels: Claude Code, Codex, Cursor, and Antigravity plugins (each reading `plugins/<collection>/.<channel>-plugin/plugin.json`), an OpenCode v2 plugin per collection (`plugins/<collection>/opencode.js`, installed from git), plus [skills.sh](https://skills.sh), which discovers the skills through the marketplace manifests. **Claude Code takes precedence** — a change that helps another channel must not regress Claude Code; install-test it there first. `README.md` has the install commands. The `Skills` CI workflow validates skills.sh distribution on push to `main`. Context7 was also a channel until `ctx7 skills install` was deprecated upstream with no successor; Context7 remains a documentation source, not a distribution target.
 
 ## Plugins
 
@@ -78,8 +78,9 @@ Plugin metadata is hand-maintained by design — there is no generator. Each col
 - The root `plugin.json` targets Agent Plugins **1.0.0** — the only version Codex accepts; a client rejects a version it does not support. Its schema is closed (`$schema`, `name`, `version`, `description`, `author`, `homepage`, `repository`, `license`, `keywords`, `extensions`), and Codex refuses to install the plugin if it does not validate. Bump the version only once Codex supports the newer one
 - `xcode-skills` is the one exception: a wrapper exposing the untouched export through a single `skills` dir symlink, whose target the validator checks
 - Each marketplace references every plugin as `./plugins/<name>`. **Keep every plugin subdirectory-sourced** — the Claude Code loader silently drops a plugin sourced at the marketplace root (`source: "./"`) when another plugin exists
-- `.release-please-manifest.json` is the canonical version source; release-please (`extra-files` in `release-please-config.json`) syncs the `plugins/**/plugin.json` versions in the release PR. Never bump a version by hand
-- When plugin copy changes, update all four channels intentionally. Do not expose Claude-only hooks in Cursor or Codex metadata unless they have been ported to that runtime
+- **OpenCode** installs each collection with `opencode plugin add 'github:tartinerlabs/skills::path:plugins/<collection>'`. That git install packs the subdirectory like an npm package, so it needs the collection's `package.json` (private, no dependencies) and copies only real files. `opencode.js` is a plain `{ id, setup }` object with no imports beyond Node built-ins; it reads each `skills/<name>/SKILL.md` and registers it through `ctx.skill.transform`. Plugin IDs (`tartinerlabs.<collection>`) must stay unique — OpenCode refuses a duplicate. `docs/opencode-v2-plugins.md` has the tested behaviour
+- `.release-please-manifest.json` is the canonical version source; release-please (`extra-files` in `release-please-config.json`) syncs the `plugins/**/plugin.json` and `plugins/<collection>/package.json` versions in the release PR. Never bump a version by hand
+- When plugin copy changes, update every channel intentionally. Do not expose Claude-only hooks in Cursor or Codex metadata unless they have been ported to that runtime
 
 ## Xcode Skill Export
 
@@ -94,5 +95,5 @@ All plugin metadata for this collection belongs in `plugins/xcode-skills/`, whos
 - PR and issue titles use natural language, NOT conventional commit prefixes
 - GitHub-related skills auto-assign to the current user via `@me` or `get_me`
 - Skills can use both CLI tools (`gh`, `git`) and MCP tools (`mcp__github__*`) depending on the operation
-- Use `pnpm dlx` in documentation, not `pnx` — readers do not share this repo's tooling, and the repo has no `package.json` of its own
+- Use `pnpm dlx` in documentation, not `pnx` — readers do not share this repo's tooling, and the repo has no root `package.json` (the per-collection ones exist only for OpenCode's git install)
 - Grant the minimum `allowed-tools` a skill needs; prefer specific commands (`Bash(git status)`) over blanket tool access

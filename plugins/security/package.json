@@ -1,0 +1,11 @@
+{
+  "name": "tartinerlabs-security",
+  "version": "1.37.0",
+  "private": true,
+  "description": "Security skills — OWASP audits, secret scanning, and dependency supply-chain hardening",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./opencode.js"
+  }
+}
