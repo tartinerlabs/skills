@@ -14,6 +14,23 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.0.0](https://github.com/tartinerlabs/skills/compare/v1.37.0...v2.0.0) (2026-10-07)
+
+
+### ⚠ BREAKING CHANGES
+
+* the deprecated all-in-one tartinerlabs plugin is removed. Install the workflow, quality, security, and tooling plugins.
+
+### Features
+
+* add OpenCode v2 plugins to collections ([b63b924](https://github.com/tartinerlabs/skills/commit/b63b924664fc13a77aad77741849d768631668c6))
+* move skills into self-contained plugins ([6a855c7](https://github.com/tartinerlabs/skills/commit/6a855c71983ebdf3bb9af777f61911340c96d2da))
+
+
+### Bug Fixes
+
+* require ref in OpenCode install command ([a1780a7](https://github.com/tartinerlabs/skills/commit/a1780a70ae71a0e7be4c4ee1a1afd870170e6673))
+
 ## [1.37.0](https://github.com/tartinerlabs/skills/compare/v1.36.0...v1.37.0) (2026-10-02)
 
 
