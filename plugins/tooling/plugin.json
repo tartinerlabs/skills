@@ -1,0 +1,21 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "tooling",
+  "version": "1.37.0",
+  "description": "Project tooling skills — linting/formatting setup, testing, and documentation sync",
+  "author": {
+    "name": "Tartiner Labs",
+    "url": "https://github.com/tartinerlabs"
+  },
+  "homepage": "https://github.com/tartinerlabs/skills",
+  "repository": "https://github.com/tartinerlabs/skills",
+  "license": "MIT",
+  "keywords": [
+    "setup",
+    "linting",
+    "formatting",
+    "testing",
+    "git-hooks",
+    "docs"
+  ]
+}

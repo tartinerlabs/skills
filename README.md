@@ -25,12 +25,12 @@ Git and GitHub workflow skills — commits, branches, pull requests, issues, and
 
 | Skill | Description |
 |-------|-------------|
-| [clean-branches](skills/clean-branches) | Delete local branches that already landed, including squash-merged PRs missed by `git branch --delete-merged` |
-| [commit](skills/commit) | Clean git commits with conventional commit detection and secret scanning |
-| [create-branch](skills/create-branch) | Create and checkout a branch with naming validation and GitHub/GitLab issue linking |
-| [create-pr](skills/create-pr) | Push branch and create a pull/merge request (GitHub or GitLab) with structured description and auto-assignment |
-| [github-actions](skills/github-actions) | Create and audit GitHub Actions workflows with SHA pinning, permissions, and caching checks |
-| [github-issues](skills/github-issues) | Create, update, query, and comment on issues (GitHub, or GitLab via glab) |
+| [clean-branches](plugins/workflow/skills/clean-branches) | Delete local branches that already landed, including squash-merged PRs missed by `git branch --delete-merged` |
+| [commit](plugins/workflow/skills/commit) | Clean git commits with conventional commit detection and secret scanning |
+| [create-branch](plugins/workflow/skills/create-branch) | Create and checkout a branch with naming validation and GitHub/GitLab issue linking |
+| [create-pr](plugins/workflow/skills/create-pr) | Push branch and create a pull/merge request (GitHub or GitLab) with structured description and auto-assignment |
+| [github-actions](plugins/workflow/skills/github-actions) | Create and audit GitHub Actions workflows with SHA pinning, permissions, and caching checks |
+| [github-issues](plugins/workflow/skills/github-issues) | Create, update, query, and comment on issues (GitHub, or GitLab via glab) |
 
 ### quality
 
@@ -38,9 +38,9 @@ Code quality skills — refactoring, naming conventions, and project structure.
 
 | Skill | Description |
 |-------|-------------|
-| [refactor](skills/refactor) | Audit and refactor code for dead code, deep nesting, and design patterns (language-agnostic; TS/JS idiom rules for TS/JS files) |
-| [naming-format](skills/naming-format) | Audit and fix filename and export naming conventions for consistency |
-| [project-structure](skills/project-structure) | Audit project directory structure for colocation, grouping, and anti-pattern detection |
+| [refactor](plugins/quality/skills/refactor) | Audit and refactor code for dead code, deep nesting, and design patterns (language-agnostic; TS/JS idiom rules for TS/JS files) |
+| [naming-format](plugins/quality/skills/naming-format) | Audit and fix filename and export naming conventions for consistency |
+| [project-structure](plugins/quality/skills/project-structure) | Audit project directory structure for colocation, grouping, and anti-pattern detection |
 
 ### security
 
@@ -48,8 +48,8 @@ Security skills — OWASP audits, secret scanning, and dependency supply-chain h
 
 | Skill | Description |
 |-------|-------------|
-| [security](skills/security) | OWASP Top 10 security audit with secret detection and dependency vulnerability scanning |
-| [deps](skills/deps) | Harden the dependency supply chain — detects the ecosystem (JS/TS, Python, Go) for pinning, vulnerability scanning, and CI gates |
+| [security](plugins/security/skills/security) | OWASP Top 10 security audit with secret detection and dependency vulnerability scanning |
+| [deps](plugins/security/skills/deps) | Harden the dependency supply chain — detects the ecosystem (JS/TS, Python, Go) for pinning, vulnerability scanning, and CI gates |
 
 ### tooling
 
@@ -57,11 +57,11 @@ Project tooling skills — linting/formatting setup, testing, and documentation 
 
 | Skill | Description |
 |-------|-------------|
-| [setup](skills/setup) | Set up the ecosystem's lint/format/git-hooks/secret-scanning toolchain — detects the language (JS/TS, Python, Go) |
-| [testing](skills/testing) | Write and run unit/component tests — detects the language and test runner (JS/TS, Python, Go) |
-| [update-project](skills/update-project) | Update and maintain CLAUDE.md, AGENTS.md, README.md, agents, skills, and rules to match current project state |
+| [setup](plugins/tooling/skills/setup) | Set up the ecosystem's lint/format/git-hooks/secret-scanning toolchain — detects the language (JS/TS, Python, Go) |
+| [testing](plugins/tooling/skills/testing) | Write and run unit/component tests — detects the language and test runner (JS/TS, Python, Go) |
+| [update-project](plugins/tooling/skills/update-project) | Update and maintain CLAUDE.md, AGENTS.md, README.md, agents, skills, and rules to match current project state |
 
-> **Migrating from the `tartinerlabs` plugin?** The original all-in-one `tartinerlabs` plugin is deprecated but still published for a transition period. Install the collection plugins above and uninstall the monolith when ready — the skills are identical, only the namespace changes (e.g. `/tartinerlabs:commit` → `/workflow:commit`).
+> **Migrating from the `tartinerlabs` plugin?** The original all-in-one `tartinerlabs` plugin has been removed. Uninstall it and install the collection plugins above — the skills are identical, only the namespace changes (e.g. `/tartinerlabs:commit` → `/workflow:commit`).
 
 ## Xcode Skills
 
@@ -100,7 +100,7 @@ Agents invoke skills autonomously with an isolated worktree. The `deps` agent sh
 
 | Agent | Description |
 |-------|-------------|
-| [deps](agents/deps.md) | Autonomous supply-chain hardening — runs the deps skill in an isolated worktree and outputs a structured summary |
+| [deps](plugins/security/agents/deps.md) | Autonomous supply-chain hardening — runs the deps skill in an isolated worktree and outputs a structured summary |
 
 ## Installation
 
@@ -117,11 +117,9 @@ claude plugin install security@tartinerlabs
 claude plugin install tooling@tartinerlabs
 ```
 
-The deprecated all-in-one plugin remains installable as `tartinerlabs@tartinerlabs` during the transition period.
-
 ### Codex Plugin
 
-This repository includes repo-scoped Codex plugin metadata in `plugins/<collection>/.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`.
+This repository includes repo-scoped Codex plugin metadata in `plugins/<collection>/.codex-plugin/plugin.json` and `.agents/plugins/marketplace.json`. Codex reads each collection's root [Agent Plugins](https://agent-plugins.org) `plugin.json` first and layers the `.codex-plugin` manifest on top.
 
 To use it in Codex:
 
@@ -138,7 +136,7 @@ To use it in Cursor:
 1. Open this repository in Cursor
 2. Install `workflow`, `quality`, `security`, and/or `tooling` from the repo marketplace
 
-For a local plugin-directory install, symlink each collection wrapper — not the repository root. Cursor loads `plugin.json` from the symlink target, and the wrappers live under `plugins/<collection>/`:
+For a local plugin-directory install, symlink each collection plugin — not the repository root. Cursor loads `plugin.json` from the symlink target, and the plugins live under `plugins/<collection>/`:
 
 ```bash
 mkdir -p ~/.cursor/plugins/local

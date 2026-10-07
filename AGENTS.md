@@ -18,7 +18,7 @@ A collection of agent skills distributed via Claude Code, Codex, Cursor, Antigra
 
 ## Skill Format
 
-Each skill lives in `skills/<name>/SKILL.md`:
+Each skill lives in its collection plugin at `plugins/<collection>/skills/<name>/SKILL.md`:
 
 ```markdown
 ---
@@ -62,31 +62,34 @@ Polyglot skills add a `references/` subdirectory for **progressive disclosure**:
 
 ### House style
 
-Skills are lightweight guides, not procedures. State a preference and its reason, then license the exception — an absolute ban on a legitimate tool or utility will be wrong somewhere. `skills/setup/` is the reference for this: every rule file pairs `### Why This Matters` with `### Alternatives`, and the skill explicitly says you may decline any tool while a deliberately-configured alternative is kept, not swapped. Over-specify only where the cost of being wrong is high — `skills/commit/`'s refusal to commit when a secret scanner reports a leak is the one place hard `STOP` language is correct.
+Skills are lightweight guides, not procedures. State a preference and its reason, then license the exception — an absolute ban on a legitimate tool or utility will be wrong somewhere. `plugins/tooling/skills/setup/` is the reference for this: every rule file pairs `### Why This Matters` with `### Alternatives`, and the skill explicitly says you may decline any tool while a deliberately-configured alternative is kept, not swapped. Over-specify only where the cost of being wrong is high — `plugins/workflow/skills/commit/`'s refusal to commit when a secret scanner reports a leak is the one place hard `STOP` language is correct.
 
 ## Distribution
 
-The skills ship as four themed **collection plugins** — `workflow`, `quality`, `security`, and `tooling`. The original all-in-one `tartinerlabs` plugin is **deprecated** but still published for a transition period; its removal is a future release. The `collections` table in `scripts/validate-skills/main.go` is the source of truth for membership — every skill must belong to exactly one collection (validated in CI).
+The skills ship as four themed **collection plugins** — `workflow`, `quality`, `security`, and `tooling`. The original all-in-one `tartinerlabs` plugin has been removed. The `collections` table in `scripts/validate-skills/main.go` is the source of truth for membership — every skill must belong to exactly one collection (validated in CI).
 
-Five channels: Claude Code, Codex, Cursor, and Antigravity plugins (each reading `plugins/<collection>/.<channel>-plugin/plugin.json`), plus [skills.sh](https://skills.sh). `README.md` has the install commands. The `Skills` CI workflow validates skills.sh distribution on push to `main`. Context7 was a sixth channel until `ctx7 skills install` was deprecated upstream with no successor; Context7 remains a documentation source, not a distribution target.
+Five channels: Claude Code, Codex, Cursor, and Antigravity plugins (each reading `plugins/<collection>/.<channel>-plugin/plugin.json`), plus [skills.sh](https://skills.sh), which discovers the skills through the marketplace manifests. **Claude Code takes precedence** — a change that helps another channel must not regress Claude Code; install-test it there first. `README.md` has the install commands. The `Skills` CI workflow validates skills.sh distribution on push to `main`. Context7 was a sixth channel until `ctx7 skills install` was deprecated upstream with no successor; Context7 remains a documentation source, not a distribution target.
 
 ## Plugins
 
-Plugin metadata is hand-maintained by design — there is no generator. Every plugin lives in its own `plugins/<name>/` wrapper holding its four per-channel manifests plus a `skills` entry exposing its skill source. Two wrapper shapes exist: **collection wrappers** with a real `skills/` directory of per-skill symlinks, and **whole-directory wrappers** (`tartinerlabs`, `xcode-skills`) exposing a source directory through one dir symlink. The validator checks every symlink target.
+Plugin metadata is hand-maintained by design — there is no generator. Each collection plugin follows the [Agent Plugins spec](https://agent-plugins.org): a root `plugin.json` plus the real skill directories under `skills/`, with the four per-channel manifests kept alongside as client adapters. Client-specific components such as the `deps` agent (`plugins/security/agents/`) live in the plugin too.
 
+- **No symlinks inside a collection plugin.** Codex copies a plugin into its cache and silently skips symlinks, and the spec has clients reject any path resolving outside the plugin root. The validator fails on any symlink under a collection plugin
+- The root `plugin.json` targets Agent Plugins **1.0.0** — the only version Codex accepts; a client rejects a version it does not support. Its schema is closed (`$schema`, `name`, `version`, `description`, `author`, `homepage`, `repository`, `license`, `keywords`, `extensions`), and Codex refuses to install the plugin if it does not validate. Bump the version only once Codex supports the newer one
+- `xcode-skills` is the one exception: a wrapper exposing the untouched export through a single `skills` dir symlink, whose target the validator checks
 - Each marketplace references every plugin as `./plugins/<name>`. **Keep every plugin subdirectory-sourced** — the Claude Code loader silently drops a plugin sourced at the marketplace root (`source: "./"`) when another plugin exists
 - `.release-please-manifest.json` is the canonical version source; release-please (`extra-files` in `release-please-config.json`) syncs the `plugins/**/plugin.json` versions in the release PR. Never bump a version by hand
 - When plugin copy changes, update all four channels intentionally. Do not expose Claude-only hooks in Cursor or Codex metadata unless they have been ported to that runtime
 
 ## Xcode Skill Export
 
-The root-level `xcode-skills/` directory is generated exclusively by `xcrun agent skills export`, and holds Apple-authored skills unrelated to `skills/`. After an export, do not edit, add, remove, rename, move, reformat, or manually clean up anything inside it. Future exports must write directly to the same path and remain untouched afterward.
+The root-level `xcode-skills/` directory is generated exclusively by `xcrun agent skills export`, and holds Apple-authored skills unrelated to the collection plugins. After an export, do not edit, add, remove, rename, move, reformat, or manually clean up anything inside it. Future exports must write directly to the same path and remain untouched afterward.
 
 All plugin metadata for this collection belongs in `plugins/xcode-skills/`, whose `skills` symlink points to `../../xcode-skills`. Wrapper metadata and documentation may change; the exported directory may not.
 
 ## Conventions
 
-- **Commit type for skill content:** skill markdown (`skills/**/*.md`) is the product, not documentation. Changes to skill behaviour use `feat`/`fix`/`refactor` — never `docs`. Reserve `docs:` for `README.md`, `AGENTS.md`, `CLAUDE.md`, `CHANGELOG.md`, and similar meta-documentation
+- **Commit type for skill content:** skill markdown (`plugins/*/skills/**/*.md`) is the product, not documentation. Changes to skill behaviour use `feat`/`fix`/`refactor` — never `docs`. Reserve `docs:` for `README.md`, `AGENTS.md`, `CLAUDE.md`, `CHANGELOG.md`, and similar meta-documentation
 - Commit subjects are max 50 characters with no scope, enforced by `.githooks/commit-msg`
 - PR and issue titles use natural language, NOT conventional commit prefixes
 - GitHub-related skills auto-assign to the current user via `@me` or `get_me`

@@ -7,6 +7,11 @@
       "extra-files": [
         {
           "type": "json",
+          "path": "plugins/workflow/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
           "path": "plugins/workflow/.codex-plugin/plugin.json",
           "jsonpath": "$.version"
         },
@@ -23,6 +28,11 @@
         {
           "type": "json",
           "path": "plugins/workflow/.antigravity-plugin/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "plugins/quality/plugin.json",
           "jsonpath": "$.version"
         },
         {
@@ -47,6 +57,11 @@
         },
         {
           "type": "json",
+          "path": "plugins/security/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
           "path": "plugins/security/.codex-plugin/plugin.json",
           "jsonpath": "$.version"
         },
@@ -67,6 +82,11 @@
         },
         {
           "type": "json",
+          "path": "plugins/tooling/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
           "path": "plugins/tooling/.codex-plugin/plugin.json",
           "jsonpath": "$.version"
         },
@@ -83,26 +103,6 @@
         {
           "type": "json",
           "path": "plugins/tooling/.antigravity-plugin/plugin.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "json",
-          "path": "plugins/tartinerlabs/.codex-plugin/plugin.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "json",
-          "path": "plugins/tartinerlabs/.claude-plugin/plugin.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "json",
-          "path": "plugins/tartinerlabs/.cursor-plugin/plugin.json",
-          "jsonpath": "$.version"
-        },
-        {
-          "type": "json",
-          "path": "plugins/tartinerlabs/.antigravity-plugin/plugin.json",
           "jsonpath": "$.version"
         },
         {
