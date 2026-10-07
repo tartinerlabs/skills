@@ -129,7 +129,7 @@ The same transform pattern covers commands (`ctx.command`), agents, MCP servers 
 
 ## Test results
 
-Tested 2026-10-07 against OpenCode v2.0.24 in an isolated home (`HOME`/`XDG_*` redirected, private `opencode serve`), inspecting state through the server's `skill.list` and `plugin.list` endpoints. Git installs used `git+file://` specs, first against a scratch repo mirroring the pre-#99 symlink layout, then against a clone of `main` after #99 moved skills into real directories under `plugins/<collection>/skills/`. `github:` shortcuts go through the same npm git-install path but were not exercised.
+Tested 2026-10-07 against OpenCode v2.0.24 in an isolated home (`HOME`/`XDG_*` redirected, private `opencode serve`), inspecting state through the server's `skill.list` and `plugin.list` endpoints. Git installs used `git+file://` specs, first against a scratch repo mirroring the pre-#99 symlink layout, then against a clone of `main` after #99 moved skills into real directories under `plugins/<collection>/skills/`. After #98 merged, all four collections were also installed from GitHub with `github:tartinerlabs/skills#main::path:plugins/<collection>`; all four plugins loaded and registered all 14 skills.
 
 ### A plain object plugin loads with zero dependencies — confirmed
 
@@ -172,6 +172,7 @@ Before #99, `raw.githubusercontent.com/tartinerlabs/skills/main/plugins/workflow
 - Reinstalling the same branch spec reuses the cached install; a new revision lands only through `opencode plugin update` or a pinned commit hash. Pinning full hashes is the reliable path for testing
 - Two plugins with the same `id` fail with `Duplicate plugin ID` — each collection needs its own `id`
 - `opencode plugin update` starts the managed background service and has no `--server` flag, so it collides with an already-running service on the same machine
+- A `github:` spec with `::path:` needs a ref: `#main::path:…` and `#<full-hash>::path:…` install, while the bare `github:org/repo::path:…` fails with `An unknown git error occurred`. Short hashes fail with `The git reference could not be found`
 - Loading a skill through `POST /api/experimental/session/{id}/skill` also triggers an assistant turn
 
 ## Implications for this repo
@@ -182,4 +183,4 @@ Before #99, `raw.githubusercontent.com/tartinerlabs/skills/main/plugins/workflow
 | HTTP catalog | Committed `index.json` served from GitHub raw | The named-file gotcha means duplicating each `SKILL.md` as `<name>.md` or adding a generator; validator must keep `index.json` and versions in sync |
 | Git plugin per collection | `plugins/<collection>/package.json` (no dependencies) + a small dependency-free `opencode.js` that reads and registers that collection's skills | Two small files per collection; reintroduces a little JS source; tracks an API with no release notes |
 
-The git plugin option is proven end to end against the merged layout: #99's real skill directories satisfy its one structural requirement, so adding a channel is now just the two files per collection. Install would be `opencode plugin add 'github:tartinerlabs/skills::path:plugins/<collection>'`.
+The git plugin option is proven end to end against the merged layout: #99's real skill directories satisfy its one structural requirement, so adding a channel is now just the two files per collection. Install would be `opencode plugin add 'github:tartinerlabs/skills#main::path:plugins/<collection>'`.
