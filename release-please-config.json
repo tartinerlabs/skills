@@ -32,6 +32,11 @@
         },
         {
           "type": "json",
+          "path": "plugins/workflow/package.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
           "path": "plugins/quality/plugin.json",
           "jsonpath": "$.version"
         },
@@ -53,6 +58,11 @@
         {
           "type": "json",
           "path": "plugins/quality/.antigravity-plugin/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "plugins/quality/package.json",
           "jsonpath": "$.version"
         },
         {
@@ -82,6 +92,11 @@
         },
         {
           "type": "json",
+          "path": "plugins/security/package.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
           "path": "plugins/tooling/plugin.json",
           "jsonpath": "$.version"
         },
@@ -103,6 +118,11 @@
         {
           "type": "json",
           "path": "plugins/tooling/.antigravity-plugin/plugin.json",
+          "jsonpath": "$.version"
+        },
+        {
+          "type": "json",
+          "path": "plugins/tooling/package.json",
           "jsonpath": "$.version"
         },
         {

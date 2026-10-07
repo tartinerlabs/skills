@@ -1,0 +1,11 @@
+{
+  "name": "tartinerlabs-workflow",
+  "version": "1.37.0",
+  "private": true,
+  "description": "Git and GitHub workflow skills — commits, branches, pull requests, issues, and CI actions",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./opencode.js"
+  }
+}
