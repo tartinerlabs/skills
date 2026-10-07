@@ -1,0 +1,11 @@
+{
+  "name": "tartinerlabs-tooling",
+  "version": "1.37.0",
+  "private": true,
+  "description": "Project tooling skills — linting/formatting setup, testing, and documentation sync",
+  "license": "MIT",
+  "type": "module",
+  "exports": {
+    ".": "./opencode.js"
+  }
+}
