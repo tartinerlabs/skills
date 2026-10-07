@@ -71,7 +71,7 @@ This repository uses [conventional commits](https://www.conventionalcommits.org/
 
 - **Max 50 characters** for the subject line
 - Format: `type: description` — no scope (e.g. `feat: add deploy skill`, `fix: correct frontmatter field`)
-- **Skill markdown is the product, not docs.** Changes under `plugins/*/skills/**/*.md` use `feat`/`fix`/`refactor`; reserve `docs:` for `README.md`, `AGENTS.md`, `CLAUDE.md`, and similar meta-documentation
+- **Skill markdown is the product, not docs.** Changes under `plugins/*/skills/**/*.md` use `feat`/`fix`/`refactor`; reserve `docs:` for `README.md`, `AGENTS.md`, and similar meta-documentation
 - A GitLeaks pre-commit hook runs on every commit to detect secrets — do not bypass it
 
 ## Pull Requests

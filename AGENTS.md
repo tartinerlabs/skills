@@ -1,6 +1,6 @@
 # AGENTS.md
 
-Canonical guidance for coding agents working in this repository. Claude Code additions live in `CLAUDE.md`; everything here applies to every agent.
+Canonical guidance for coding agents working in this repository; it applies to every agent.
 
 ## Project Overview
 
@@ -68,7 +68,7 @@ Skills are lightweight guides, not procedures. State a preference and its reason
 
 The skills ship as four themed **collection plugins** — `workflow`, `quality`, `security`, and `tooling`. The original all-in-one `tartinerlabs` plugin has been removed. The `collections` table in `scripts/validate-skills/main.go` is the source of truth for membership — every skill must belong to exactly one collection (validated in CI).
 
-Six channels: Claude Code, Codex, Cursor, and Antigravity plugins (each reading `plugins/<collection>/.<channel>-plugin/plugin.json`), an OpenCode v2 plugin per collection (`plugins/<collection>/opencode.js`, installed from git), plus [skills.sh](https://skills.sh), which discovers the skills through the marketplace manifests. **Claude Code takes precedence** — a change that helps another channel must not regress Claude Code; install-test it there first. `README.md` has the install commands. The `Skills` CI workflow validates skills.sh distribution on push to `main`. Context7 was also a channel until `ctx7 skills install` was deprecated upstream with no successor; Context7 remains a documentation source, not a distribution target.
+Six channels: Claude Code, Codex, Cursor, and Antigravity plugins (each reading `plugins/<collection>/.<channel>-plugin/plugin.json`), an OpenCode v2 plugin per collection (`plugins/<collection>/opencode.js`, installed from git), plus [skills.sh](https://skills.sh), which discovers the skills through the marketplace manifests. **Claude Code takes precedence** — a change that helps another channel must not regress Claude Code; install-test it there first. Once a collection plugin is installed there, its skills are invoked as `/<collection>:<skill>` — e.g. `/workflow:commit`, `/quality:refactor`. `README.md` has the install commands. The `Skills` CI workflow validates skills.sh distribution on push to `main`. Context7 was also a channel until `ctx7 skills install` was deprecated upstream with no successor; Context7 remains a documentation source, not a distribution target.
 
 ## Plugins
 
@@ -90,7 +90,7 @@ All plugin metadata for this collection belongs in `plugins/xcode-skills/`, whos
 
 ## Conventions
 
-- **Commit type for skill content:** skill markdown (`plugins/*/skills/**/*.md`) is the product, not documentation. Changes to skill behaviour use `feat`/`fix`/`refactor` — never `docs`. Reserve `docs:` for `README.md`, `AGENTS.md`, `CLAUDE.md`, `CHANGELOG.md`, and similar meta-documentation
+- **Commit type for skill content:** skill markdown (`plugins/*/skills/**/*.md`) is the product, not documentation. Changes to skill behaviour use `feat`/`fix`/`refactor` — never `docs`. Reserve `docs:` for `README.md`, `AGENTS.md`, `CHANGELOG.md`, and similar meta-documentation
 - Commit subjects are max 50 characters with no scope, enforced by `.githooks/commit-msg`
 - PR and issue titles use natural language, NOT conventional commit prefixes
 - GitHub-related skills auto-assign to the current user via `@me` or `get_me`
