@@ -127,19 +127,58 @@ The same transform pattern covers commands (`ctx.command`), agents, MCP servers 
 }
 ```
 
+## Test results
+
+Tested 2026-10-07 against OpenCode v2.0.24 in an isolated home (`HOME`/`XDG_*` redirected, private `opencode serve`), inspecting state through the server's `skill.list` and `plugin.list` endpoints. Git installs used `git+file://` specs against a scratch repo mirroring this repo's layout; `github:` shortcuts go through the same npm git-install path but were not exercised.
+
+### A plain object plugin loads with zero dependencies — confirmed
+
+```js
+import { readFileSync } from "node:fs"
+
+export default {
+  id: "tartinerlabs.test",
+  async setup(ctx) {
+    // read SKILL.md, split frontmatter, then:
+    await ctx.skill.transform((editor) => editor.add({ id, name, description, path, content }))
+  },
+}
+```
+
+No `@opencode/plugin` import, no `package.json` dependencies. The plugin reported `active` and the skill appeared in `skill.list` alongside discovered ones. Node built-ins (`node:fs`, `node:path`, `node:url`) are available.
+
+### Supporting files resolve from `path` — confirmed
+
+OpenCode's shipped `Skill.prepare` sets the skill's base directory to `dirname(skill.path)`, and when the file is named exactly `SKILL.md` it scans that directory for up to 10 supporting files (sorted, excluding `SKILL.md`) to include when the skill loads. A plugin-registered skill whose `path` points at a real `SKILL.md` therefore gets the same base directory and `rules/`/`references/` sample as a discovered skill. Skills with more than 10 supporting files get a truncated sample either way.
+
+### Git installs pack like npm — symlinks are dropped
+
+| Variant | Spec | Result |
+|---------|------|--------|
+| Subdirectory with symlinked skills (current layout) | `…#<ref>::path:plugins/workflow` | Installs, but `skills/` is missing entirely — only `index.js` and `package.json` arrive |
+| Subdirectory with real skill directories | `…#<ref>::path:plugins/workflow` | Full tree arrives, including `rules/` and `references/`; skills register |
+| Root `package.json`, no `::path:` | `…#<ref>` | Whole repo arrives; an entrypoint under `plugins/workflow/` reading `../../skills` registers skills |
+| Subdirectory without `package.json` | `…#<ref>::path:plugins/workflow` | Fails: `NpmInstallFailedError: Could not read package.json` |
+
+The `package.json` can be dependency-free — `name`, `version`, `"type": "module"`, and `exports` were enough.
+
+### Raw GitHub does not follow symlinks — confirmed
+
+`raw.githubusercontent.com/tartinerlabs/skills/main/plugins/workflow/skills/commit` returns the link text `../../../skills/commit`, and `…/plugins/workflow/skills/commit/SKILL.md` returns 404. An HTTP catalog can only point at real files.
+
+### Operational notes
+
+- Reinstalling the same branch spec reuses the cached install; a new revision lands only through `opencode plugin update` or a pinned commit hash. Pinning full hashes is the reliable path for testing
+- Two plugins with the same `id` fail with `Duplicate plugin ID` — each collection needs its own `id`
+- `opencode plugin update` starts the managed background service and has no `--server` flag, so it collides with an already-running service on the same machine
+- Loading a skill through `POST /api/experimental/session/{id}/skill` also triggers an assistant turn
+
 ## Implications for this repo
 
 | Option | What ships | Cost |
 |--------|-----------|------|
 | README update only | A line saying OpenCode v2 reads skills.sh installs from `~/.agents/skills` | Nothing to maintain |
-| HTTP catalog | Committed `index.json` served from GitHub raw | Named-file gotcha means duplicating each `SKILL.md` as `<name>.md`, or a generator; validator must keep `index.json` and versions in sync |
-| Git plugin per collection | `plugins/<collection>/.opencode-plugin/` with `package.json` + a small JS module that reads and registers that collection's skills | Reintroduces JS source; tracks an API with no release notes |
+| HTTP catalog | Committed `index.json` served from GitHub raw | Real files only, and the named-file gotcha means duplicating each `SKILL.md` as `<name>.md` or adding a generator; validator must keep `index.json` and versions in sync |
+| Git plugin per collection | `plugins/<collection>/package.json` (no dependencies) + a small dependency-free JS module that reads and registers that collection's skills | Requires real skill directories under `plugins/<collection>/skills/` rather than symlinks; reintroduces a little JS source; tracks an API with no release notes |
 
-## Open questions
-
-Each needs a scratch OpenCode v2 project to answer:
-
-1. Does the loader accept a plain `{ id, setup }` object with no `@opencode/plugin` import? The docs say v2 "reads the default export's `id` and `setup()`", which suggests `Plugin.define` is a type helper — that would keep a plugin at zero npm dependencies
-2. Does `::path:` install require a `package.json` in the subdirectory, and do symlinks inside it (our `plugins/<collection>/skills/*`) survive the git install?
-3. Does `raw.githubusercontent.com` serve symlinked files? It is believed to return the link text, which rules out per-collection catalogs built from the existing symlinks
-4. Does a skill registered through `ctx.skill.transform` with a real `path` get the supporting-file sample, so `rules/` and `references/` resolve?
+The git plugin option is now proven end to end, and its one structural requirement — real directories rather than symlinks inside each collection — is the same change Codex needs to install skills from these plugins.
