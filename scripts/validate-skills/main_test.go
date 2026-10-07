@@ -11,8 +11,10 @@ import (
 
 const version = "1.0.0"
 
-// The fixture ships a single skill (`demo`) exposed through one collection
-// wrapper, standing in for the real collections table.
+const demoDir = "plugins/workflow/skills/demo"
+
+// The fixture ships a single skill (`demo`) in one collection plugin, standing
+// in for the real collections table.
 var fixtureCollections = []collection{
 	{name: "workflow", skills: []string{"demo"}},
 }
@@ -84,8 +86,8 @@ func buildFixture(t *testing.T) string {
 
 	writeJSONFile(t, filepath.Join(root, ".release-please-manifest.json"), map[string]string{".": version})
 
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), validSkill)
-	writeTextFile(t, filepath.Join(root, "skills/demo/rules/foo.md"), "# Foo\n")
+	writeTextFile(t, filepath.Join(root, demoDir, "SKILL.md"), validSkill)
+	writeTextFile(t, filepath.Join(root, demoDir, "rules/foo.md"), "# Foo\n")
 
 	if err := os.MkdirAll(filepath.Join(root, "xcode-skills/sample"), 0o755); err != nil {
 		t.Fatal(err)
@@ -93,7 +95,11 @@ func buildFixture(t *testing.T) string {
 
 	for _, manifest := range pluginManifests {
 		name := strings.Split(manifest, "/")[1]
-		writeJSONFile(t, filepath.Join(root, manifest), map[string]string{"name": name, "version": version})
+		fields := map[string]string{"name": name, "version": version}
+		if manifest == agentPluginManifest(name) {
+			fields["$schema"] = agentPluginSchema
+		}
+		writeJSONFile(t, filepath.Join(root, manifest), fields)
 	}
 	for _, marketplace := range marketplaces {
 		writeJSONFile(t, filepath.Join(root, marketplace), map[string]interface{}{
@@ -102,18 +108,7 @@ func buildFixture(t *testing.T) string {
 		})
 	}
 
-	mustSymlink(t, "../../skills", filepath.Join(root, "plugins/tartinerlabs/skills"))
 	mustSymlink(t, "../../xcode-skills", filepath.Join(root, "plugins/xcode-skills/skills"))
-
-	for _, coll := range fixtureCollections {
-		wrapperDir := filepath.Join(root, "plugins", coll.name, "skills")
-		if err := os.MkdirAll(wrapperDir, 0o755); err != nil {
-			t.Fatal(err)
-		}
-		for _, skill := range coll.skills {
-			mustSymlink(t, "../../../skills/"+skill, filepath.Join(wrapperDir, skill))
-		}
-	}
 
 	return root
 }
@@ -156,7 +151,7 @@ func writeDemoSkill(t *testing.T, root, line, replacement string) {
 		t.Fatalf("fixture skill has no line %q", line)
 	}
 	source := strings.Replace(validSkill, line+"\n", replacement, 1)
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), source)
+	writeTextFile(t, filepath.Join(root, demoDir, "SKILL.md"), source)
 }
 
 func TestFlagsSkillMissingPortableFrontmatter(t *testing.T) {
@@ -187,7 +182,7 @@ func TestFlagsSkillNameNotMatchingDirectory(t *testing.T) {
 
 func TestFlagsSkillWithoutFrontmatterBlock(t *testing.T) {
 	root := buildFixture(t)
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"),
+	writeTextFile(t, filepath.Join(root, demoDir, "SKILL.md"),
 		"Read `rules/foo.md` before proceeding.\n")
 	assertSomeError(t, validateFixture(root), "SKILL.md has no YAML frontmatter block")
 }
@@ -209,34 +204,34 @@ func TestAllowsSkillWithoutClaudeOnlyFields(t *testing.T) {
 
 func TestFlagsReferencedRuleFileThatDoesNotExist(t *testing.T) {
 	root := buildFixture(t)
-	mustRemove(t, filepath.Join(root, "skills/demo/rules/foo.md"))
+	mustRemove(t, filepath.Join(root, demoDir, "rules/foo.md"))
 	assertSomeError(t, validateFixture(root), "references `rules/foo.md` which does not exist")
 }
 
 func TestPassesWhenSkillReferencesExistingReferencesFile(t *testing.T) {
 	root := buildFixture(t)
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"),
+	writeTextFile(t, filepath.Join(root, demoDir, "SKILL.md"),
 		validSkill+"\nSee `references/python.md` for the Python path.\n")
-	writeTextFile(t, filepath.Join(root, "skills/demo/references/python.md"), "# Python\n")
+	writeTextFile(t, filepath.Join(root, demoDir, "references/python.md"), "# Python\n")
 	assertNoErrors(t, validateFixture(root))
 }
 
 func TestFlagsReferencedReferencesFileThatDoesNotExist(t *testing.T) {
 	root := buildFixture(t)
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"),
+	writeTextFile(t, filepath.Join(root, demoDir, "SKILL.md"),
 		validSkill+"\nSee `references/python.md` for the Python path.\n")
 	assertSomeError(t, validateFixture(root), "references `references/python.md` which does not exist")
 }
 
 func TestFlagsOrphanedReferencesFile(t *testing.T) {
 	root := buildFixture(t)
-	writeTextFile(t, filepath.Join(root, "skills/demo/references/orphan.md"), "# Orphan\n")
+	writeTextFile(t, filepath.Join(root, demoDir, "references/orphan.md"), "# Orphan\n")
 	assertSomeError(t, validateFixture(root), "`references/orphan.md` is never referenced")
 }
 
 func TestIgnoresReferencesPlaceholderTemplates(t *testing.T) {
 	root := buildFixture(t)
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"),
+	writeTextFile(t, filepath.Join(root, demoDir, "SKILL.md"),
 		validSkill+"\nLoad `references/<lang>.md` for the detected language.\n")
 	// No references/ dir exists — a placeholder must not be treated as a real,
 	// missing file.
@@ -286,48 +281,58 @@ func TestReleasePleaseSyncsEveryPluginManifestViaExtraFiles(t *testing.T) {
 
 func TestFlagsBrokenWrapperSymlink(t *testing.T) {
 	root := buildFixture(t)
-	mustRemove(t, filepath.Join(root, "plugins/tartinerlabs/skills"))
-	mustSymlink(t, "../../does-not-exist", filepath.Join(root, "plugins/tartinerlabs/skills"))
-	assertSomeError(t, validateFixture(root), "plugins/tartinerlabs/skills")
+	mustRemove(t, filepath.Join(root, "plugins/xcode-skills/skills"))
+	mustSymlink(t, "../../does-not-exist", filepath.Join(root, "plugins/xcode-skills/skills"))
+	assertSomeError(t, validateFixture(root), "plugins/xcode-skills/skills")
 }
 
-func TestFlagsWrapperSymlinkPointingAtWrongCollection(t *testing.T) {
-	root := buildFixture(t)
-	// Swap tartinerlabs' skills link to the xcode-skills collection — a valid,
-	// existing directory, so only the target comparison can catch it.
-	mustRemove(t, filepath.Join(root, "plugins/tartinerlabs/skills"))
-	mustSymlink(t, "../../xcode-skills", filepath.Join(root, "plugins/tartinerlabs/skills"))
-	assertSomeError(t, validateFixture(root), "plugins/tartinerlabs/skills", "expected `../../skills`")
-}
-
-func TestFlagsMissingPerSkillCollectionSymlink(t *testing.T) {
-	root := buildFixture(t)
-	mustRemove(t, filepath.Join(root, "plugins/workflow/skills/demo"))
-	assertSomeError(t, validateFixture(root), "plugins/workflow/skills/demo: broken or missing symlink")
-}
-
-func TestFlagsPerSkillCollectionSymlinkWithWrongTarget(t *testing.T) {
+func TestFlagsWrapperSymlinkWithWrongTarget(t *testing.T) {
 	root := buildFixture(t)
 	// Point at a valid, existing directory so only the target comparison can
 	// catch the swap.
-	mustRemove(t, filepath.Join(root, "plugins/workflow/skills/demo"))
-	mustSymlink(t, "../../../skills", filepath.Join(root, "plugins/workflow/skills/demo"))
-	assertSomeError(t, validateFixture(root), "plugins/workflow/skills/demo", "expected `../../../skills/demo`")
+	mustRemove(t, filepath.Join(root, "plugins/xcode-skills/skills"))
+	mustSymlink(t, "../workflow/skills", filepath.Join(root, "plugins/xcode-skills/skills"))
+	assertSomeError(t, validateFixture(root), "plugins/xcode-skills/skills", "expected `../../xcode-skills`")
 }
 
-func TestFlagsEntryACollectionWrapperShouldNotExpose(t *testing.T) {
+// Codex skips symlinks when it copies a plugin into its cache, so a symlinked
+// skill installs as nothing at all.
+func TestFlagsSymlinkedSkillInsideCollection(t *testing.T) {
 	root := buildFixture(t)
-	mustSymlink(t, "../../../skills/demo", filepath.Join(root, "plugins/workflow/skills/extra"))
+	writeTextFile(t, filepath.Join(root, "shared/demo/SKILL.md"), validSkill)
+	writeTextFile(t, filepath.Join(root, "shared/demo/rules/foo.md"), "# Foo\n")
+	if err := os.RemoveAll(filepath.Join(root, demoDir)); err != nil {
+		t.Fatal(err)
+	}
+	mustSymlink(t, "../../../shared/demo", filepath.Join(root, demoDir))
+	assertSomeError(t, validateFixture(root), demoDir+": symlink inside a plugin")
+}
+
+func TestFlagsSymlinkedFileAnywhereInCollection(t *testing.T) {
+	root := buildFixture(t)
+	writeTextFile(t, filepath.Join(root, "agents/deps.md"), "# Deps\n")
+	if err := os.MkdirAll(filepath.Join(root, "plugins/workflow/agents"), 0o755); err != nil {
+		t.Fatal(err)
+	}
+	mustSymlink(t, "../../../agents/deps.md", filepath.Join(root, "plugins/workflow/agents/deps.md"))
+	assertSomeError(t, validateFixture(root), "plugins/workflow/agents/deps.md: symlink inside a plugin")
+}
+
+func TestFlagsMissingCollectionSkill(t *testing.T) {
+	root := buildFixture(t)
+	if err := os.RemoveAll(filepath.Join(root, demoDir)); err != nil {
+		t.Fatal(err)
+	}
 	assertSomeError(t, validateFixture(root),
-		"plugins/workflow/skills/extra: not part of the `workflow` collection")
+		"collections: lists `demo` which does not exist in plugins/workflow/skills/")
 }
 
-func TestFlagsSkillNotAssignedToAnyCollection(t *testing.T) {
+func TestFlagsSkillNotInCollectionsTable(t *testing.T) {
 	root := buildFixture(t)
-	looseSkill := strings.ReplaceAll(validSkill, "rules/foo.md", "rules/bar.md")
-	writeTextFile(t, filepath.Join(root, "skills/loose/SKILL.md"), looseSkill)
-	writeTextFile(t, filepath.Join(root, "skills/loose/rules/bar.md"), "# Bar\n")
-	assertSomeError(t, validateFixture(root), "skills/loose: not assigned to any collection")
+	looseSkill := strings.ReplaceAll(validSkill, "name: demo", "name: loose")
+	writeTextFile(t, filepath.Join(root, "plugins/workflow/skills/loose/SKILL.md"), looseSkill)
+	assertSomeError(t, validateFixture(root),
+		"plugins/workflow/skills/loose: not part of the `workflow` collection")
 }
 
 func TestFlagsSkillAssignedToTwoCollections(t *testing.T) {
@@ -336,18 +341,10 @@ func TestFlagsSkillAssignedToTwoCollections(t *testing.T) {
 		{name: "workflow", skills: []string{"demo"}},
 		{name: "quality", skills: []string{"demo"}},
 	})
-	assertSomeError(t, errors, "skills/demo: assigned to both `workflow` and `quality` collections")
+	assertSomeError(t, errors, "collections: `demo` assigned to both `workflow` and `quality`")
 }
 
-func TestFlagsCollectionListingSkillThatDoesNotExist(t *testing.T) {
-	root := buildFixture(t)
-	errors := validate(root, []collection{
-		{name: "workflow", skills: []string{"demo", "ghost"}},
-	})
-	assertSomeError(t, errors, "collections: lists `ghost` which does not exist")
-}
-
-func TestFlagsCollectionWrapperWithoutSkillsDirectory(t *testing.T) {
+func TestFlagsCollectionWithoutSkillsDirectory(t *testing.T) {
 	root := buildFixture(t)
 	if err := os.RemoveAll(filepath.Join(root, "plugins/workflow/skills")); err != nil {
 		t.Fatal(err)
@@ -355,23 +352,51 @@ func TestFlagsCollectionWrapperWithoutSkillsDirectory(t *testing.T) {
 	assertSomeError(t, validateFixture(root), "plugins/workflow/skills: directory not found")
 }
 
+// Codex refuses to install a plugin whose root `plugin.json` is not a valid
+// Agent Plugins manifest, so each rule is enforced before release.
+func TestFlagsInvalidAgentPluginManifest(t *testing.T) {
+	for _, testCase := range []struct {
+		name     string
+		manifest map[string]interface{}
+		wantErr  string
+	}{
+		{"unsupported schema", map[string]interface{}{
+			"$schema": "https://agent-plugins.org/schemas/1.1.0/plugin.schema.json",
+			"name":    "workflow", "version": version,
+		}, "`$schema` must be"},
+		{"wrong name", map[string]interface{}{
+			"$schema": agentPluginSchema, "name": "other", "version": version,
+		}, "`name` must be `workflow`"},
+		{"unknown field", map[string]interface{}{
+			"$schema": agentPluginSchema, "name": "workflow", "version": version,
+			"skills": "./skills/",
+		}, "`skills` is not an Agent Plugins manifest field"},
+	} {
+		t.Run(testCase.name, func(t *testing.T) {
+			root := buildFixture(t)
+			writeJSONFile(t, filepath.Join(root, "plugins/workflow/plugin.json"), testCase.manifest)
+			assertSomeError(t, validateFixture(root), "plugins/workflow/plugin.json", testCase.wantErr)
+		})
+	}
+}
+
 func TestFlagsActionUsingMutableTag(t *testing.T) {
 	root := buildFixture(t)
-	writeTextFile(t, filepath.Join(root, "skills/demo/rules/foo.md"),
+	writeTextFile(t, filepath.Join(root, demoDir, "rules/foo.md"),
 		"# Foo\n\n```yaml\n- uses: actions/checkout@v7\n```\n")
-	assertSomeError(t, validateFixture(root), "skills/demo/rules/foo.md:4", "full 40-character commit SHA")
+	assertSomeError(t, validateFixture(root), demoDir+"/rules/foo.md:4", "full 40-character commit SHA")
 }
 
 func TestFlagsPinnedActionWithoutRefComment(t *testing.T) {
 	root := buildFixture(t)
-	writeTextFile(t, filepath.Join(root, "skills/demo/rules/foo.md"),
+	writeTextFile(t, filepath.Join(root, demoDir, "rules/foo.md"),
 		"# Foo\n\n```yaml\n- uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0\n```\n")
-	assertSomeError(t, validateFixture(root), "skills/demo/rules/foo.md:4", "version or source-ref comment")
+	assertSomeError(t, validateFixture(root), demoDir+"/rules/foo.md:4", "version or source-ref comment")
 }
 
 func TestAcceptsPinnedActionsAndFullShaPlaceholders(t *testing.T) {
 	root := buildFixture(t)
-	writeTextFile(t, filepath.Join(root, "skills/demo/rules/foo.md"), strings.Join([]string{
+	writeTextFile(t, filepath.Join(root, demoDir, "rules/foo.md"), strings.Join([]string{
 		"# Foo",
 		"",
 		"```yaml",
@@ -388,8 +413,8 @@ func TestAllowsMutableRefsOnlyInActionPinningIncorrectSection(t *testing.T) {
 	root := buildFixture(t)
 	githubActionsSkill := strings.ReplaceAll(validSkill, "demo", "github-actions")
 	githubActionsSkill = strings.ReplaceAll(githubActionsSkill, "rules/foo.md", "rules/action-pinning.md")
-	writeTextFile(t, filepath.Join(root, "skills/github-actions/SKILL.md"), githubActionsSkill)
-	writeTextFile(t, filepath.Join(root, "skills/github-actions/rules/action-pinning.md"), strings.Join([]string{
+	writeTextFile(t, filepath.Join(root, "plugins/workflow/skills/github-actions/SKILL.md"), githubActionsSkill)
+	writeTextFile(t, filepath.Join(root, "plugins/workflow/skills/github-actions/rules/action-pinning.md"), strings.Join([]string{
 		"# Action Pinning",
 		"",
 		"### Incorrect",
@@ -401,8 +426,6 @@ func TestAllowsMutableRefsOnlyInActionPinningIncorrectSection(t *testing.T) {
 		"- uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0",
 		"",
 	}, "\n"))
-	mustSymlink(t, "../../../skills/github-actions",
-		filepath.Join(root, "plugins/workflow/skills/github-actions"))
 	errors := validate(root, []collection{
 		{name: "workflow", skills: []string{"demo", "github-actions"}},
 	})
@@ -441,12 +464,11 @@ func secondSkill(name, body string) string {
 	}, "\n")
 }
 
-// addSecondSkill writes a second skill and wires up its collection symlink.
+// addSecondSkill writes a second skill into the fixture's collection.
 func addSecondSkill(t *testing.T, root, name, body string) {
 	t.Helper()
-	writeTextFile(t, filepath.Join(root, "skills", name, "SKILL.md"), secondSkill(name, body))
-	writeTextFile(t, filepath.Join(root, "skills", name, "rules/bar.md"), "# Bar\n")
-	mustSymlink(t, "../../../skills/"+name, filepath.Join(root, "plugins/workflow/skills/"+name))
+	writeTextFile(t, filepath.Join(root, "plugins/workflow/skills", name, "SKILL.md"), secondSkill(name, body))
+	writeTextFile(t, filepath.Join(root, "plugins/workflow/skills", name, "rules/bar.md"), "# Bar\n")
 }
 
 func twoSkillCollections(name string) []collection {
@@ -455,17 +477,17 @@ func twoSkillCollections(name string) []collection {
 
 func TestFlagsEagerLoadAllRulesPhrasing(t *testing.T) {
 	root := buildFixture(t)
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), strings.Replace(validSkill,
+	writeTextFile(t, filepath.Join(root, demoDir, "SKILL.md"), strings.Replace(validSkill,
 		"You are a demo skill. Read `rules/foo.md` before proceeding.",
 		"Read ALL rule files before proceeding — do not skip or ask:", 1))
-	assertSomeError(t, validateFixture(root), "skills/demo", "instructs an unconditional read")
+	assertSomeError(t, validateFixture(root), demoDir, "instructs an unconditional read")
 }
 
 // The false-positive boundary: the install and generate skills legitimately
 // tell the agent to read each rule file, because they apply every one.
 func TestAllowsPerStepRuleReferences(t *testing.T) {
 	root := buildFixture(t)
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), strings.Replace(validSkill,
+	writeTextFile(t, filepath.Join(root, demoDir, "SKILL.md"), strings.Replace(validSkill,
 		"You are a demo skill. Read `rules/foo.md` before proceeding.",
 		"Read each rule file in `rules/` for detailed setup instructions.", 1))
 	assertNoErrors(t, validateFixture(root))
@@ -476,7 +498,7 @@ func TestAllowsPerStepRuleReferences(t *testing.T) {
 // shares the line.
 func TestAllowsHardStopPhrasingWithoutReadInstruction(t *testing.T) {
 	root := buildFixture(t)
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), strings.Replace(validSkill,
+	writeTextFile(t, filepath.Join(root, demoDir, "SKILL.md"), strings.Replace(validSkill,
 		"You are a demo skill. Read `rules/foo.md` before proceeding.",
 		"STOP if the scanner reports a leak. Do not skip or ask — the commit is refused.", 1))
 	assertNoErrors(t, validateFixture(root))
@@ -485,8 +507,8 @@ func TestAllowsHardStopPhrasingWithoutReadInstruction(t *testing.T) {
 func TestFlagsSkillFileOverLineBudget(t *testing.T) {
 	root := buildFixture(t)
 	padding := strings.Repeat("\nFiller prose line.", maxSkillLines)
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), validSkill+padding+"\n")
-	assertSomeError(t, validateFixture(root), "skills/demo", "SKILL.md is", "max 125")
+	writeTextFile(t, filepath.Join(root, demoDir, "SKILL.md"), validSkill+padding+"\n")
+	assertSomeError(t, validateFixture(root), demoDir, "SKILL.md is", "max 125")
 }
 
 func TestAllowsSkillFileAtLineBudget(t *testing.T) {
@@ -498,15 +520,15 @@ func TestAllowsSkillFileAtLineBudget(t *testing.T) {
 	if got := countLines(source); got != maxSkillLines {
 		t.Fatalf("fixture setup: got %d lines, want exactly %d", got, maxSkillLines)
 	}
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), source)
+	writeTextFile(t, filepath.Join(root, demoDir, "SKILL.md"), source)
 	assertNoErrors(t, validateFixture(root))
 }
 
 func TestFlagsOversizedRuleFile(t *testing.T) {
 	root := buildFixture(t)
-	writeTextFile(t, filepath.Join(root, "skills/demo/rules/foo.md"),
+	writeTextFile(t, filepath.Join(root, demoDir, "rules/foo.md"),
 		"# Foo\n"+strings.Repeat("Filler prose line.\n", maxRuleLines))
-	assertSomeError(t, validateFixture(root), "skills/demo", "rules/foo.md is", "max 150")
+	assertSomeError(t, validateFixture(root), demoDir, "rules/foo.md is", "max 150")
 }
 
 func TestFlagsBlockDuplicatedAcrossSkills(t *testing.T) {
@@ -516,7 +538,7 @@ func TestFlagsBlockDuplicatedAcrossSkills(t *testing.T) {
 		"intent is ambiguous or diagnostic. Produce an evidence-backed report",
 		"and make no file edits at all.",
 	}, "\n")
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), validSkill+"\n"+shared+"\n")
+	writeTextFile(t, filepath.Join(root, demoDir, "SKILL.md"), validSkill+"\n"+shared+"\n")
 	addSecondSkill(t, root, "other", shared)
 	assertSomeError(t, validate(root, twoSkillCollections("other")), "block duplicated from")
 }
@@ -531,12 +553,12 @@ func TestDuplicateBlockReportsRealLineNumber(t *testing.T) {
 		"and make no file edits at all.",
 	}, "\n")
 	source := validSkill + "\n" + shared + "\n"
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), source)
+	writeTextFile(t, filepath.Join(root, demoDir, "SKILL.md"), source)
 	addSecondSkill(t, root, "other", shared)
 
 	want := 1 + strings.Count(source[:strings.Index(source, shared)], "\n")
 	assertSomeError(t, validate(root, twoSkillCollections("other")),
-		fmt.Sprintf("skills/demo/SKILL.md:%d", want))
+		fmt.Sprintf("%s/SKILL.md:%d", demoDir, want))
 }
 
 // Within one skill, repetition is legitimate — the per-language references/
@@ -548,8 +570,8 @@ func TestAllowsSameBlockRepeatedWithinOneSkill(t *testing.T) {
 		"intent is ambiguous or diagnostic. Produce an evidence-backed report",
 		"and make no file edits at all.",
 	}, "\n")
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), validSkill+"\n"+shared+"\n")
-	writeTextFile(t, filepath.Join(root, "skills/demo/rules/foo.md"), "# Foo\n\n"+shared+"\n")
+	writeTextFile(t, filepath.Join(root, demoDir, "SKILL.md"), validSkill+"\n"+shared+"\n")
+	writeTextFile(t, filepath.Join(root, demoDir, "rules/foo.md"), "# Foo\n\n"+shared+"\n")
 	assertNoErrors(t, validateFixture(root))
 }
 
@@ -557,7 +579,7 @@ func TestAllowsSameBlockRepeatedWithinOneSkill(t *testing.T) {
 func TestAllowsShortSharedLineAcrossSkills(t *testing.T) {
 	root := buildFixture(t)
 	shared := "Detect the package manager from the lockfile, in this order: pnpm, bun, yarn, npm. With no lockfile, ask."
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), validSkill+"\n"+shared+"\n")
+	writeTextFile(t, filepath.Join(root, demoDir, "SKILL.md"), validSkill+"\n"+shared+"\n")
 	addSecondSkill(t, root, "other", shared)
 	assertNoErrors(t, validate(root, twoSkillCollections("other")))
 }
@@ -571,12 +593,12 @@ func TestAllowsSharedFencedCodeAcrossSkills(t *testing.T) {
 		"pip-audit -r requirements.txt   # audit a requirements file",
 		"```",
 	}, "\n")
-	writeTextFile(t, filepath.Join(root, "skills/demo/SKILL.md"), validSkill+"\n"+shared+"\n")
+	writeTextFile(t, filepath.Join(root, demoDir, "SKILL.md"), validSkill+"\n"+shared+"\n")
 	addSecondSkill(t, root, "other", shared)
 	assertNoErrors(t, validate(root, twoSkillCollections("other")))
 }
 
-// The content budgets are scoped to skills/; the generated xcode-skills/ export
+// The content budgets are scoped to collection skills; the generated xcode-skills/ export
 // carries much larger Apple-authored files and must never be measured.
 func TestIgnoresContentBudgetsInXcodeExport(t *testing.T) {
 	root := buildFixture(t)

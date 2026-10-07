@@ -26,11 +26,6 @@
       "description": "Project tooling skills — linting/formatting setup, testing, and documentation sync"
     },
     {
-      "name": "tartinerlabs",
-      "source": "./plugins/tartinerlabs",
-      "description": "Deprecated: install the workflow, quality, security, and tooling plugins instead. Language-agnostic agent skills for git/GitHub workflows, code quality, and project tooling, with first-class JS/TS support."
-    },
-    {
       "name": "xcode-skills",
       "source": "./plugins/xcode-skills",
       "description": "Apple-authored agent skills exported unchanged from Xcode 27 for Swift and Apple platform development"

@@ -1,5 +1,5 @@
 // Command validate-skills checks the repository's skill structure, plugin
-// manifest versions, wrapper symlinks, and GitHub Action pinning discipline.
+// manifests, plugin-root containment, and GitHub Action pinning discipline.
 //
 // Run from the repo root: go run ./scripts/validate-skills
 package main
@@ -15,10 +15,11 @@ import (
 	"strings"
 )
 
-// Skill collections: each entry is a `plugins/<name>/` wrapper exposing the
-// listed skills through per-skill symlinks (`skills/<skill>` →
-// `../../../skills/<skill>`). Every directory under `skills/` must belong to
-// exactly one collection — validated in validateCollections.
+// Skill collections: each entry is a `plugins/<name>/` plugin whose
+// `skills/<skill>/` directories hold the real skill files. A plugin must be
+// self-contained — Codex drops symlinks when it copies a plugin into its cache,
+// and the Agent Plugins spec has clients reject paths that resolve outside the
+// plugin root. Membership is validated in validateCollections.
 type collection struct {
 	name   string
 	skills []string
@@ -36,19 +37,47 @@ var collections = []collection{
 var pluginManifests = manifestPaths()
 
 func manifestPaths() []string {
-	plugins := make([]string, 0, len(collections)+2)
+	plugins := make([]string, 0, len(collections)+1)
+	var manifests []string
 	for _, coll := range collections {
 		plugins = append(plugins, coll.name)
+		manifests = append(manifests, agentPluginManifest(coll.name))
 	}
-	plugins = append(plugins, "tartinerlabs", "xcode-skills")
+	plugins = append(plugins, "xcode-skills")
 
-	var manifests []string
 	for _, plugin := range plugins {
 		for _, channel := range []string{".codex-plugin", ".claude-plugin", ".cursor-plugin", ".antigravity-plugin"} {
 			manifests = append(manifests, fmt.Sprintf("plugins/%s/%s/plugin.json", plugin, channel))
 		}
 	}
 	return manifests
+}
+
+// Each collection carries a root `plugin.json` per the Agent Plugins spec
+// (agent-plugins.org). 1.0.0 is pinned deliberately: it is the only version
+// Codex accepts, and a client must reject a version it does not support.
+const agentPluginSchema = "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json"
+
+// The spec's manifest schema is closed — anything client-specific belongs
+// under `extensions` or in the per-channel manifests.
+var agentPluginFields = map[string]bool{
+	"$schema": true, "name": true, "version": true, "description": true, "author": true,
+	"homepage": true, "repository": true, "license": true, "keywords": true, "extensions": true,
+}
+
+func agentPluginManifest(name string) string {
+	return fmt.Sprintf("plugins/%s/plugin.json", name)
+}
+
+func collectionSkillsDir(name string) string {
+	return fmt.Sprintf("plugins/%s/skills", name)
+}
+
+// A skill's name plus its directory relative to the repo root, used both to
+// read it and to label every error about it.
+type skillRef struct {
+	name string
+	dir  string
 }
 
 // Marketplace manifests distributed alongside the plugin manifests.
@@ -58,26 +87,19 @@ var marketplaces = []string{
 	".agents/plugins/marketplace.json",
 }
 
-// Whole-directory wrappers expose their skill source through a `skills`
-// symlink that must point at a specific source — swapping the targets would
-// publish the wrong skills through that wrapper, so the exact destination is
-// checked. Collection wrappers instead use per-skill symlinks derived from
-// the collections table (validated in validateCollections).
+// The xcode-skills wrapper exposes the untouched Xcode export through one
+// `skills` symlink, whose exact destination is checked.
 var wrapperSymlinks = []struct {
 	path   string
 	target string
 }{
-	{path: "plugins/tartinerlabs/skills", target: "../../skills"},
 	{path: "plugins/xcode-skills/skills", target: "../../xcode-skills"},
 }
 
 // `xcode-skills/` is a generated Xcode export — its skill content is
 // deliberately excluded from the rules checks below. Only the
 // `plugins/xcode-skills` manifests (in pluginManifests) are validated.
-const (
-	skillsDir         = "skills"
-	actionPinningRule = "skills/github-actions/rules/action-pinning.md"
-)
+const actionPinningRule = "plugins/workflow/skills/github-actions/rules/action-pinning.md"
 
 var (
 	actionUseRE     = regexp.MustCompile("\\buses:\\s*([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_.-]+)*)@([^\\s`]+)")
@@ -109,7 +131,7 @@ const (
 // Content budgets, measured like `wc -l`. SKILL.md is the always-loaded entry
 // point, so detail belongs in rules/ or references/ instead. Both ceilings sit
 // just above the current maxima — raise them only with a reason, since the
-// point is to make growth deliberate. Scoped to skillsDir: the generated
+// point is to make growth deliberate. Scoped to collection skills: the generated
 // xcode-skills/ export carries much larger Apple-authored files.
 const (
 	maxSkillLines = 125
@@ -207,8 +229,11 @@ func checkActionUses(root, file, source string, errors *[]string) {
 	}
 }
 
-func validateActionPinning(root string, errors *[]string) {
-	files := collectFiles(filepath.Join(root, skillsDir), []string{".md"})
+func validateActionPinning(root string, skills []skillRef, errors *[]string) {
+	var files []string
+	for _, skill := range skills {
+		files = append(files, collectFiles(filepath.Join(root, skill.dir), []string{".md"})...)
+	}
 	files = append(files, collectFiles(filepath.Join(root, ".github/workflows"), []string{".yml", ".yaml"})...)
 
 	for _, file := range files {
@@ -255,8 +280,8 @@ func sortedKeys(set map[string]bool) []string {
 // Compare the `<name>.md` files present in `<skillDir>/<subdir>` against the
 // set referenced by SKILL.md, appending an error for every missing reference
 // and every orphaned file.
-func checkSubdir(skillDir, skillName, subdir string, referenced map[string]bool, errors *[]string) {
-	dir := filepath.Join(skillDir, subdir)
+func checkSubdir(root string, skill skillRef, subdir string, referenced map[string]bool, errors *[]string) {
+	dir := filepath.Join(root, skill.dir, subdir)
 	fileSet := map[string]bool{}
 	if pathExists(dir) {
 		entries, err := os.ReadDir(dir)
@@ -269,8 +294,8 @@ func checkSubdir(skillDir, skillName, subdir string, referenced map[string]bool,
 				if data, err := os.ReadFile(filepath.Join(dir, entry.Name())); err == nil {
 					if lines := countLines(string(data)); lines > maxRuleLines {
 						*errors = append(*errors, fmt.Sprintf(
-							"%s/%s: %s/%s is %d lines (max %d) — split it or trim the examples",
-							skillsDir, skillName, subdir, entry.Name(), lines, maxRuleLines))
+							"%s: %s/%s is %d lines (max %d) — split it or trim the examples",
+							skill.dir, subdir, entry.Name(), lines, maxRuleLines))
 					}
 				}
 			}
@@ -280,15 +305,15 @@ func checkSubdir(skillDir, skillName, subdir string, referenced map[string]bool,
 	for _, name := range sortedKeys(referenced) {
 		if !fileSet[name] {
 			*errors = append(*errors, fmt.Sprintf(
-				"%s/%s: references `%s/%s.md` which does not exist",
-				skillsDir, skillName, subdir, name))
+				"%s: references `%s/%s.md` which does not exist",
+				skill.dir, subdir, name))
 		}
 	}
 	for _, name := range sortedKeys(fileSet) {
 		if !referenced[name] {
 			*errors = append(*errors, fmt.Sprintf(
-				"%s/%s: `%s/%s.md` is never referenced in SKILL.md (orphan)",
-				skillsDir, skillName, subdir, name))
+				"%s: `%s/%s.md` is never referenced in SKILL.md (orphan)",
+				skill.dir, subdir, name))
 		}
 	}
 }
@@ -331,10 +356,11 @@ func parseFrontmatter(source string) (fields map[string]string, ok bool) {
 // `metadata.short-description` — the only field beyond name/description that
 // Codex's skill loader parses. The Claude-only fields (`model`, `effort`,
 // `context`, `agent`) are deliberately unchecked; other clients ignore them.
-func validateFrontmatter(skillName, source string, errors *[]string) {
+func validateFrontmatter(skill skillRef, source string, errors *[]string) {
+	skillName := skill.name
 	report := func(format string, args ...interface{}) {
-		*errors = append(*errors, fmt.Sprintf("%s/%s: %s",
-			skillsDir, skillName, fmt.Sprintf(format, args...)))
+		*errors = append(*errors, fmt.Sprintf("%s: %s",
+			skill.dir, fmt.Sprintf(format, args...)))
 	}
 
 	fields, ok := parseFrontmatter(source)
@@ -382,12 +408,12 @@ func countLines(source string) int {
 
 // Flag phrasing that tells the agent to read every rule file up front, which
 // loads a skill's whole rules/ directory on every invocation.
-func checkEagerLoad(skillName, source string, errors *[]string) {
+func checkEagerLoad(skill skillRef, source string, errors *[]string) {
 	for index, line := range strings.Split(source, "\n") {
 		if eagerLoadRE.MatchString(line) {
 			*errors = append(*errors, fmt.Sprintf(
-				"%s/%s: SKILL.md:%d instructs an unconditional read of all rule files — reference each rule where the workflow needs it",
-				skillsDir, skillName, index+1))
+				"%s: SKILL.md:%d instructs an unconditional read of all rule files — reference each rule where the workflow needs it",
+				skill.dir, index+1))
 		}
 	}
 }
@@ -396,33 +422,32 @@ func checkEagerLoad(skillName, source string, errors *[]string) {
 // validateFrontmatter, stay within maxSkillLines, avoid eager-load phrasing,
 // and have its referenced `rules/*.md` and `references/*.md` files resolve
 // (with none left orphaned).
-func validateSkill(root, skillName string, errors *[]string) {
-	skillDir := filepath.Join(root, skillsDir, skillName)
-	skillFile := filepath.Join(skillDir, "SKILL.md")
+func validateSkill(root string, skill skillRef, errors *[]string) {
+	skillFile := filepath.Join(root, skill.dir, "SKILL.md")
 	if !pathExists(skillFile) {
-		*errors = append(*errors, fmt.Sprintf("%s/%s: missing SKILL.md", skillsDir, skillName))
+		*errors = append(*errors, fmt.Sprintf("%s: missing SKILL.md", skill.dir))
 		return
 	}
 
 	data, err := os.ReadFile(skillFile)
 	if err != nil {
-		*errors = append(*errors, fmt.Sprintf("%s/%s: %s", skillsDir, skillName, err))
+		*errors = append(*errors, fmt.Sprintf("%s: %s", skill.dir, err))
 		return
 	}
 	source := string(data)
 
-	validateFrontmatter(skillName, source, errors)
-	checkEagerLoad(skillName, source, errors)
+	validateFrontmatter(skill, source, errors)
+	checkEagerLoad(skill, source, errors)
 	if lines := countLines(source); lines > maxSkillLines {
 		*errors = append(*errors, fmt.Sprintf(
-			"%s/%s: SKILL.md is %d lines (max %d) — move detail into rules/ or references/",
-			skillsDir, skillName, lines, maxSkillLines))
+			"%s: SKILL.md is %d lines (max %d) — move detail into rules/ or references/",
+			skill.dir, lines, maxSkillLines))
 	}
-	checkSubdir(skillDir, skillName, "rules", extractReferencedRules(source), errors)
-	checkSubdir(skillDir, skillName, "references", extractReferencedFiles(source), errors)
+	checkSubdir(root, skill, "rules", extractReferencedRules(source), errors)
+	checkSubdir(root, skill, "references", extractReferencedFiles(source), errors)
 }
 
-func validatePlugins(root string, errors *[]string) {
+func validatePlugins(root string, colls []collection, errors *[]string) {
 	releaseManifest := readJSON(root, ".release-please-manifest.json", errors)
 	var expectedVersion string
 	if releaseManifest != nil {
@@ -449,6 +474,40 @@ func validatePlugins(root string, errors *[]string) {
 
 	for _, marketplacePath := range marketplaces {
 		readJSON(root, marketplacePath, errors)
+	}
+
+	for _, coll := range colls {
+		validateAgentPluginManifest(root, coll.name, errors)
+	}
+}
+
+// Codex treats a root `plugin.json` as an Agent Plugins manifest and refuses
+// to install the plugin when it does not validate, so the closed schema is
+// enforced here rather than discovered at install time.
+func validateAgentPluginManifest(root, name string, errors *[]string) {
+	manifestPath := agentPluginManifest(name)
+	manifest := readJSON(root, manifestPath, errors)
+	if manifest == nil {
+		return
+	}
+	if schema, _ := manifest["$schema"].(string); schema != agentPluginSchema {
+		*errors = append(*errors, fmt.Sprintf(
+			"%s: `$schema` must be `%s`", manifestPath, agentPluginSchema))
+	}
+	if manifestName, _ := manifest["name"].(string); manifestName != name {
+		*errors = append(*errors, fmt.Sprintf(
+			"%s: `name` must be `%s`", manifestPath, name))
+	}
+	fields := map[string]bool{}
+	for field := range manifest {
+		fields[field] = true
+	}
+	for _, field := range sortedKeys(fields) {
+		if !agentPluginFields[field] {
+			*errors = append(*errors, fmt.Sprintf(
+				"%s: `%s` is not an Agent Plugins manifest field — move it under `extensions` or a per-channel manifest",
+				manifestPath, field))
+		}
 	}
 }
 
@@ -490,62 +549,82 @@ func validateSymlinks(root string, errors *[]string) {
 	}
 }
 
-// Collection wrappers must expose exactly their assigned skills, each through
-// a per-skill symlink into the flat `skills/` source. Every skill in the
-// source must belong to exactly one collection so a newly added skill cannot
-// silently ship in none (or two) of the collection plugins.
-func validateCollections(root string, skillNames []string, colls []collection, errors *[]string) {
+// Collection plugins must hold exactly their assigned skills as real
+// directories, and each skill must belong to exactly one collection so a
+// newly added skill cannot silently ship in none (or two) of the plugins.
+// Returns the skills found, sorted by directory, for the per-skill checks.
+func validateCollections(root string, colls []collection, errors *[]string) []skillRef {
 	assigned := map[string]string{}
 	for _, coll := range colls {
 		for _, skill := range coll.skills {
 			if previous, ok := assigned[skill]; ok {
 				*errors = append(*errors, fmt.Sprintf(
-					"%s/%s: assigned to both `%s` and `%s` collections",
-					skillsDir, skill, previous, coll.name))
+					"collections: `%s` assigned to both `%s` and `%s`",
+					skill, previous, coll.name))
 			}
 			assigned[skill] = coll.name
 		}
 	}
 
-	skillSet := map[string]bool{}
-	for _, skill := range skillNames {
-		skillSet[skill] = true
-		if _, ok := assigned[skill]; !ok {
-			*errors = append(*errors, fmt.Sprintf(
-				"%s/%s: not assigned to any collection", skillsDir, skill))
-		}
-	}
-	assignedSet := map[string]bool{}
-	for skill := range assigned {
-		assignedSet[skill] = true
-	}
-	for _, skill := range sortedKeys(assignedSet) {
-		if !skillSet[skill] {
-			*errors = append(*errors, fmt.Sprintf(
-				"collections: lists `%s` which does not exist in %s/", skill, skillsDir))
-		}
-	}
-
+	var skills []skillRef
 	for _, coll := range colls {
-		wrapperDir := fmt.Sprintf("plugins/%s/skills", coll.name)
-		entries, err := os.ReadDir(filepath.Join(root, wrapperDir))
+		skillsDir := collectionSkillsDir(coll.name)
+		entries, err := os.ReadDir(filepath.Join(root, skillsDir))
 		if err != nil {
-			*errors = append(*errors, fmt.Sprintf("%s: directory not found", wrapperDir))
+			*errors = append(*errors, fmt.Sprintf("%s: directory not found", skillsDir))
 			continue
 		}
 		expected := map[string]bool{}
 		for _, skill := range coll.skills {
 			expected[skill] = true
 		}
+		present := map[string]bool{}
 		for _, entry := range entries {
-			if !expected[entry.Name()] {
+			dir := skillsDir + "/" + entry.Name()
+			present[entry.Name()] = true
+			switch {
+			case !expected[entry.Name()]:
 				*errors = append(*errors, fmt.Sprintf(
-					"%s/%s: not part of the `%s` collection", wrapperDir, entry.Name(), coll.name))
+					"%s: not part of the `%s` collection — add it to the collections table", dir, coll.name))
+			case entry.Type()&os.ModeSymlink != 0:
+				// Reported by validateContainment.
+			case !entry.IsDir():
+				*errors = append(*errors, fmt.Sprintf("%s: expected a skill directory", dir))
+			default:
+				skills = append(skills, skillRef{name: entry.Name(), dir: dir})
 			}
 		}
 		for _, skill := range coll.skills {
-			checkSymlink(root, wrapperDir+"/"+skill, "../../../skills/"+skill, errors)
+			if !present[skill] {
+				*errors = append(*errors, fmt.Sprintf(
+					"collections: lists `%s` which does not exist in %s/", skill, skillsDir))
+			}
 		}
+	}
+
+	sort.Slice(skills, func(i, j int) bool { return skills[i].dir < skills[j].dir })
+	return skills
+}
+
+// A collection plugin must not contain symlinks. Codex skips them when it
+// copies the plugin into its cache (the skill silently vanishes), and Agent
+// Plugins clients must reject any path that resolves outside the plugin root.
+func validateContainment(root string, colls []collection, errors *[]string) {
+	for _, coll := range colls {
+		pluginDir := filepath.Join(root, "plugins", coll.name)
+		filepath.WalkDir(pluginDir, func(path string, entry fs.DirEntry, err error) error {
+			if err != nil || entry.Type()&os.ModeSymlink == 0 {
+				return nil
+			}
+			relPath, relErr := filepath.Rel(root, path)
+			if relErr != nil {
+				relPath = path
+			}
+			*errors = append(*errors, fmt.Sprintf(
+				"%s: symlink inside a plugin — commit the real file; Codex drops symlinks on install",
+				filepath.ToSlash(relPath)))
+			return nil
+		})
 	}
 }
 
@@ -593,12 +672,13 @@ func stripFences(source string) string {
 // so a shared command is never reported. Both bounds keep the check quiet
 // enough to be trusted; widening either produces false positives faster than
 // true ones.
-func validateDuplicateBlocks(root string, skillNames []string, errors *[]string) {
+func validateDuplicateBlocks(root string, skills []skillRef, errors *[]string) {
 	type location struct{ skill, where string }
 	seen := map[string]location{}
 
-	for _, skillName := range skillNames {
-		files := collectFiles(filepath.Join(root, skillsDir, skillName), []string{".md"})
+	for _, skill := range skills {
+		skillName := skill.name
+		files := collectFiles(filepath.Join(root, skill.dir), []string{".md"})
 		sort.Strings(files)
 		for _, file := range files {
 			data, err := os.ReadFile(file)
@@ -660,31 +740,16 @@ func validateDuplicateBlocks(root string, skillNames []string, errors *[]string)
 func validate(root string, colls []collection) []string {
 	errors := []string{}
 
-	var skillNames []string
-	skillsRoot := filepath.Join(root, skillsDir)
-	if pathExists(skillsRoot) {
-		entries, err := os.ReadDir(skillsRoot)
-		if err != nil {
-			errors = append(errors, fmt.Sprintf("%s/: %s", skillsDir, err))
-		}
-		for _, entry := range entries {
-			if entry.IsDir() {
-				skillNames = append(skillNames, entry.Name())
-			}
-		}
-		sort.Strings(skillNames)
-		for _, skillName := range skillNames {
-			validateSkill(root, skillName, &errors)
-		}
-	} else {
-		errors = append(errors, skillsDir+"/: directory not found")
+	skills := validateCollections(root, colls, &errors)
+	for _, skill := range skills {
+		validateSkill(root, skill, &errors)
 	}
 
-	validateDuplicateBlocks(root, skillNames, &errors)
-	validatePlugins(root, &errors)
+	validateDuplicateBlocks(root, skills, &errors)
+	validatePlugins(root, colls, &errors)
 	validateSymlinks(root, &errors)
-	validateCollections(root, skillNames, colls, &errors)
-	validateActionPinning(root, &errors)
+	validateContainment(root, colls, &errors)
+	validateActionPinning(root, skills, &errors)
 
 	return errors
 }
