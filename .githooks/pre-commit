@@ -2,7 +2,7 @@
 set -e
 
 # Secrets detection - fail fast if secrets found
-gitleaks protect --staged --verbose
+gitleaks git --staged --redact --verbose
 
 # Go formatting - reject staged .go files whose working-tree copy is
 # unformatted (run `gofmt -w .` to fix)
