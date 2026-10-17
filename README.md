@@ -63,11 +63,12 @@ Project tooling skills — linting/formatting setup, testing, and documentation 
 
 ### design
 
-Design skills — UX psychology for web, SaaS, and mobile apps.
+Design skills — UX psychology for web, SaaS, and mobile apps, and Apple featuring readiness.
 
 | Skill | Description |
 |-------|-------------|
 | [ux-psychology](plugins/design/skills/ux-psychology) | Apply research-backed UX psychology (Hick, Fitts, cognitive load, Gestalt, defaults, reciprocity) while building screens and flows, or audit them on request — detects web/SaaS, Apple platforms, Android, and React Native/Expo |
+| [apple-featuring](plugins/design/skills/apple-featuring) | Review an Apple platform app's readiness for App Store featuring and the Apple Design Awards, and plan the featuring nomination in App Store Connect |
 
 The `design` plugin also ships a read-only `ux-audit` agent for whole-app UX reviews in Claude Code.
 
