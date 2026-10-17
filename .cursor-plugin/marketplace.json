@@ -22,6 +22,11 @@
       "description": "Project tooling skills — linting/formatting setup, testing, and documentation sync"
     },
     {
+      "name": "design",
+      "source": "./plugins/design",
+      "description": "Design skills — UX psychology for web, SaaS, and mobile apps"
+    },
+    {
       "name": "xcode-skills",
       "source": "./plugins/xcode-skills",
       "description": "Apple-authored agent skills exported unchanged from Xcode 27 for Swift and Apple platform development"
