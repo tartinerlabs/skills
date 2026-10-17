@@ -30,6 +30,7 @@ var collections = []collection{
 	{name: "quality", skills: []string{"refactor", "naming-format", "project-structure"}},
 	{name: "security", skills: []string{"security", "deps"}},
 	{name: "tooling", skills: []string{"setup", "testing", "update-project"}},
+	{name: "design", skills: []string{"ux-psychology"}},
 }
 
 // Plugin manifests whose `version` release-please keeps in sync with the

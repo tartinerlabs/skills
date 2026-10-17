@@ -17,7 +17,7 @@ Language-agnostic agent skills for git/GitHub workflows, code quality, and proje
 
 ## Skills
 
-The skills ship as four themed collections, each installable as its own plugin (`workflow@tartinerlabs`, `quality@tartinerlabs`, `security@tartinerlabs`, `tooling@tartinerlabs`). Install the collections you need, then invoke skills through your agent's native skill or command interface — e.g. `/workflow:commit` in Claude Code.
+The skills ship as five themed collections, each installable as its own plugin (`workflow@tartinerlabs`, `quality@tartinerlabs`, `security@tartinerlabs`, `tooling@tartinerlabs`, `design@tartinerlabs`). Install the collections you need, then invoke skills through your agent's native skill or command interface — e.g. `/workflow:commit` in Claude Code.
 
 ### workflow
 
@@ -60,6 +60,16 @@ Project tooling skills — linting/formatting setup, testing, and documentation 
 | [setup](plugins/tooling/skills/setup) | Set up the ecosystem's lint/format/git-hooks/secret-scanning toolchain — detects the language (JS/TS, Python, Go) |
 | [testing](plugins/tooling/skills/testing) | Write and run unit/component tests — detects the language and test runner (JS/TS, Python, Go) |
 | [update-project](plugins/tooling/skills/update-project) | Update and maintain CLAUDE.md, AGENTS.md, README.md, agents, skills, and rules to match current project state |
+
+### design
+
+Design skills — UX psychology for web, SaaS, and mobile apps.
+
+| Skill | Description |
+|-------|-------------|
+| [ux-psychology](plugins/design/skills/ux-psychology) | Apply research-backed UX psychology (Hick, Fitts, cognitive load, Gestalt, defaults, reciprocity) while building screens and flows, or audit them on request — detects web/SaaS, iOS, Android, and React Native/Expo |
+
+The `design` plugin also ships a read-only `ux-audit` agent for whole-app UX reviews in Claude Code.
 
 > **Migrating from the `tartinerlabs` plugin?** The original all-in-one `tartinerlabs` plugin has been removed. Uninstall it and install the collection plugins above — the skills are identical, only the namespace changes (e.g. `/tartinerlabs:commit` → `/workflow:commit`).
 
@@ -115,6 +125,7 @@ claude plugin install workflow@tartinerlabs
 claude plugin install quality@tartinerlabs
 claude plugin install security@tartinerlabs
 claude plugin install tooling@tartinerlabs
+claude plugin install design@tartinerlabs
 ```
 
 ### Codex Plugin
@@ -125,7 +136,7 @@ To use it in Codex:
 
 1. Open this repository in Codex
 2. Restart Codex if needed so it reloads the repo marketplace
-3. Open the plugin directory and install `workflow`, `quality`, `security`, and/or `tooling` from the repo marketplace
+3. Open the plugin directory and install `workflow`, `quality`, `security`, `tooling`, and/or `design` from the repo marketplace
 
 ### Cursor Plugin
 
@@ -134,7 +145,7 @@ This repository includes Cursor plugin metadata in `plugins/<collection>/.cursor
 To use it in Cursor:
 
 1. Open this repository in Cursor
-2. Install `workflow`, `quality`, `security`, and/or `tooling` from the repo marketplace
+2. Install `workflow`, `quality`, `security`, `tooling`, and/or `design` from the repo marketplace
 
 For a local plugin-directory install, symlink each collection plugin — not the repository root. Cursor loads `plugin.json` from the symlink target, and the plugins live under `plugins/<collection>/`:
 
@@ -144,6 +155,7 @@ ln -s "$(pwd)/plugins/workflow" ~/.cursor/plugins/local/workflow
 ln -s "$(pwd)/plugins/quality" ~/.cursor/plugins/local/quality
 ln -s "$(pwd)/plugins/security" ~/.cursor/plugins/local/security
 ln -s "$(pwd)/plugins/tooling" ~/.cursor/plugins/local/tooling
+ln -s "$(pwd)/plugins/design" ~/.cursor/plugins/local/design
 ```
 
 Claude-specific hooks are intentionally not declared in the Cursor manifests.
@@ -157,9 +169,10 @@ opencode plugin add 'github:tartinerlabs/skills#main::path:plugins/workflow'
 opencode plugin add 'github:tartinerlabs/skills#main::path:plugins/quality'
 opencode plugin add 'github:tartinerlabs/skills#main::path:plugins/security'
 opencode plugin add 'github:tartinerlabs/skills#main::path:plugins/tooling'
+opencode plugin add 'github:tartinerlabs/skills#main::path:plugins/design'
 ```
 
-OpenCode needs the ref before `::path:` — the form without one fails to install. To pin a release, swap `main` for a tag from v2.0.0 onward, the first release to include these plugins. The plugins register skills only; the `deps` agent is Claude Code-only.
+OpenCode needs the ref before `::path:` — the form without one fails to install. To pin a release, swap `main` for a tag from v2.0.0 onward, the first release to include these plugins. The plugins register skills only; the `deps` and `ux-audit` agents are Claude Code-only.
 
 ### [Skills](https://skills.sh)
 

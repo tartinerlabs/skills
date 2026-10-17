@@ -46,7 +46,7 @@ Fields split into two groups. **Portable** fields (`name`, `description`, `licen
 - `compatibility` — The skill's real requirements (e.g. `Requires git`, `Any language project; detects the ecosystem`). Max 500 characters. Every skill carries one
 - `metadata` — Spec-sanctioned extension point (arbitrary string map). We set `metadata.short-description`, a human-readable display string — the only field beyond `name`/`description` that Codex's skill loader parses, so it is what Codex surfaces in its UI instead of the retrieval-optimised `description`
 - `allowed-tools` — Scoped tool permissions (e.g. `Bash(git status)` for specific commands, `Read` for full tool access). Spec-optional and marked experimental; Claude Code honours it, Cursor and Codex ignore it
-- `model` — Model preference. Low/medium-effort skills default to `haiku` (cheaper, separate rate-limit bucket); high-effort skills that need deeper reasoning (forked subagents, complex audits) use `sonnet`
+- `model` — Model preference. Low/medium-effort skills default to `haiku` (cheaper, separate rate-limit bucket); high-effort skills that need deeper reasoning (forked subagents, complex audits) use `sonnet`. Skills meant to load passively while Claude writes code (`ux-psychology`) set neither `model` nor `effort` — the override lasts the rest of the turn, so it would switch the user's session model mid-task
 - `effort` — Reasoning effort level (`low`, `medium`, `high`, `max`). Overrides the session effort level while the skill is active
 - `context: fork` + `agent` — Runs the skill as an isolated subagent with its own context window. Used by the high-effort audit skills (`refactor`, `security`, `github-actions`)
 
@@ -66,7 +66,7 @@ Skills are lightweight guides, not procedures. State a preference and its reason
 
 ## Distribution
 
-The skills ship as four themed **collection plugins** — `workflow`, `quality`, `security`, and `tooling`. The original all-in-one `tartinerlabs` plugin has been removed. The `collections` table in `scripts/validate-skills/main.go` is the source of truth for membership — every skill must belong to exactly one collection (validated in CI).
+The skills ship as five themed **collection plugins** — `workflow`, `quality`, `security`, `tooling`, and `design`. The original all-in-one `tartinerlabs` plugin has been removed. The `collections` table in `scripts/validate-skills/main.go` is the source of truth for membership — every skill must belong to exactly one collection (validated in CI).
 
 Six channels: Claude Code, Codex, Cursor, and Antigravity plugins (each reading `plugins/<collection>/.<channel>-plugin/plugin.json`), an OpenCode v2 plugin per collection (`plugins/<collection>/opencode.js`, installed from git), plus [skills.sh](https://skills.sh), which discovers the skills through the marketplace manifests. **Claude Code takes precedence** — a change that helps another channel must not regress Claude Code; install-test it there first. Once a collection plugin is installed there, its skills are invoked as `/<collection>:<skill>` — e.g. `/workflow:commit`, `/quality:refactor`. `README.md` has the install commands. The `Skills` CI workflow validates skills.sh distribution on push to `main`. Context7 was also a channel until `ctx7 skills install` was deprecated upstream with no successor; Context7 remains a documentation source, not a distribution target.
 
