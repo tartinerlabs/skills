@@ -16,6 +16,8 @@ tags: memory, recognition, recall, complexity, chunking
 - **One task per screen** on mobile; on desktop, keep secondary information visually quieter than the task
 - **Remove extraneous load** — decorative elements, duplicate labels, jargon, and unexplained abbreviations all compete with the task
 - **Units and context next to numbers** — "3 seats left of 10", "+12% vs last week"
+- **Cut before you hide** — remove content that serves no task on the screen; grouping and progressive disclosure are for what remains, not a way to tuck clutter behind a click
+- **Budget interruptions** — toasts, badges, unread counts, banners, and modals on load each cost attention; too many teach users to ignore them all, including the one that matters. Interrupt only for what the user must act on now
 
 ### When Auditing
 
@@ -23,6 +25,8 @@ tags: memory, recognition, recall, complexity, chunking
 - Instructions shown once and then removed while the user acts on them
 - Screens mixing several unrelated tasks or decisions
 - Unchunked codes and IDs the user must type or compare
+- Content, widgets, or stats on a screen that no user task needs
+- Badges, toasts, and banners that ask for attention but need no action
 
 ### Incorrect
 

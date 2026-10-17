@@ -38,7 +38,7 @@ Each rule file has a **When building** constraint and a **When auditing** check.
 |---|---|---|---|
 | Deceptive patterns | CRITICAL | urgency, cancellation, consent, upsells, pricing | `rules/deceptive-patterns.md` |
 | Error prevention & recovery | HIGH | forms, destructive actions, input formats, exits | `rules/error-prevention.md` |
-| Cognitive load | HIGH | multi-step flows, dense screens, anything to remember | `rules/cognitive-load.md` |
+| Cognitive load | HIGH | multi-step flows, dense screens, information overload, interruptions, anything to remember | `rules/cognitive-load.md` |
 | System status & micro-feedback | HIGH | any action, loading, saving, async work | `rules/system-status.md` |
 | Jakob's law & consistency | HIGH | navigation, platform conventions, repeated patterns | `rules/jakobs-law.md` |
 | Fitts's law | HIGH | buttons, touch targets, toolbars, destructive actions | `rules/fitts-law.md` |
