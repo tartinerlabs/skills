@@ -28,9 +28,9 @@ Load an ecosystem guide **only** when `rules/convention-detection.md` reaches Ti
 
 Scan staged changes for secrets before every commit, using the project's secret scanner. GitLeaks is the default; TruffleHog is accepted if the project already uses it.
 
-1. Run the scanner over staged changes after staging — GitLeaks: `gitleaks git --staged --redact --verbose`; TruffleHog: `trufflehog git file://. --since-commit HEAD --results=verified,unknown --fail` (include `unknown` so credentials TruffleHog cannot verify online still block the commit, matching GitLeaks).
+1. Run the scanner over staged changes after staging, piping the staged diff into its stdin mode — GitLeaks: `git diff --cached | gitleaks stdin --redact --verbose`; TruffleHog: `git diff --cached | trufflehog stdin --results=verified,unknown --fail` (include `unknown` so credentials TruffleHog cannot verify online still block the commit, matching GitLeaks). Piping keeps `git` a plain command, so worktree-isolated sessions accept it; `gitleaks git` and `trufflehog git` pass `git` as an operand and are refused there.
 2. If the scanner reports a leak, **STOP** — do not commit. Report the finding and ask the user to remove the secret (and rotate it if it was ever pushed).
-3. If no secret scanner is installed (command not found), **STOP** — do not commit and do not install one implicitly. Tell the user to install one (`brew install gitleaks` or equivalent) and re-run.
+3. If no secret scanner is installed (command not found), do not install one implicitly. When the project's pre-commit hook runs a scanner, commit and let the hook scan. Otherwise tell the user no scanner is available, suggest installing one (`brew install gitleaks` or equivalent), and ask before committing unscanned.
 
 Never edit `.husky/`, `commitlint`, or other project tooling as part of a commit. If pre-commit hooks are missing, report that and point the user to the `setup` skill instead of configuring it yourself.
 
