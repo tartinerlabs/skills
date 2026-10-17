@@ -14,6 +14,16 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.2.0](https://github.com/tartinerlabs/skills/compare/v2.1.0...v2.2.0) (2026-10-17)
+
+
+### Features
+
+* add a11y-audit agent ([0f05021](https://github.com/tartinerlabs/skills/commit/0f0502137f246a603c22109d2d848f3b1e3217c0))
+* split pnpm guidance from generic examples ([fb3f912](https://github.com/tartinerlabs/skills/commit/fb3f9129c28e87757b9c89ed5ab080441af9e4a5))
+* use pnpm/setup in matrix examples ([af500b7](https://github.com/tartinerlabs/skills/commit/af500b7e934d373d53b982c606f6b5e2089f18a1))
+* use SHA placeholders in action examples ([549351f](https://github.com/tartinerlabs/skills/commit/549351f6b4022dc20c11f50a15ae31b1a8901097))
+
 ## [2.1.0](https://github.com/tartinerlabs/skills/compare/v2.0.1...v2.1.0) (2026-10-17)
 
 
