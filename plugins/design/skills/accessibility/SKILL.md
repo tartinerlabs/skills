@@ -49,7 +49,7 @@ Each rule file has **When building** constraints, **When auditing** checks, and 
 
 ## 4. Audit Mode
 
-1. Scope: the files or screens named; otherwise every user-facing screen
+1. Scope: the files or screens named; otherwise every user-facing screen. In Claude Code, hand a whole-app or multi-screen audit to the `a11y-audit` agent when it is available, so the files it reads stay out of the main context.
 2. Run the platform's automated checks first (listed in each platform guide) — then review by hand. Automated tools find only part of WCAG failures; most problems with names, focus order, and meaning need a person (or you, reading the code)
 3. Check each screen against the rules whose "Applies to" matches it
 4. Report, grouped by impact (CRITICAL first):
