@@ -14,6 +14,21 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.1.0](https://github.com/tartinerlabs/skills/compare/v2.0.1...v2.1.0) (2026-10-17)
+
+
+### Features
+
+* add accessibility skill ([3fc1591](https://github.com/tartinerlabs/skills/commit/3fc1591cb61994cc079078020e4d8c1923a27e2f))
+* add apple-featuring skill ([94810f7](https://github.com/tartinerlabs/skills/commit/94810f797ffcf5c6a8c162eaeb9c0a50a02d9881))
+* add design collection with ux-psychology ([f51e9bd](https://github.com/tartinerlabs/skills/commit/f51e9bd4d5ab8bd2d10b190d9da9e8b29a1b215c))
+* add first impressions and fluency research ([8463ad6](https://github.com/tartinerlabs/skills/commit/8463ad6f9c63d7eada7f397e599522a7dcf104c1))
+* add landing page guidance to ux-psychology ([7fb27e7](https://github.com/tartinerlabs/skills/commit/7fb27e765f9a8e3249c1c4032186564e7c593506))
+* add Liquid Glass guidance to ux-psychology ([8110bae](https://github.com/tartinerlabs/skills/commit/8110baeab4a8e66cb9301b3d057eaf1290a51d94))
+* cover all Apple platforms in ux-psychology ([aa088c5](https://github.com/tartinerlabs/skills/commit/aa088c539ef843088fa3a76777ebbec407a064a4))
+* cover information overload in cognitive load ([dbbc3a0](https://github.com/tartinerlabs/skills/commit/dbbc3a0b24783f5f59c756a1be4064fc4383492d))
+* run ux-audit agent on opus at medium effort ([eab9ea8](https://github.com/tartinerlabs/skills/commit/eab9ea83288241c96facb517c36f115dbb9481da))
+
 ## [2.0.1](https://github.com/tartinerlabs/skills/compare/v2.0.0...v2.0.1) (2026-10-17)
 
 
