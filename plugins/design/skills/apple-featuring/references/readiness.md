@@ -22,7 +22,7 @@ Whoever evaluates the app at Apple installs it fresh. An app that only shines af
 
 ## Accessibility
 
-Two featuring considerations and the Inclusivity category depend on it. Check every primary workflow:
+Two featuring considerations and the Inclusivity category depend on it. Check every primary workflow — and when the `accessibility` skill is available, run its audit for the full picture:
 
 - **VoiceOver:** every control labelled; visual content (charts, maps, images) has a meaningful spoken alternative
 - **Dynamic Type:** layouts work up to the largest accessibility sizes
