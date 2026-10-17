@@ -14,6 +14,13 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.0.1](https://github.com/tartinerlabs/skills/compare/v2.0.0...v2.0.1) (2026-10-17)
+
+
+### Bug Fixes
+
+* pipe staged diff into secret scanners ([1e72a43](https://github.com/tartinerlabs/skills/commit/1e72a43f51fc9b4c9774b9a1e2f397e62c5a51bf))
+
 ## [2.0.0](https://github.com/tartinerlabs/skills/compare/v1.37.0...v2.0.0) (2026-10-07)
 
 
