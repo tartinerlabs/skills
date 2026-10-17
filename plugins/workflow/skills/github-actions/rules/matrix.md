@@ -15,18 +15,22 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@<full-SHA>  # <latest release>
-      - uses: pnpm/setup@<full-SHA>  # <latest release>
+      - uses: actions/setup-node@<full-SHA>  # <latest release>
         with:
-          runtime: node@22
-      - run: pnpm test
+          node-version: '22'
+          cache: '<pm>'
+      - run: <pm> install --frozen-lockfile
+      - run: <pm> test
   test-24:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@<full-SHA>  # <latest release>
-      - uses: pnpm/setup@<full-SHA>  # <latest release>
+      - uses: actions/setup-node@<full-SHA>  # <latest release>
         with:
-          runtime: node@24
-      - run: pnpm test
+          node-version: '24'
+          cache: '<pm>'
+      - run: <pm> install --frozen-lockfile
+      - run: <pm> test
 ```
 
 ### Correct
@@ -42,13 +46,26 @@ jobs:
         node: ['22', '24']
     steps:
       - uses: actions/checkout@<full-SHA>  # <latest release>
+      - uses: actions/setup-node@<full-SHA>  # <latest release>
+        with:
+          node-version: ${{ matrix.node }}
+          cache: '<pm>'
+      - run: <pm> install --frozen-lockfile
+      - run: <pm> test
+```
+
+### pnpm
+
+Use `pnpm/setup` in place of `actions/setup-node` and the install step — it installs pnpm and Node, then runs `pnpm install` itself. A matrix is the one place it takes an input: `runtime` deliberately overrides the `devEngines.runtime` pin so each cell gets its own Node.
+
+```yaml
+    steps:
+      - uses: actions/checkout@<full-SHA>  # <latest release>
       - uses: pnpm/setup@<full-SHA>  # <latest release>
         with:
           runtime: node@${{ matrix.node }}
       - run: pnpm test
 ```
-
-`pnpm/setup` replaces `actions/setup-node` and runs `pnpm install` itself. A matrix is the one place it takes an input: `runtime` deliberately overrides the `devEngines.runtime` pin so each cell gets its own Node.
 
 ### Fail Fast
 
