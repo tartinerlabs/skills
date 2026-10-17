@@ -71,7 +71,7 @@ Design skills — UX psychology, accessibility, and Apple featuring readiness fo
 | [accessibility](plugins/design/skills/accessibility) | Build and audit accessible UI mapped to WCAG 2.2 AA — screen readers, keyboard and focus, contrast, text scaling, reduced motion, targets, forms, and media — for web, Apple platforms, Android, and React Native/Expo |
 | [apple-featuring](plugins/design/skills/apple-featuring) | Review an Apple platform app's readiness for App Store featuring and the Apple Design Awards, and plan the featuring nomination in App Store Connect |
 
-The `design` plugin also ships a read-only `ux-audit` agent for whole-app UX reviews in Claude Code.
+The `design` plugin also ships two read-only agents in Claude Code: `ux-audit` for whole-app UX reviews and `a11y-audit` for whole-app accessibility reviews.
 
 > **Migrating from the `tartinerlabs` plugin?** The original all-in-one `tartinerlabs` plugin has been removed. Uninstall it and install the collection plugins above — the skills are identical, only the namespace changes (e.g. `/tartinerlabs:commit` → `/workflow:commit`).
 
@@ -174,7 +174,7 @@ opencode plugin add 'github:tartinerlabs/skills#main::path:plugins/tooling'
 opencode plugin add 'github:tartinerlabs/skills#main::path:plugins/design'
 ```
 
-OpenCode needs the ref before `::path:` — the form without one fails to install. To pin a release, swap `main` for a tag from v2.0.0 onward, the first release to include these plugins. The plugins register skills only; the `deps` and `ux-audit` agents are Claude Code-only.
+OpenCode needs the ref before `::path:` — the form without one fails to install. To pin a release, swap `main` for a tag from v2.0.0 onward, the first release to include these plugins. The plugins register skills only; the `deps`, `ux-audit`, and `a11y-audit` agents are Claude Code-only.
 
 ### [Skills](https://skills.sh)
 
