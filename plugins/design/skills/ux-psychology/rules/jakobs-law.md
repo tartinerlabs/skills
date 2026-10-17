@@ -10,7 +10,7 @@ tags: conventions, consistency, platform, mental-models, navigation
 
 ### When Building
 
-- **Platform conventions** — use the OS's navigation, back behaviour, dialogs, and pickers (`references/ios.md`, `references/android.md`); on the web, the patterns users already know (logo links home, cart top-right, search at the top)
+- **Platform conventions** — use the OS's navigation, back behaviour, dialogs, and pickers (`references/apple.md`, `references/android.md`); on the web, the patterns users already know (logo links home, cart top-right, search at the top)
 - **Category conventions** — a checkout looks like checkouts users have used; a calendar like calendars
 - **Internal consistency** — the same action has the same name, icon, and position everywhere; the same component behaves the same way on every screen
 - **Match the user's world** — their words, their order of steps, their units and formats (dates and currencies per locale)

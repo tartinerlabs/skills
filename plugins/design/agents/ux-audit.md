@@ -1,6 +1,6 @@
 ---
 name: ux-audit
-description: Read-only UX psychology audit of a whole app or several screens. Use for full-app or multi-screen UX reviews — returns a severity-ranked report without editing files. Detects web/SaaS, iOS, Android, and React Native/Expo.
+description: Read-only UX psychology audit of a whole app or several screens. Use for full-app or multi-screen UX reviews — returns a severity-ranked report without editing files. Detects web/SaaS, Apple platforms, Android, and React Native/Expo.
 model: sonnet
 effort: high
 maxTurns: 40

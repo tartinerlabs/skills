@@ -1,9 +1,9 @@
 ---
 name: ux-psychology
-description: Use when designing, building, or reviewing a screen, flow, or page — onboarding, sign-up, navigation, forms, settings, dashboards, tables, pricing, checkout, empty states, error messages, permission prompts — or when a UI feels confusing, cluttered, or slow. Applies UX psychology (Hick, Fitts, cognitive load, Gestalt, defaults, reciprocity) to web/SaaS, iOS, Android, and React Native/Expo apps. Not for visual styling, colour, or animation tuning.
+description: Use when designing, building, or reviewing a screen, flow, or page — onboarding, sign-up, navigation, forms, settings, dashboards, tables, pricing, checkout, empty states, error messages, permission prompts — or when a UI feels confusing, cluttered, or slow. Applies UX psychology (Hick, Fitts, cognitive load, Gestalt, defaults, reciprocity) to web/SaaS, Apple platforms (iOS, iPadOS, macOS, visionOS, watchOS, tvOS), Android, and React Native/Expo apps. Not for visual styling, colour, or animation tuning.
 license: MIT
 allowed-tools: Read Glob Grep
-compatibility: Any UI project; detects the platform — web/SaaS and React Native/Expo first-class, SwiftUI well supported, native Android (Compose) best-effort
+compatibility: Any UI project; detects the platform — web/SaaS and React Native/Expo first-class, Apple platforms (SwiftUI/UIKit/AppKit) well supported, native Android (Compose) best-effort
 metadata:
   short-description: UX psychology for screens and flows.
 ---
@@ -25,10 +25,10 @@ Read the manifest as prose and load **only** the matching guides:
 |---|---|---|
 | **Web / SaaS** | `package.json` with a web framework (Next.js, Vite, Remix, Astro, Nuxt, SvelteKit, …), or HTML templates | `references/web.md` |
 | **React Native / Expo** | `package.json` with `expo` or `react-native` | `references/mobile.md` + `references/cross-platform.md` |
-| **iOS (SwiftUI/UIKit)** | `*.xcodeproj`, `Package.swift` with an app target | `references/mobile.md` + `references/ios.md` |
+| **Apple (iPhone, iPad, Mac, Vision Pro, Watch, TV)** | `*.xcodeproj`, `Package.swift` with an app target | `references/apple.md`, plus `references/mobile.md` for iPhone and iPad |
 | **Android (Compose)** | `build.gradle(.kts)` with Compose | `references/mobile.md` + `references/android.md` |
 
-React Native/Expo: add `references/ios.md` or `references/android.md` only when the change behaves differently per OS (back navigation, sheets, pickers, haptics, system dialogs). Expo web output also loads `references/web.md`. A monorepo with several apps loads the guide for the app being touched. For another UI stack (Flutter, Kotlin Multiplatform), use `references/cross-platform.md` and the closest native guide.
+React Native/Expo: add `references/apple.md` or `references/android.md` only when the change behaves differently per OS (back navigation, sheets, pickers, haptics, system dialogs). Expo web output also loads `references/web.md`. A monorepo with several apps loads the guide for the app being touched. For another UI stack (Flutter, Kotlin Multiplatform), use `references/cross-platform.md` and the closest native guide.
 
 ## 3. Rules
 

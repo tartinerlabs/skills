@@ -1,6 +1,6 @@
 # Mobile (shared)
 
-How the rules apply on phones and tablets, whatever the stack. Load the platform guide alongside this one — `ios.md`, `android.md`, or `cross-platform.md` — for conventions specific to each OS.
+How the rules apply on phones and tablets, whatever the stack. Load the platform guide alongside this one — `apple.md`, `android.md`, or `cross-platform.md` — for conventions specific to each OS.
 
 ## The Context Is Different
 

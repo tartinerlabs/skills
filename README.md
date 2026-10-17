@@ -67,7 +67,7 @@ Design skills — UX psychology for web, SaaS, and mobile apps.
 
 | Skill | Description |
 |-------|-------------|
-| [ux-psychology](plugins/design/skills/ux-psychology) | Apply research-backed UX psychology (Hick, Fitts, cognitive load, Gestalt, defaults, reciprocity) while building screens and flows, or audit them on request — detects web/SaaS, iOS, Android, and React Native/Expo |
+| [ux-psychology](plugins/design/skills/ux-psychology) | Apply research-backed UX psychology (Hick, Fitts, cognitive load, Gestalt, defaults, reciprocity) while building screens and flows, or audit them on request — detects web/SaaS, Apple platforms, Android, and React Native/Expo |
 
 The `design` plugin also ships a read-only `ux-audit` agent for whole-app UX reviews in Claude Code.
 
