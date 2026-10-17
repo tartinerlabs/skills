@@ -11,25 +11,21 @@ tags: matrix, parallel, fail-fast, ci
 ```yaml
 # Isolated variants as sequential jobs — duplicated setup, no fail-fast
 jobs:
-  test-20:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@<full-SHA>  # <latest release>
-      - uses: actions/setup-node@<full-SHA>  # <latest release>
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm test
   test-22:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@<full-SHA>  # <latest release>
-      - uses: actions/setup-node@<full-SHA>  # <latest release>
+      - uses: pnpm/setup@<full-SHA>  # <latest release>
         with:
-          node-version: '22'
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
+          runtime: node@22
+      - run: pnpm test
+  test-24:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@<full-SHA>  # <latest release>
+      - uses: pnpm/setup@<full-SHA>  # <latest release>
+        with:
+          runtime: node@24
       - run: pnpm test
 ```
 
@@ -43,20 +39,20 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        node: ['20', '22']
+        node: ['22', '24']
     steps:
       - uses: actions/checkout@<full-SHA>  # <latest release>
-      - uses: actions/setup-node@<full-SHA>  # <latest release>
+      - uses: pnpm/setup@<full-SHA>  # <latest release>
         with:
-          node-version: ${{ matrix.node }}
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
+          runtime: node@${{ matrix.node }}
       - run: pnpm test
 ```
 
+`pnpm/setup` replaces `actions/setup-node` and runs `pnpm install` itself. A matrix is the one place it takes an input: `runtime` deliberately overrides the `devEngines.runtime` pin so each cell gets its own Node.
+
 ### Fail Fast
 
-`fail-fast: true` cancels remaining matrix jobs as soon as one fails. This saves compute minutes and gives faster feedback — if Node 20 fails, there is no point waiting for Node 22.
+`fail-fast: true` cancels remaining matrix jobs as soon as one fails. This saves compute minutes and gives faster feedback — if Node 22 fails, there is no point waiting for Node 24.
 
 ### When to Use
 
