@@ -28,15 +28,14 @@ jobs:
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6
 
-      - uses: pnpm/action-setup@0ebf47130e4866e96fce0953f49152a61190b271  # v6.0.9
+      # The repo has no root package.json, so there is no devEngines to read:
+      # pnpm and Node are given explicitly. No install runs and no cache is
+      # kept — the commands below exercise consumer-side `pnpm dlx` tools,
+      # not repo dependencies.
+      - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4  # v3.1.1
         with:
-          version: 11
-
-      # No pnpm cache: the repo has no pnpm-lock.yaml (the install commands
-      # below exercise consumer-side `pnpm dlx` tools, not repo dependencies).
-      - uses: actions/setup-node@48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e  # v6
-        with:
-          node-version: lts/*
+          version: 12.14.0
+          runtime: node@lts
 
       - name: Install
         run: ${{ matrix.command }}
