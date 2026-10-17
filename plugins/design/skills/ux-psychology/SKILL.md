@@ -92,4 +92,4 @@ Fix nothing in audit mode unless asked; when asked, fix in impact order.
 ## Boundaries
 
 - **Visual styling** (colour palettes, type scales, spacing systems) and **animation timing** (easing, springs, duration) are out of scope — defer to a visual-design or animation skill when one is installed. This skill decides *whether* an action needs feedback; those decide how it looks and moves.
-- **Accessibility** overlaps where noted (target size, colour-only signals, focus, input purpose); a full WCAG audit is a separate job.
+- **Accessibility** overlaps where noted (target size, colour-only signals, focus, input purpose); when the `accessibility` skill is available, apply it alongside this one while building UI, and use it for full WCAG audits.
