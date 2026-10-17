@@ -55,7 +55,7 @@ Each rule file has a **When building** constraint and a **When auditing** check.
 | Social proof | MEDIUM | landing, pricing, sign-up | `rules/social-proof.md` |
 | Goal gradient & endowed progress | LOW | steppers, progress bars, setup checklists | `rules/goal-gradient.md` |
 | Peak-end | LOW | flow endings, success and error moments | `rules/peak-end.md` |
-| Aesthetic-usability | LOW | polish vs function trade-offs, test sessions | `rules/aesthetic-usability.md` |
+| Aesthetic-usability | LOW | first impressions, landing pages, polish vs function trade-offs, test sessions | `rules/aesthetic-usability.md` |
 
 `rules/deceptive-patterns.md` overrides every other rule: when a persuasion rule (defaults, reciprocity, commitment, social proof, goal gradient) would work against the user's interest, it is a deceptive pattern, not a technique.
 

@@ -6,7 +6,7 @@ tags: memory, recognition, recall, complexity, chunking
 
 **Rule**: People can hold only about four chunks in working memory. Let them recognise rather than recall, and never make them carry information from one screen to the next.
 
-**Evidence**: Cowan 2001, "The magical number 4 in short-term memory" (*Behavioral and Brain Sciences*) — capacity is about 4 chunks, not Miller's often-quoted 7±2 (Miller 1956, *Psychological Review*, which was about memory span, never menu length). Sweller 1988, "Cognitive load during problem solving" (*Cognitive Science*) — extraneous load competes with the task. Nielsen's heuristic #6, recognition rather than recall.
+**Evidence**: Cowan 2001, "The magical number 4 in short-term memory" (*Behavioral and Brain Sciences*) — capacity is about 4 chunks, not Miller's often-quoted 7±2 (Miller 1956, *Psychological Review*, which was about memory span, never menu length). Sweller 1988, "Cognitive load during problem solving" (*Cognitive Science*) — extraneous load competes with the task. Nielsen's heuristic #6, recognition rather than recall. Reber, Schwarz & Winkielman 2004, "Processing fluency and aesthetic pleasure" (*Personality and Social Psychology Review*) — the easier something is to process, the more people like it, so low load is felt, not just measured.
 
 ### When Building
 
