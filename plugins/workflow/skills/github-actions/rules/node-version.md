@@ -29,8 +29,10 @@ tags: node, lts, setup-node, versioning
     node-version: 'lts/*'
 
 # pnpm project pinning Node in devEngines.runtime — default settings read the pin
-- uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4  # v3.1.1
+- uses: pnpm/setup@<full-SHA>  # <latest release>
 ```
+
+Resolve `pnpm/setup`'s latest release and its commit SHA at setup time rather than copying a SHA from this rule: `gh api repos/pnpm/setup/releases/latest --jq '.tag_name'`, then `gh api repos/pnpm/setup/commits/<tag> --jq '.sha'`.
 
 ### Available Aliases
 
