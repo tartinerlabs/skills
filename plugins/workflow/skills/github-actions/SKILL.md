@@ -31,7 +31,7 @@ Scan for project indicators:
 
 Detect the package manager from the lockfile, in this order: `nub.lock`, `pnpm-lock.yaml`, `bun.lock`/`bun.lockb`, `yarn.lock`, `package-lock.json`. With no lockfile, ask.
 
-A `packageManager` or `devEngines.packageManager` field in `package.json` outranks any lockfile. Nub runs in compat-mode over another manager's lockfile, so `nub.lock` alongside `pnpm-lock.yaml` means nub — check the field before concluding from lockfiles alone.
+A `devEngines.packageManager` or `packageManager` field in `package.json` outranks any lockfile. For pnpm, prefer `devEngines.packageManager` over `packageManager`: pnpm 11+ and the `pnpm/setup` action read it first, and pnpm records the resolved version in `pnpm-lock.yaml`. Pin an exact version rather than a range, so every machine and CI run uses the same pnpm — resolve the current latest at setup time (`pnpm view pnpm version`) and write it as `{ "name": "pnpm", "version": "<latest>", "onFail": "download" }`. The same goes for the runtime: declare Node in `devEngines.runtime` (pnpm 10.14+ downloads it and records its checksum in the lockfile) rather than `.nvmrc` or `engines.node`, pinned to the current LTS resolved at setup time — `pnpm runtime set node lts` (pnpm 11.4+) writes the field; confirm the saved `version` is exact, not a range. Write that field when declaring pnpm; migrating a legacy `"packageManager": "pnpm@…"` is worthwhile but optional. Keep one declaration, not both — version switchers refuse a project whose two fields disagree. Yarn still needs `packageManager`, the only field it reads. Nub runs in compat-mode over another manager's lockfile, so `nub.lock` alongside `pnpm-lock.yaml` means nub — check the field before concluding from lockfiles alone.
 
 ### 3. Generate Workflow
 
@@ -85,6 +85,8 @@ jobs:
       - run: <pm> test
       - run: <pm> build
 ```
+
+For pnpm, replace the `actions/setup-node` and install steps with a single `pnpm/setup` step on its default settings (`rules/node-version.md`): with no inputs it installs pnpm from `devEngines.packageManager` and Node from `devEngines.runtime`, then runs `pnpm install`.
 
 ## Audit Mode
 

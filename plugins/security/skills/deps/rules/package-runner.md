@@ -38,7 +38,7 @@ For markdown documentation files, **report** occurrences and suggest updating, b
 
 ### Tradeoff
 
-- In CI, ensure the package manager is installed before any step using its runner (e.g., `pnpm/action-setup` before `pnx`, or `oven-sh/setup-bun` before `bunx`).
+- In CI, ensure the package manager is installed before any step using its runner (e.g., `pnpm/setup` before `pnx`, or `oven-sh/setup-bun` before `bunx`).
 - Public-facing docs that teach general users may intentionally use `npx` as the lowest-common-denominator. Review these manually.
 
 ### Why This Matters
