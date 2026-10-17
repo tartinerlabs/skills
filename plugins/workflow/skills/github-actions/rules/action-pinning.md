@@ -22,8 +22,8 @@ tags: actions, pinning, sha, supply-chain
 
 ```yaml
 # Every action uses a full commit SHA with a readable release comment
-- uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
-- uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+- uses: actions/checkout@<full-SHA>  # <latest release>
+- uses: actions/setup-node@<full-SHA>  # <latest release>
 - uses: codecov/codecov-action@015f24e6818733317a2da2edd6290ab26238649a  # v5.0.7
 - uses: JamesIves/github-pages-deploy-action@6c2d9db40f9296374acc17b90404b6e8864128c8  # v4.7.3
 ```

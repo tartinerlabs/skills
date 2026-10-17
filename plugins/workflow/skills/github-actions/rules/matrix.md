@@ -11,26 +11,26 @@ tags: matrix, parallel, fail-fast, ci
 ```yaml
 # Isolated variants as sequential jobs — duplicated setup, no fail-fast
 jobs:
-  test-20:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
-        with:
-          node-version: '20'
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm test
   test-22:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+      - uses: actions/checkout@<full-SHA>  # <latest release>
+      - uses: actions/setup-node@<full-SHA>  # <latest release>
         with:
           node-version: '22'
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
-      - run: pnpm test
+          cache: '<pm>'
+      - run: <pm> install --frozen-lockfile
+      - run: <pm> test
+  test-24:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@<full-SHA>  # <latest release>
+      - uses: actions/setup-node@<full-SHA>  # <latest release>
+        with:
+          node-version: '24'
+          cache: '<pm>'
+      - run: <pm> install --frozen-lockfile
+      - run: <pm> test
 ```
 
 ### Correct
@@ -43,20 +43,33 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        node: ['20', '22']
+        node: ['22', '24']
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+      - uses: actions/checkout@<full-SHA>  # <latest release>
+      - uses: actions/setup-node@<full-SHA>  # <latest release>
         with:
           node-version: ${{ matrix.node }}
-          cache: 'pnpm'
-      - run: pnpm install --frozen-lockfile
+          cache: '<pm>'
+      - run: <pm> install --frozen-lockfile
+      - run: <pm> test
+```
+
+### pnpm
+
+Use `pnpm/setup` in place of `actions/setup-node` and the install step — it installs pnpm and Node, then runs `pnpm install` itself. A matrix is the one place it takes an input: `runtime` deliberately overrides the `devEngines.runtime` pin so each cell gets its own Node.
+
+```yaml
+    steps:
+      - uses: actions/checkout@<full-SHA>  # <latest release>
+      - uses: pnpm/setup@<full-SHA>  # <latest release>
+        with:
+          runtime: node@${{ matrix.node }}
       - run: pnpm test
 ```
 
 ### Fail Fast
 
-`fail-fast: true` cancels remaining matrix jobs as soon as one fails. This saves compute minutes and gives faster feedback — if Node 20 fails, there is no point waiting for Node 22.
+`fail-fast: true` cancels remaining matrix jobs as soon as one fails. This saves compute minutes and gives faster feedback — if Node 22 fails, there is no point waiting for Node 24.
 
 ### When to Use
 
