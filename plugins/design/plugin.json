@@ -2,7 +2,7 @@
   "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
   "name": "design",
   "version": "2.0.1",
-  "description": "Design skills — UX psychology for web, SaaS, and mobile apps",
+  "description": "Design skills — UX psychology for web, SaaS, and mobile apps, and Apple featuring readiness",
   "author": {
     "name": "Tartiner Labs",
     "url": "https://github.com/tartinerlabs"
