@@ -14,8 +14,8 @@ jobs:
   test-20:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+      - uses: actions/checkout@<full-SHA>  # <latest release>
+      - uses: actions/setup-node@<full-SHA>  # <latest release>
         with:
           node-version: '20'
           cache: 'pnpm'
@@ -24,8 +24,8 @@ jobs:
   test-22:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+      - uses: actions/checkout@<full-SHA>  # <latest release>
+      - uses: actions/setup-node@<full-SHA>  # <latest release>
         with:
           node-version: '22'
           cache: 'pnpm'
@@ -45,8 +45,8 @@ jobs:
       matrix:
         node: ['20', '22']
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+      - uses: actions/checkout@<full-SHA>  # <latest release>
+      - uses: actions/setup-node@<full-SHA>  # <latest release>
         with:
           node-version: ${{ matrix.node }}
           cache: 'pnpm'

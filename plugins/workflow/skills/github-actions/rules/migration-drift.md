@@ -73,9 +73,9 @@ jobs:
         ports: ['5432:5432']
         options: --health-cmd pg_isready --health-interval 5s --health-retries 10
     steps:
-      - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0  # v7.0.0
+      - uses: actions/checkout@<full-SHA>  # <latest release>
       # Same setup and install steps as the project's CI template, cache included
-      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+      - uses: actions/setup-node@<full-SHA>  # <latest release>
         with:
           node-version: 'lts/*'
           cache: '<pm>'

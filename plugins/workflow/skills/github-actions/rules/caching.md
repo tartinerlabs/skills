@@ -12,7 +12,7 @@ tags: caching, dependencies, setup-actions, performance
 
 ```yaml
 # No caching — downloads all dependencies every run
-- uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+- uses: actions/setup-node@<full-SHA>  # <latest release>
   with:
     node-version: 'lts/*'
 - run: <pm> install --frozen-lockfile
@@ -22,7 +22,7 @@ tags: caching, dependencies, setup-actions, performance
 
 ```yaml
 # Caching enabled — reuses dependencies across runs
-- uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020  # v7.0.0
+- uses: actions/setup-node@<full-SHA>  # <latest release>
   with:
     node-version: 'lts/*'
     cache: '<pm>'
