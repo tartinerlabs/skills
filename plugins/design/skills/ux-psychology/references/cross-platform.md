@@ -22,7 +22,7 @@ First-class path. Check the installed versions before relying on an API.
 ### Navigation
 
 - Use Expo Router's (or React Navigation's) native-backed **stack** — it gives the iOS edge swipe and Android predictive back without extra code
-- Tabs: native-backed tabs where the SDK supports them, so each OS gets its own tab bar look and behaviour
+- Tabs: Expo Router's `NativeTabs` (`expo-router/native-tabs`) renders each OS's real tab bar — Liquid Glass on iOS 26+, Material on Android — instead of a JavaScript imitation of one
 - Modals: `presentation: "modal"` or `"formSheet"` on a stack screen, which maps to native sheets on iOS
 - Android back: handled by the native stack; for custom screens that must intercept it (unsaved draft), use `BackHandler` and let the user leave after one confirmation (`references/android.md`)
 
@@ -31,6 +31,8 @@ First-class path. Check the installed versions before relying on an API.
 - `Platform.select({ ios: …, android: … })` or `.ios.tsx` / `.android.tsx` files for the few components that truly differ — keep the logic shared
 - Native date/time pickers (`@react-native-community/datetimepicker`) rather than one custom picker for both
 - `Alert.alert` for system alerts; an action sheet on iOS and a bottom sheet or menu on Android for option lists
+- `@expo/ui` renders real SwiftUI on iOS and Jetpack Compose on Android from React — its Universal components give each OS its native controls from one component tree, which is the "follow the OS" column above in one package
+- `expo-glass-effect` (`GlassView`) only for custom floating controls that need glass; it falls back to a plain `View` below iOS 26 and on Android, so the design must work without it
 
 ### Layout
 

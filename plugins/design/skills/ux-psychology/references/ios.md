@@ -20,6 +20,13 @@ Apple's Human Interface Guidelines (HIG) are what iPhone users have learned — 
 - The back button shows the previous screen's title — keep titles short so it stays meaningful
 - Do not build custom back buttons that drop the edge swipe
 
+## Current System Design (Liquid Glass)
+
+- System tab bars, navigation bars, toolbars, and sheets pick up the current OS design (Liquid Glass from iOS 26) when built with the current SDK; custom-drawn chrome does not, and looks foreign next to every other app (`rules/jakobs-law.md`)
+- Glass belongs to the navigation layer floating above content, not to the scrolling content itself — Apple's WWDC25 design guidance warns glass on the content layer collides with the navigation layer
+- Check legibility over changing backgrounds, and with Reduce Transparency and Increase Contrast turned on
+- How glass looks (tint, shape, layering) is visual styling — out of scope here
+
 ## Actions and Choices
 
 - Destructive confirmations: `.confirmationDialog` (action sheet) with the destructive option in `.destructive` role — red, and separated from Cancel
