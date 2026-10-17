@@ -1,6 +1,6 @@
 ---
 name: ux-psychology
-description: Use when designing, building, or reviewing a screen, flow, or page — onboarding, sign-up, navigation, forms, settings, dashboards, tables, pricing, checkout, empty states, error messages, permission prompts — or when a UI feels confusing, cluttered, or slow. Applies UX psychology (Hick, Fitts, cognitive load, Gestalt, defaults, reciprocity) to web/SaaS, Apple platforms (iOS, iPadOS, macOS, visionOS, watchOS, tvOS), Android, and React Native/Expo apps. Not for visual styling, colour, or animation tuning.
+description: Use when designing, building, or reviewing a screen, flow, or page — landing and marketing pages, onboarding, sign-up, navigation, forms, settings, dashboards, tables, pricing, checkout, empty states, error messages, permission prompts — or when a UI feels confusing, cluttered, or slow. Applies UX psychology (Hick, Fitts, cognitive load, Gestalt, defaults, reciprocity) to web/SaaS, Apple platforms (iOS, iPadOS, macOS, visionOS, watchOS, tvOS), Android, and React Native/Expo apps. Not for visual styling, colour, or animation tuning.
 license: MIT
 allowed-tools: Read Glob Grep
 compatibility: Any UI project; detects the platform — web/SaaS and React Native/Expo first-class, Apple platforms (SwiftUI/UIKit/AppKit) well supported, native Android (Compose) best-effort
@@ -23,7 +23,7 @@ Read the manifest as prose and load **only** the matching guides:
 
 | Platform | Detected by | Load |
 |---|---|---|
-| **Web / SaaS** | `package.json` with a web framework (Next.js, Vite, Remix, Astro, Nuxt, SvelteKit, …), or HTML templates | `references/web.md` |
+| **Web / SaaS** (apps, landing and marketing pages) | `package.json` with a web framework (Next.js, Vite, Remix, Astro, Nuxt, SvelteKit, …), or HTML templates | `references/web.md` |
 | **React Native / Expo** | `package.json` with `expo` or `react-native` | `references/mobile.md` + `references/cross-platform.md` |
 | **Apple (iPhone, iPad, Mac, Vision Pro, Watch, TV)** | `*.xcodeproj`, `Package.swift` with an app target | `references/apple.md`, plus `references/mobile.md` for iPhone and iPad |
 | **Android (Compose)** | `build.gradle(.kts)` with Compose | `references/mobile.md` + `references/android.md` |
@@ -63,7 +63,7 @@ Each rule file has a **When building** constraint and a **When auditing** check.
 
 **New product or flow, nothing built yet** — settle these before the first screen, from the request and the codebase (ask only for what neither answers):
 
-1. Who the user is and their one to three main tasks
+1. Who the user is and their one to three main tasks — for a landing or marketing page, why they would care to buy
 2. The one primary action of each screen
 3. The navigation pattern the platform expects (tab bar, sidebar, stack)
 4. How dense the information should be (glanceable consumer app vs expert tool)
