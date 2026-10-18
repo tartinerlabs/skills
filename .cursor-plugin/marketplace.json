@@ -9,7 +9,7 @@
     {
       "name": "quality",
       "source": "./plugins/quality",
-      "description": "Code quality skills — refactoring, naming conventions, and project structure"
+      "description": "Code quality skills — refactoring, naming conventions, project structure, and internationalisation"
     },
     {
       "name": "security",

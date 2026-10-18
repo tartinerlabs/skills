@@ -34,13 +34,14 @@ Git and GitHub workflow skills — commits, branches, pull requests, issues, and
 
 ### quality
 
-Code quality skills — refactoring, naming conventions, and project structure.
+Code quality skills — refactoring, naming conventions, project structure, and internationalisation.
 
 | Skill | Description |
 |-------|-------------|
 | [refactor](plugins/quality/skills/refactor) | Audit and refactor code for dead code, deep nesting, and design patterns (language-agnostic; TS/JS idiom rules for TS/JS files) |
 | [naming-format](plugins/quality/skills/naming-format) | Audit and fix filename and export naming conventions for consistency |
 | [project-structure](plugins/quality/skills/project-structure) | Audit project directory structure for colocation, grouping, and anti-pattern detection |
+| [i18n](plugins/quality/skills/i18n) | Prepare apps for translation — string catalogs, locale-aware dates, numbers, and units, time zones, and RTL-ready layout (JS/TS, Apple, Android) |
 
 ### security
 
