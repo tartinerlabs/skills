@@ -54,9 +54,9 @@ Foundation and SwiftUI localise by default: string literals in SwiftUI views are
 
 ## Validation
 
-- **Scheme → Run → Options**: App Language **Double-Length Pseudolanguage**, **Right-to-Left Pseudolanguage**, and **Accented Pseudolanguage**; App Region to test formats. Also enable **Show non-localized strings** to flag text that bypasses the catalog
+- **Scheme → Run → Options**: App Language **Double-Length Pseudolanguage**, **Right-to-Left Pseudolanguage**, **Accented Pseudolanguage**, and **Bounded String Pseudolanguage** (exposes truncation); App Region to test formats. Under Localization Debugging, **Show non-localized strings** renders text that bypasses the catalog in all caps
 - **Xcode Previews**: `.environment(\.locale, Locale(identifier: "de_DE"))`, `.environment(\.layoutDirection, .rightToLeft)`, `.dynamicTypeSize(.accessibility5)`
-- **Build settings**: `LOCALIZATION_PREFERS_STRING_CATALOGS = YES` and `SWIFT_EMIT_LOC_STRINGS = YES` (Use Compiler to Extract Swift Strings) — the default in new projects
+- **Build settings**: `SWIFT_EMIT_LOC_STRINGS = YES` so strings outside `Text` reach the catalog; `LOCALIZATION_PREFERS_STRING_CATALOGS = YES` so localization exports produce String Catalogs
 - **Catalog integrity**: Xcode's build-time extraction flags missing and stale entries; treat stale entries as cleanup, not errors to suppress
 - **Xcode MCP**: when available in Claude Code, `LocalizationPlanner`, `StringCatalogRead`, and `StringCatalogEdit` inspect and edit catalogs without hand-editing JSON
 - **Tests (Swift Testing / XCTest)**: pass `Locale(identifier:)`, `TimeZone(identifier:)!`, and a `Calendar` explicitly — `.formatted(.dateTime.locale(locale))`, `style.timeZone = zone`. Don't depend on the simulator's region

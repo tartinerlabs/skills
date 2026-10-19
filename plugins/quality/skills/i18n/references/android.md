@@ -20,7 +20,7 @@ Android resources and `java.time`/ICU formatters are locale-aware by default. Mo
 | 12/24-hour | `android.text.format.DateFormat.is24HourFormat(context)`, or the skeleton `"jm"` |
 | Relative | `android.icu.text.RelativeDateTimeFormatter` or `DateUtils.getRelativeTimeSpanString` |
 | Number / percent / currency | `NumberFormat.getInstance(locale)`, `getPercentInstance`, `getCurrencyInstance` with `currency = Currency.getInstance(code)` |
-| Measurement | `android.icu.number.NumberFormatter.withLocale(locale).unit(MeasureUnit.KILOMETER).usage("road")` (API 30+); `MeasureFormat` before that |
+| Measurement | `android.icu.number.NumberFormatter.withLocale(locale).unit(MeasureUnit.KILOMETER)` (API 30+); `MeasureFormat` before that. The framework has no `usage()` — pick the unit yourself from the measurement system below |
 | Measurement system | `LocaleData.getMeasurementSystem(ULocale.forLocale(locale))` (API 28+) |
 | First weekday | `WeekFields.of(locale).firstDayOfWeek` |
 | Sorting | `java.text.Collator.getInstance(locale)` |

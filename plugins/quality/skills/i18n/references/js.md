@@ -27,7 +27,7 @@
 | Units | `Intl.NumberFormat(locale, { style: "unit", unit: "kilometer", unitDisplay: "short" })` |
 | Duration | `Intl.DurationFormat(locale, { style: "short" }).format({ hours: 1, minutes: 20 })` — Baseline 2025; feature-detect or polyfill for older targets |
 | Time-zone name | `Intl.DateTimeFormat(locale, { timeZone, timeZoneName: "shortGeneric" })` |
-| First weekday | `new Intl.Locale(locale).getWeekInfo?.().firstDay` (1 = Monday, 7 = Sunday). Not in every engine — some shipped a `weekInfo` property instead, and stable Firefox lacks it; fall back to a small region table |
+| First weekday | `new Intl.Locale(locale).getWeekInfo().firstDay` (1 = Monday, 7 = Sunday) — Baseline 2026 (Firefox 153). Older Chrome and Safari shipped a `weekInfo` property instead; feature-detect both for older targets |
 | Sorting | `Intl.Collator(locale, { sensitivity: "base" }).compare` |
 | Graphemes | `[...new Intl.Segmenter(locale, { granularity: "grapheme" }).segment(text)]` for counting and truncating |
 | Word breaks (CJK) | `Intl.Segmenter(locale, { granularity: "word" })` |
