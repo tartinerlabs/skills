@@ -3,7 +3,7 @@
   "name": "quality",
   "displayName": "quality",
   "version": "2.2.0",
-  "description": "Code quality skills — refactoring, naming conventions, and project structure",
+  "description": "Code quality skills — refactoring, naming conventions, project structure, and internationalisation",
   "author": {
     "name": "Tartiner Labs",
     "url": "https://github.com/tartinerlabs"
@@ -15,6 +15,7 @@
     "refactoring",
     "naming",
     "project-structure",
+    "i18n",
     "code-quality"
   ],
   "skills": "./skills/"
