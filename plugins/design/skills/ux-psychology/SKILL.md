@@ -53,6 +53,7 @@ Each rule file has a **When building** constraint and a **When auditing** check.
 | Reciprocity | MEDIUM | onboarding, sign-up walls, permission and payment asks | `rules/reciprocity.md` |
 | Commitment | MEDIUM | onboarding, sign-up, multi-step setup | `rules/commitment.md` |
 | Social proof | MEDIUM | landing, pricing, sign-up | `rules/social-proof.md` |
+| Emotional design | MEDIUM | payment, irreversible actions, errors, waits, first run, success, offboarding | `rules/emotional-design.md` |
 | Goal gradient & endowed progress | LOW | steppers, progress bars, setup checklists | `rules/goal-gradient.md` |
 | Peak-end | LOW | flow endings, success and error moments | `rules/peak-end.md` |
 | Aesthetic-usability | LOW | first impressions, landing pages, polish vs function trade-offs, test sessions | `rules/aesthetic-usability.md` |
@@ -68,6 +69,7 @@ Each rule file has a **When building** constraint and a **When auditing** check.
 3. The navigation pattern the platform expects (tab bar, sidebar, stack)
 4. How dense the information should be (glanceable consumer app vs expert tool)
 5. Where people will drop off — first run, empty states, sign-up and permission asks
+6. Where the user will feel exposed — paying, deleting, sending, granting access — and how they should feel at the end (`rules/emotional-design.md`)
 
 Then build with the rules as constraints.
 
