@@ -11,7 +11,7 @@ tags: experience, endings, success, errors, emotion, flows
 ### When Building
 
 - **Good endings** — a clear success screen after checkout, sign-up, or publishing: what happened, what happens next, and the obvious next action
-- **Soften the worst moments** — errors that explain and offer a way forward, failures that keep the user's work, waits with progress (`rules/system-status.md`, `rules/microcopy.md`)
+- **Soften the worst moments** — errors that explain and offer a way forward, failures that keep the user's work, waits with progress (`rules/system-status.md`, `rules/microcopy.md`); reassurance and tone at moments of risk are in `rules/emotional-design.md`
 - **Leave on a positive note** — cancellation and account deletion confirm calmly and keep the door open; no guilt trips
 - **Small moments of delight** where they fit the brand — a completion animation, a personal touch on a milestone — sparingly, so they stay special
 
