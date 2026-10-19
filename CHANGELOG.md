@@ -14,6 +14,15 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.3.0](https://github.com/tartinerlabs/skills/compare/v2.2.0...v2.3.0) (2026-10-19)
+
+
+### Features
+
+* add emotional design rule to ux-psychology ([70eba48](https://github.com/tartinerlabs/skills/commit/70eba48caffe149e28bae006a24b9828ca725c82))
+* add i18n skill ([cfa186b](https://github.com/tartinerlabs/skills/commit/cfa186b3111dd5ebdb59b34e1cbc904be4fc0a92))
+* add i18n skill ([ca0b241](https://github.com/tartinerlabs/skills/commit/ca0b24148e594bf13f6010f411a0f19e6f82dd97))
+
 ## [2.2.0](https://github.com/tartinerlabs/skills/compare/v2.1.0...v2.2.0) (2026-10-17)
 
 
