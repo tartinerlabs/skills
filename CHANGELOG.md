@@ -14,6 +14,13 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.4.0](https://github.com/tartinerlabs/skills/compare/v2.3.0...v2.4.0) (2026-10-22)
+
+
+### Features
+
+* add app-resizability and xctrace skills ([97a3519](https://github.com/tartinerlabs/skills/commit/97a35194c816eae37408fafb9e2721e0c6ceaef5))
+
 ## [2.3.0](https://github.com/tartinerlabs/skills/compare/v2.2.0...v2.3.0) (2026-10-19)
 
 
