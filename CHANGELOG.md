@@ -14,6 +14,13 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.4.1](https://github.com/tartinerlabs/skills/compare/v2.4.0...v2.4.1) (2026-10-24)
+
+
+### Bug Fixes
+
+* let create-pr branch and commit when needed ([152e7a6](https://github.com/tartinerlabs/skills/commit/152e7a619584281d8b970f4760361f8700cd9f3c))
+
 ## [2.4.0](https://github.com/tartinerlabs/skills/compare/v2.3.0...v2.4.0) (2026-10-22)
 
 
