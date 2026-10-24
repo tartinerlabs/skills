@@ -14,6 +14,13 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.5.0](https://github.com/tartinerlabs/skills/compare/v2.4.1...v2.5.0) (2026-10-24)
+
+
+### Features
+
+* prefer AGENTS.md over legacy CLAUDE.md ([c5cec91](https://github.com/tartinerlabs/skills/commit/c5cec9174d09cc42515eaad4376a75a488411adb))
+
 ## [2.4.1](https://github.com/tartinerlabs/skills/compare/v2.4.0...v2.4.1) (2026-10-24)
 
 
