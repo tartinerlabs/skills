@@ -26,7 +26,7 @@ Scan for mismatched runners across:
 - `.github/workflows/*.{yml,yaml}`
 - Shell scripts (`**/*.sh`)
 - `Makefile`
-- Markdown docs (`README.md`, `CLAUDE.md`, `docs/**/*.md`) — flag but do not auto-rewrite (see Tradeoff)
+- Markdown docs (`README.md`, `AGENTS.md`, `CLAUDE.md`, `docs/**/*.md`) — flag but do not auto-rewrite (see Tradeoff)
 
 Skip if no mismatches are found.
 
