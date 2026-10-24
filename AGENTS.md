@@ -54,6 +54,8 @@ Fields split into two groups. **Portable** fields (`name`, `description`, `licen
 
 Every skill is **language-aware with JS/TS as the first-class default** — no skill assumes React or a single framework/host. Skills **detect, don't assume**: read the project's manifest (`package.json`/`pyproject.toml`/`go.mod`/…) as prose (never `!`-shell-injection, which is Claude-Code-only) and adapt. The general workflow/audit skills work in any language, gating framework-specific rules behind detection. The ecosystem tooling (`setup`, `deps`, `testing`) is polyglot. Secret scanning is abstracted: `commit`/`security`/`setup`/`deps` accept any scanner (GitLeaks default, TruffleHog accepted), not a hard-coded tool.
 
+The same applies to the git forge: workflow skills detect the remote (`git remote get-url origin`) and drive `gh` or `glab` accordingly — GitHub best-supported, GitLab covered — keeping GitHub-only features (issue types, sub-issues, `gh stack`) as enhancements rather than requirements. Agnostic does not mean stripping specifics: a skill that is platform-specific by nature (`github-actions`, `apple-featuring`) is legitimate, and a host-guarded note ("In Claude Code, hand off to … when available") is fine where other hosts can safely skip it. Keep short platform branches inline; move them to `references/<platform>.md` only once they grow large enough that loading them selectively pays off.
+
 ### Rules and References Pattern
 
 Skills with multiple checks use a `rules/` subdirectory alongside `SKILL.md`, referenced from a table and read at runtime. Each rule file is standalone, with severity, examples, and fix instructions — so rules can be added, removed, or edited independently.
