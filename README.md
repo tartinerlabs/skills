@@ -60,7 +60,7 @@ Project tooling skills — linting/formatting setup, testing, and documentation 
 |-------|-------------|
 | [setup](plugins/tooling/skills/setup) | Set up the ecosystem's lint/format/git-hooks/secret-scanning toolchain — detects the language (JS/TS, Python, Go) |
 | [testing](plugins/tooling/skills/testing) | Write and run unit/component tests — detects the language and test runner (JS/TS, Python, Go) |
-| [update-project](plugins/tooling/skills/update-project) | Update and maintain CLAUDE.md, AGENTS.md, README.md, agents, skills, and rules to match current project state |
+| [update-project](plugins/tooling/skills/update-project) | Update and maintain AGENTS.md, README.md, agents, skills, and rules to match current project state |
 
 ### design
 

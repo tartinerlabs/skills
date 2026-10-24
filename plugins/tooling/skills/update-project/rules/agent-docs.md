@@ -10,7 +10,9 @@ Covers the prose documents a human or agent reads to understand the project.
 
 **Rule**: Keep the project's agent instruction file current and accurate by scanning the project and updating relevant sections.
 
-Maintain whichever file(s) the project already uses — `CLAUDE.md` (Claude Code), `AGENTS.md` (the cross-agent standard, read by Codex and others). If both exist, keep shared guidance consistent between them rather than letting them drift into divergent copies.
+Prefer `AGENTS.md` — the cross-agent standard, read by Claude Code, Codex, and other hosts — so one file serves every agent. Create `AGENTS.md`, never a new `CLAUDE.md`.
+
+A project that only has `CLAUDE.md` keeps working: maintain it in place, and suggest renaming it to `AGENTS.md` rather than doing it unasked. When both exist, propose folding the `CLAUDE.md` content into `AGENTS.md` and removing the duplicate, so the two cannot drift. Keep a `CLAUDE.md` the project deliberately retains — Claude-Code-only instructions, or a team on a Claude Code version without `AGENTS.md` support — and keep its shared guidance consistent with `AGENTS.md`.
 
 ### What to scan
 
