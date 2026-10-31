@@ -64,11 +64,12 @@ Project tooling skills — linting/formatting setup, testing, and documentation 
 
 ### design
 
-Design skills — UX psychology, accessibility, and Apple featuring readiness for web, SaaS, and mobile apps.
+Design skills — UX psychology, visual design, accessibility, and Apple featuring readiness for web, SaaS, and mobile apps.
 
 | Skill | Description |
 |-------|-------------|
 | [ux-psychology](plugins/design/skills/ux-psychology) | Apply research-backed UX psychology (Hick, Fitts, cognitive load, Gestalt, defaults, reciprocity) while building screens and flows, or audit them on request — detects web/SaaS, Apple platforms, Android, and React Native/Expo |
+| [visual-design](plugins/design/skills/visual-design) | Pick a visual direction and apply it as tokens — colour, typography, spacing, surfaces, buttons, icons, and imagery — while building screens, or audit code, screenshots, and mockups on request — for web, Apple platforms, Android, and React Native/Expo |
 | [accessibility](plugins/design/skills/accessibility) | Build and audit accessible UI mapped to WCAG 2.2 AA — screen readers, keyboard and focus, contrast, text scaling, reduced motion, targets, forms, and media — for web, Apple platforms, Android, and React Native/Expo |
 | [apple-featuring](plugins/design/skills/apple-featuring) | Review an Apple platform app's readiness for App Store featuring and the Apple Design Awards, and plan the featuring nomination in App Store Connect |
 
