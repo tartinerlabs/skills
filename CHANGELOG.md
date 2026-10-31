@@ -14,6 +14,14 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.6.0](https://github.com/tartinerlabs/skills/compare/v2.5.0...v2.6.0) (2026-10-31)
+
+
+### Features
+
+* add landing pages reference to ux-psychology ([788db62](https://github.com/tartinerlabs/skills/commit/788db6258929763a481b038fe866fc4cb710a9b8))
+* add visual-design skill ([b555c83](https://github.com/tartinerlabs/skills/commit/b555c83495125fc2308919733076f88ee3312b06))
+
 ## [2.5.0](https://github.com/tartinerlabs/skills/compare/v2.4.1...v2.5.0) (2026-10-24)
 
 
