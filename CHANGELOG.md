@@ -14,6 +14,13 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.7.0](https://github.com/tartinerlabs/skills/compare/v2.6.2...v2.7.0) (2026-11-01)
+
+
+### Features
+
+* add accent ramp and chart hue guidance ([56beb0c](https://github.com/tartinerlabs/skills/commit/56beb0cd561e3c345f64959c443d5b3e6b21e994))
+
 ## [2.6.2](https://github.com/tartinerlabs/skills/compare/v2.6.1...v2.6.2) (2026-11-01)
 
 
