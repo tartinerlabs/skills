@@ -50,6 +50,11 @@
       "name": "git-status",
       "source": "./plugins/git-status",
       "description": "The branch, working tree and pull request above the prompt, toasts when checks finish, and /merge for single PRs and gh-stack stacks."
+    },
+    {
+      "name": "youtube",
+      "source": "./plugins/youtube",
+      "description": "Reads the YouTube links in a prompt with yt-dlp and hands Claude each video's title, channel, description, chapters and transcript."
     }
   ]
 }
