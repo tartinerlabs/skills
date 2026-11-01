@@ -14,6 +14,13 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.6.2](https://github.com/tartinerlabs/skills/compare/v2.6.1...v2.6.2) (2026-11-01)
+
+
+### Bug Fixes
+
+* keep the default TabView in Apple guide ([7ece644](https://github.com/tartinerlabs/skills/commit/7ece644b2702deb6c3563b939fcd0e50b927fca7))
+
 ## [2.6.1](https://github.com/tartinerlabs/skills/compare/v2.6.0...v2.6.1) (2026-11-01)
 
 

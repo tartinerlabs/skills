@@ -1,6 +1,6 @@
 {
   "name": "tartinerlabs-security",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "private": true,
   "description": "Security skills — OWASP audits, secret scanning, and dependency supply-chain hardening",
   "license": "MIT",
