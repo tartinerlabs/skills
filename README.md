@@ -30,6 +30,7 @@
 | 📱 | [resource-watch](#-resource-watch) | Band above the prompt, toast | Shows which session is using each simulator, Claude Design project or the Xcode app, and messages the other session on a clash |
 | 🗜 | [smart-compact](#-smart-compact) | Toast | Compacts between turns, sooner at checkpoints or when the cache is cooling |
 | ⛅ | [token-weather](#-token-weather) | Band above the prompt | Forecasts how full the context window is |
+| ▶️ | [youtube](#️-youtube) | Toast, Claude's context | Hands Claude the transcript, chapters and description of YouTube links in a prompt |
 
 ---
 
@@ -158,6 +159,17 @@ Draws a forecast of the context window above the prompt, with tokens used, a spa
 | under 25% | under 50% | under 75% | under 90% | 90% and up |
 
 <sub>📁 [`plugins/token-weather`](plugins/token-weather)</sub>
+
+### ▶️ youtube
+
+Finds YouTube links in a prompt (`watch`, `youtu.be`, `shorts`, `live` and `embed`, up to three per prompt) and fetches each video's title, channel, length, description, chapters and English transcript with [yt-dlp](https://github.com/yt-dlp/yt-dlp). They reach Claude beside the prompt, so you can ask it to apply a tutorial to your code. The transcript is in timestamped paragraphs, one every 30 seconds or so. If yt-dlp is not installed, the mod offers to install it with Homebrew, uv or pipx, and stops asking for the rest of the session if you say no.
+
+```text
+> apply https://www.youtube.com/watch?v=SfX43uIubj4 to the landing page
+YouTube: added "4 UI Design Hacks to KILL boring designs" with its transcript   ← toast
+```
+
+<sub>📁 [`plugins/youtube`](plugins/youtube)</sub>
 
 ---
 

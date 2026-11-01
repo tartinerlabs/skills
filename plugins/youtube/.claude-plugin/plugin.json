@@ -1,0 +1,11 @@
+{
+  "name": "youtube",
+  "displayName": "YouTube",
+  "version": "0.17.0",
+  "description": "Reads the YouTube links in a prompt with yt-dlp and hands Claude each video's title, channel, description, chapters and transcript.",
+  "author": {
+    "name": "Tartiner Labs",
+    "url": "https://tartinerlabs.com"
+  },
+  "types": "./types/index.d.ts"
+}
