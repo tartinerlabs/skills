@@ -1,7 +1,7 @@
 {
   "name": "smart-compact",
   "displayName": "Smart Compact",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "Compacts between turns when the context is full enough, sooner after a commit, PR, approved plan or finished todo list, or when the prompt cache is about to go cold or the 5-hour limit runs low.",
   "author": {
     "name": "Tartiner Labs",

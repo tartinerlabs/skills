@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.18.0](https://github.com/tartinerlabs/claude-code-mods/compare/v0.17.0...v0.18.0) (2026-11-01)
+
+
+### Features
+
+* **youtube:** add youtube mod ([ad7e983](https://github.com/tartinerlabs/claude-code-mods/commit/ad7e983ea5fabde88c8f51c216833684bc006d3a))
+
 ## [0.17.0](https://github.com/tartinerlabs/claude-code-mods/compare/v0.16.0...v0.17.0) (2026-10-29)
 
 

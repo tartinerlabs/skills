@@ -1,7 +1,7 @@
 {
   "name": "cache-clock",
   "displayName": "Cache Clock",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "Counts down to the prompt cache going cold, with the last request's hit rate, above the prompt.",
   "author": {
     "name": "Tartiner Labs",
