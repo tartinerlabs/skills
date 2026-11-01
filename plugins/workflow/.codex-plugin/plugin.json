@@ -1,6 +1,6 @@
 {
   "name": "workflow",
-  "version": "2.6.1",
+  "version": "2.6.2",
   "description": "Git and GitHub workflow skills — commits, branches, pull requests, issues, and CI actions",
   "author": {
     "name": "Tartiner Labs",
