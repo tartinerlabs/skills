@@ -1,7 +1,7 @@
 {
   "name": "resource-watch",
   "displayName": "Resource Watch",
-  "version": "0.17.0",
+  "version": "0.18.0",
   "description": "Shows which Claude Code session is using each booted Apple simulator, Claude Design project and the Xcode app, above the prompt, and when another session already holds one this session picks up, toasts, messages that session and tells this session's agent.",
   "author": {
     "name": "Tartiner Labs",
