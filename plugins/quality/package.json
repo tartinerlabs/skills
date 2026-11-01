@@ -1,6 +1,6 @@
 {
   "name": "tartinerlabs-quality",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "private": true,
   "description": "Code quality skills — refactoring, naming conventions, project structure, and internationalisation",
   "license": "MIT",

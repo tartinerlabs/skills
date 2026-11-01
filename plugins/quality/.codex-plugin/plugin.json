@@ -1,6 +1,6 @@
 {
   "name": "quality",
-  "version": "2.6.0",
+  "version": "2.6.1",
   "description": "Code quality skills — refactoring, naming conventions, project structure, and internationalisation",
   "author": {
     "name": "Tartiner Labs",

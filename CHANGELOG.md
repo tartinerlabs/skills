@@ -14,6 +14,14 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.6.1](https://github.com/tartinerlabs/skills/compare/v2.6.0...v2.6.1) (2026-11-01)
+
+
+### Bug Fixes
+
+* correct visual-design platform API names ([ba26ac0](https://github.com/tartinerlabs/skills/commit/ba26ac012e53dea2cb4931b3bb46d969e2973207))
+* treat depicted directions as illustration ([4bdfacf](https://github.com/tartinerlabs/skills/commit/4bdfacf1beca39e4777b79c1855cd0f83dc6b019))
+
 ## [2.6.0](https://github.com/tartinerlabs/skills/compare/v2.5.0...v2.6.0) (2026-10-31)
 
 
