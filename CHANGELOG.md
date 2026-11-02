@@ -14,6 +14,13 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.8.0](https://github.com/tartinerlabs/skills/compare/v2.7.0...v2.8.0) (2026-11-02)
+
+
+### Features
+
+* add researched landing page questions ([75c3101](https://github.com/tartinerlabs/skills/commit/75c31011b999e37a4d8ee90dfec1631535fb3c5e))
+
 ## [2.7.0](https://github.com/tartinerlabs/skills/compare/v2.6.2...v2.7.0) (2026-11-01)
 
 
