@@ -14,6 +14,13 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.9.0](https://github.com/tartinerlabs/skills/compare/v2.8.0...v2.9.0) (2026-11-06)
+
+
+### Features
+
+* update Xcode Skills ([0aff73c](https://github.com/tartinerlabs/skills/commit/0aff73c887c3cdeb3b25b3626c984c4bbca47d59))
+
 ## [2.8.0](https://github.com/tartinerlabs/skills/compare/v2.7.0...v2.8.0) (2026-11-02)
 
 
