@@ -1,6 +1,6 @@
 {
   "name": "@tartinerlabs/app-store-connect-mcp",
-  "version": "0.12.0",
+  "version": "1.0.0",
   "description": "Unofficial Model Context Protocol server for read-only App Store Connect access with per-user API keys, with Sign in with Google (OAuth 2.1 via Better Auth) on Cloudflare Workers and D1.",
   "license": "MIT",
   "type": "module",

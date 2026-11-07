@@ -1,6 +1,6 @@
 {
   "name": "@tartinerlabs/google-search-console-mcp",
-  "version": "0.12.0",
+  "version": "1.0.0",
   "description": "Unofficial Model Context Protocol server for Google Search Console, with Sign in with Google (OAuth 2.1 via Better Auth) on Vercel.",
   "license": "MIT",
   "type": "module",

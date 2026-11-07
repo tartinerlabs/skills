@@ -1,3 +1,20 @@
+# [1.0.0](https://github.com/tartinerlabs/mcp/compare/v0.12.0...v1.0.0) (2026-11-07)
+
+
+* feat(index-now)!: run IndexNow MCP locally ([1bf25a7](https://github.com/tartinerlabs/mcp/commit/1bf25a7821d92d34d2e57b5263e9f8decabd2549))
+
+
+### Features
+
+* **index-now:** rely on root devEngines ([79a7d9b](https://github.com/tartinerlabs/mcp/commit/79a7d9bdb1979b7795225af03b2088675fee2342))
+
+
+### BREAKING CHANGES
+
+* the HTTP /mcp endpoint and submission_status are
+removed. Clients connect with
+`claude mcp add index-now -- pnpx @tartinerlabs/index-now-mcp`.
+
 # [0.12.0](https://github.com/tartinerlabs/mcp/compare/v0.11.0...v0.12.0) (2026-10-25)
 
 
