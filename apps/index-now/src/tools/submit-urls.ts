@@ -2,6 +2,7 @@ import type { McpServer, ServerContext } from "@modelcontextprotocol/server";
 import * as z from "zod";
 import type { IndexNowClientProvider } from "../indexnow/client.ts";
 import { isCoveredBy } from "../indexnow/key.ts";
+import { runSubmission } from "../indexnow/submission.ts";
 import {
   keyLocationSchema,
   keySchema,
@@ -9,15 +10,10 @@ import {
   publicUrlSchema,
 } from "../schemas/common.ts";
 import { toToolError } from "../utils/errors.ts";
-import { finishedSubmission } from "./submission-status.ts";
 
 // IndexNow accepts up to 10,000 URLs in one POST.
 const MAX_URLS = 10_000;
-const POLL_MS = 5_000;
-// How long one call waits for the Workflow. Claude Code moves a call still
-// running after two minutes to the background, so this does not block the
-// agent; past it, the submission carries on and submission_status reports it.
-const MAX_WAIT_MS = 10 * 60_000;
+const KIND_PREFIX = /^\[[a-z_]+\] /;
 
 function sleep(ms: number, signal: AbortSignal): Promise<void> {
   return new Promise((resolve, reject) => {
@@ -113,10 +109,8 @@ export function registerSubmitUrlsTool(
       description:
         "Notify IndexNow search engines (Bing, Yandex, Seznam, Naver and others; not Google) that URLs on one host were " +
         "added, updated or deleted. Only for projects that contain an IndexNow key file. Up to 10,000 URLs per call. " +
-        "The submission runs durably on the server: it waits for the live site to serve the key file and retries when " +
-        "IndexNow is unavailable, reporting progress, and returns the outcome. A rate limit fails at once; do not " +
-        "resubmit soon after one. If it is still retrying after 10 minutes, " +
-        "the call returns a submissionId to check later with submission_status.",
+        "It waits for the live site to serve the key file and retries when IndexNow is unavailable, reporting " +
+        "progress, and returns the outcome. A rate limit fails at once; do not resubmit soon after one.",
       inputSchema,
       annotations: {
         readOnlyHint: false,
@@ -130,35 +124,36 @@ export function registerSubmitUrlsTool(
         const client = await getClient();
         const urlList = [...new Set(urls)];
         const host = new URL(urlList[0] as string).hostname;
-        const submissionId = await client.startSubmission({
-          host,
-          key,
-          ...(keyLocation && { keyLocation }),
-          urlList,
-        });
         const report = progressReporter(ctx);
-        const deadline = Date.now() + MAX_WAIT_MS;
-
-        // A dropped connection ends only this wait; the Workflow carries on.
-        while (Date.now() < deadline) {
-          await sleep(POLL_MS, ctx.mcpReq.signal);
-          const submission = await client.getSubmission(submissionId);
-          const finished = finishedSubmission(submissionId, submission);
-          if (finished) return finished;
-          await report(
-            `Submission ${submission?.status}: waiting for the key file or retrying IndexNow.`,
-          );
-        }
-        const pending = {
-          submissionId,
-          host,
-          status: "running",
-          note: "Still retrying in the background. Check later with submission_status.",
+        const output = await runSubmission(
+          { host, key, ...(keyLocation && { keyLocation }), urlList },
+          {
+            ...client,
+            async sleep(seconds, reason) {
+              await report(`Retrying in ${seconds}s: ${reason}`);
+              await sleep(seconds * 1000, ctx.mcpReq.signal);
+            },
+          },
+        );
+        const result = {
+          ...output,
+          // 202: received, with IndexNow's own key check still pending.
+          note:
+            output.status === 202
+              ? "Accepted; IndexNow will validate the key before processing."
+              : "Accepted.",
         };
         return {
-          content: [{ type: "text", text: JSON.stringify(pending, null, 2) }],
+          content: [{ type: "text", text: JSON.stringify(result, null, 2) }],
         };
       } catch (error) {
+        // runSubmission ends with an already classified "[kind] message".
+        if (error instanceof Error && KIND_PREFIX.test(error.message)) {
+          return {
+            isError: true,
+            content: [{ type: "text", text: error.message }],
+          };
+        }
         return toToolError("submit_urls", error);
       }
     },

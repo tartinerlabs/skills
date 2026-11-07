@@ -7,7 +7,8 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "pnpm -r version ${nextRelease.version} --no-git-tag-version --no-git-checks"
+        "prepareCmd": "pnpm -r version ${nextRelease.version} --no-git-tag-version --no-git-checks",
+        "publishCmd": "pnpm --filter @tartinerlabs/index-now-mcp build && pnpm --filter @tartinerlabs/index-now-mcp publish --no-git-checks"
       }
     ],
     [

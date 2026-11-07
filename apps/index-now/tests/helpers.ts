@@ -13,8 +13,7 @@ export function mockClient(
   const notMocked = () => Promise.reject(new Error("not mocked"));
   const client: IndexNowClient = {
     fetchKeyFile: notMocked,
-    startSubmission: notMocked,
-    getSubmission: notMocked,
+    submit: notMocked,
     ...overrides,
   };
   return () => client;

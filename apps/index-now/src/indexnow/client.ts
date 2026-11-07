@@ -13,39 +13,12 @@ export interface KeyFileResponse {
   text: string;
 }
 
-/** A submission Workflow instance, as `instance.status()` reports it. */
-export interface Submission {
-  status:
-    | "queued"
-    | "running"
-    | "paused"
-    | "errored"
-    | "terminated"
-    | "complete"
-    | "waiting"
-    | "waitingForPause"
-    | "unknown";
-  error?: { name: string; message: string };
-  output?: unknown;
-}
-
-/** The parts of the Cloudflare Workflow binding the tools use. */
-export interface SubmissionWorkflow {
-  create(options: {
-    id: string;
-    params: SubmitRequest;
-  }): Promise<{ id: string }>;
-  get(id: string): Promise<{ status(): Promise<Submission> }>;
-}
-
 /** The operations the MCP tools depend on. */
 export interface IndexNowClient {
   /** Fetches a key file without following redirects. */
   fetchKeyFile(url: string): Promise<KeyFileResponse>;
-  /** Starts a durable submission and resolves its id. */
-  startSubmission(request: SubmitRequest): Promise<string>;
-  /** Resolves a submission's status, or undefined when no such submission exists. */
-  getSubmission(id: string): Promise<Submission | undefined>;
+  /** Submits URLs and resolves the IndexNow status code (200 or 202). */
+  submit(request: SubmitRequest): Promise<number>;
 }
 
 /** Resolves the client lazily, inside each tool call, as the other servers do. */
@@ -93,25 +66,7 @@ export async function submitToIndexNow(
   return response.status;
 }
 
-export function createIndexNowClient(
-  workflow: SubmissionWorkflow,
-): IndexNowClient {
-  return {
-    fetchKeyFile,
-    async startSubmission(request) {
-      const instance = await workflow.create({
-        id: crypto.randomUUID(),
-        params: request,
-      });
-      return instance.id;
-    },
-    async getSubmission(id) {
-      try {
-        return await (await workflow.get(id)).status();
-      } catch {
-        // get() throws for an id with no instance.
-        return undefined;
-      }
-    },
-  };
-}
+export const indexNowClient: IndexNowClient = {
+  fetchKeyFile,
+  submit: submitToIndexNow,
+};

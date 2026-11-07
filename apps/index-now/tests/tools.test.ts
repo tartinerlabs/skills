@@ -7,44 +7,34 @@ const KEY = "test-key-not-secret";
 const keyFile = (status = 200, text = KEY) =>
   vi.fn().mockResolvedValue({ status, text });
 
-const ID = "4b3f3b52-6a0c-4f43-9a51-8b1f0e2d7c11";
-const running = { status: "running" } as const;
-const complete = (status = 200) =>
-  ({
-    status: "complete",
-    output: { host: "example.com", submitted: 2, status },
-  }) as const;
-
 describe("submit_urls", () => {
   afterEach(() => {
     vi.useRealTimers();
   });
 
-  /** Calls submit_urls with fake timers, running out the wait. */
+  /** Calls submit_urls with fake timers, running out the retries. */
   async function submit(
     client: Parameters<typeof mockClient>[0],
     args: Record<string, unknown> = {},
   ) {
     vi.useFakeTimers();
-    const { callTool } = createTestClient(mockClient(client));
+    const { callTool } = createTestClient(
+      mockClient({ fetchKeyFile: keyFile(), ...client }),
+    );
     const pending = callTool("submit_urls", {
       urls: ["https://example.com/a"],
       key: KEY,
       ...args,
     });
-    await vi.advanceTimersByTimeAsync(11 * 60_000);
+    await vi.advanceTimersByTimeAsync(20 * 60_000);
     return pending;
   }
 
-  it("should start a submission for the deduplicated urls and return its outcome", async () => {
-    const startSubmission = vi.fn().mockResolvedValue(ID);
-    const getSubmission = vi
-      .fn()
-      .mockResolvedValueOnce(running)
-      .mockResolvedValue(complete());
+  it("should submit the deduplicated urls and return the outcome", async () => {
+    const submitUrls = vi.fn().mockResolvedValue(200);
 
     const result = await submit(
-      { startSubmission, getSubmission },
+      { submit: submitUrls },
       {
         urls: [
           "https://example.com/a",
@@ -55,14 +45,12 @@ describe("submit_urls", () => {
     );
 
     expect(result.isError).toBe(false);
-    expect(startSubmission).toHaveBeenCalledWith({
+    expect(submitUrls).toHaveBeenCalledWith({
       host: "example.com",
       key: KEY,
       urlList: ["https://example.com/a", "https://example.com/b"],
     });
-    expect(getSubmission).toHaveBeenCalledWith(ID);
     expect(JSON.parse(result.text)).toEqual({
-      submissionId: ID,
       host: "example.com",
       submitted: 2,
       status: 200,
@@ -72,17 +60,14 @@ describe("submit_urls", () => {
 
   it("should pass keyLocation through when the key file is not at the root", async () => {
     const keyLocation = `https://example.com/blog/${KEY}.txt`;
-    const startSubmission = vi.fn().mockResolvedValue(ID);
+    const submitUrls = vi.fn().mockResolvedValue(202);
 
     const result = await submit(
-      {
-        startSubmission,
-        getSubmission: vi.fn().mockResolvedValue(complete(202)),
-      },
+      { submit: submitUrls },
       { urls: ["https://example.com/blog/post"], keyLocation },
     );
 
-    expect(startSubmission).toHaveBeenCalledWith(
+    expect(submitUrls).toHaveBeenCalledWith(
       expect.objectContaining({ keyLocation }),
     );
     expect(JSON.parse(result.text).note).toContain("will validate the key");
@@ -90,47 +75,25 @@ describe("submit_urls", () => {
 
   it("should report a failed submission's classified error", async () => {
     const result = await submit({
-      startSubmission: vi.fn().mockResolvedValue(ID),
-      getSubmission: vi.fn().mockResolvedValue({
-        status: "errored",
-        error: {
-          name: "Error",
-          message: "[not_found] https://example.com/k.txt was not found",
-        },
-      }),
+      fetchKeyFile: keyFile(404, ""),
+      submit: vi.fn(),
     });
 
     expect(result.isError).toBe(true);
     expect(result.text).toMatch(/^\[not_found\] .*was not found/);
   });
 
-  it("should return the submissionId when it is still retrying after 10 minutes", async () => {
-    const getSubmission = vi.fn().mockResolvedValue(running);
-
-    const result = await submit({
-      startSubmission: vi.fn().mockResolvedValue(ID),
-      getSubmission,
-    });
-
-    expect(result.isError).toBe(false);
-    expect(JSON.parse(result.text)).toMatchObject({
-      submissionId: ID,
-      status: "running",
-    });
-    expect(getSubmission.mock.calls.length).toBeGreaterThan(100);
-  });
-
-  it("should stream progress while the submission runs", async () => {
+  it("should stream progress while the submission retries", async () => {
     vi.useFakeTimers();
     const handler = createMcpHandler(
       () =>
         createServer(
           mockClient({
-            startSubmission: vi.fn().mockResolvedValue(ID),
-            getSubmission: vi
+            fetchKeyFile: vi
               .fn()
-              .mockResolvedValueOnce(running)
-              .mockResolvedValue(complete()),
+              .mockResolvedValueOnce({ status: 404, text: "" })
+              .mockResolvedValue({ status: 200, text: KEY }),
+            submit: vi.fn().mockResolvedValue(200),
           }),
         ),
       { legacy: "reject" },
@@ -148,44 +111,8 @@ describe("submit_urls", () => {
 
     const text = await body;
     expect(text).toContain('"method":"notifications/progress"');
-    expect(text).toContain("Submission running");
-    expect(text).toContain(ID);
-  });
-});
-
-describe("submission_status", () => {
-  it("should report a running submission", async () => {
-    const { callTool } = createTestClient(
-      mockClient({ getSubmission: vi.fn().mockResolvedValue(running) }),
-    );
-
-    const result = await callTool("submission_status", { submissionId: ID });
-
-    expect(JSON.parse(result.text)).toMatchObject({ status: "running" });
-  });
-
-  it("should report a completed submission's outcome", async () => {
-    const { callTool } = createTestClient(
-      mockClient({ getSubmission: vi.fn().mockResolvedValue(complete()) }),
-    );
-
-    const result = await callTool("submission_status", { submissionId: ID });
-
-    expect(JSON.parse(result.text)).toMatchObject({
-      submissionId: ID,
-      status: 200,
-    });
-  });
-
-  it("should report an unknown id as not found", async () => {
-    const { callTool } = createTestClient(
-      mockClient({ getSubmission: vi.fn().mockResolvedValue(undefined) }),
-    );
-
-    const result = await callTool("submission_status", { submissionId: ID });
-
-    expect(result.isError).toBe(true);
-    expect(result.text).toMatch(/^\[not_found\]/);
+    expect(text).toContain("Retrying in 15s: [not_found]");
+    expect(text).toContain('\\"submitted\\": 1');
   });
 });
 

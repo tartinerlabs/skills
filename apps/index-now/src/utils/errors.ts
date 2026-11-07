@@ -105,7 +105,7 @@ export function classifyError(error: unknown): ClassifiedError {
         status,
         kind: "quota",
         message:
-          "IndexNow is rate-limiting this host (HTTP 429). Submit less often, batching URLs into one call.",
+          "IndexNow is rate-limiting submissions (HTTP 429). Submit less often, batching URLs into one call.",
       };
     }
     if (status === 403) {

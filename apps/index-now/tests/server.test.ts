@@ -22,7 +22,6 @@ describe("MCP server", () => {
     }[] = message.result.tools;
     expect(tools.map((tool) => tool.name).sort()).toEqual([
       "ping",
-      "submission_status",
       "submit_urls",
       "verify_key",
     ]);

@@ -219,16 +219,17 @@ The Chrome UX Report API allows 150 queries per minute per Google Cloud project.
 | --- | --- |
 | `ping` | Checks that the server is running. |
 | `verify_key` | Checks that the live site serves the key file with the key as its contents. Submits nothing. |
-| `submit_urls` | Submits up to 10,000 URLs on one host as a durable Workflow that waits for the key file to be live and retries IndexNow outages (a rate limit fails at once), streaming progress until the outcome. Still running after 10 minutes, it returns a `submissionId`. The only tool that is not read-only. |
-| `submission_status` | Reports the outcome of a submission by its `submissionId`. |
+| `submit_urls` | Submits up to 10,000 URLs on one host. It waits for the key file to be live and retries IndexNow outages (a rate limit fails at once), streaming progress until the outcome. The only tool that is not read-only. |
 
 The server's instructions tell the client to use it only in projects that contain a key file (such as `public/<key>.txt`), and to submit only the production URLs that changed, once the deploy is live.
 
-It runs on Cloudflare Workers, not Vercel. To deploy, create a Worker named `index-now-mcp` and connect this repository with git deployment (Workers Builds), *Root directory* `apps/index-now`; `apps/index-now/wrangler.jsonc` holds its settings and builds `@repo/core` first. It serves on the Custom Domain `index-now.mcp.tartinerlabs.com` (its `routes` entry; Cloudflare creates the DNS record and certificate); change the pattern to your own hostname. The same config registers the `index-now-submissions` Workflow, which runs each submission: it retries the key-file check while a deploy goes live, and the IndexNow POST on 5xx (honouring `Retry-After`) and network errors. A 429 ends the run with a `[quota]` error at once, because retrying a throttled host keeps it throttled. A Claude Code session moves a `submit_urls` call still running after two minutes to the background, so the agent keeps working until the outcome arrives. No variables are required. `LOG_LEVEL` works as for the other servers; set it under the Worker's *Variables and Secrets*. Because `/mcp` is open, add a Cloudflare rate-limiting rule on it. Then add it to Claude Code for every project:
+Unlike the other servers it runs locally over stdio, published to npm as `@tartinerlabs/index-now-mcp`. IndexNow permanently rate-limits the shared egress IPs of cloud platforms (it answered every submission from Cloudflare Workers with HTTP 429), so submissions must leave from the user's own IP. `submit_urls` retries the key-file check while a deploy goes live (about 16 minutes), and the IndexNow POST on 5xx (honouring `Retry-After`) and network errors. A 429 ends the call with a `[quota]` error at once, because retrying a throttled request keeps it throttled. A Claude Code session moves a `submit_urls` call still running after two minutes to the background, so the agent keeps working until the outcome arrives. No variables are required; `LOG_LEVEL` works as for the other servers, and logs go to stderr. Add it to Claude Code for every project:
 
 ```sh
-claude mcp add --scope user --transport http index-now https://<your-deployment>/mcp
+claude mcp add --scope user index-now -- pnpx @tartinerlabs/index-now-mcp
 ```
+
+semantic-release publishes it from CI on every release with npm trusted publishing (OIDC, `id-token: write`); the package's trusted publisher on npmjs.com must name this repository and `.github/workflows/ci.yml`.
 
 ## App Store Connect server
 

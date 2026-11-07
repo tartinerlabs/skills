@@ -1,106 +1,90 @@
 import { classifyError, IndexNowApiError } from "../utils/errors.ts";
-import type { KeyFileResponse, SubmitRequest } from "./client.ts";
+import type { IndexNowClient, SubmitRequest } from "./client.ts";
 import { checkKeyFile, keyFileUrl } from "./key.ts";
 
-/** What a completed submission Workflow outputs. */
+/** What a completed submission returns. */
 export interface SubmissionOutput {
   host: string;
   submitted: number;
   status: number;
 }
 
-/** The parts of a Workflow step the submission uses. */
-export interface SubmissionStep {
-  do<T>(
-    name: string,
-    config: {
-      retries: {
-        limit: number;
-        delay:
-          | string
-          | ((options: { ctx: { attempt: number }; error: Error }) => string);
-        backoff?: "constant" | "linear" | "exponential";
-      };
-      timeout: string;
-    },
-    callback: () => Promise<T>,
-  ): Promise<T>;
+export interface SubmissionDeps extends IndexNowClient {
+  /** Waits before the next attempt; `reason` is why the last one failed. */
+  sleep(seconds: number, reason: string): Promise<void>;
 }
 
-export interface SubmissionDeps {
-  fetchKeyFile(url: string): Promise<KeyFileResponse>;
-  submit(request: SubmitRequest): Promise<number>;
-}
-
+const RETRIES = 6;
 const RETRY_AFTER = /retry after (\d+)s/;
 const MAX_DELAY_SECONDS = 3600;
 
-/** IndexNow's Retry-After, carried in the step error's message, else exponential from 30 seconds. */
-export function submitRetryDelay({
-  ctx,
-  error,
-}: {
-  ctx: { attempt: number };
-  error: Error;
-}): string {
+/** IndexNow's Retry-After, carried in the error's message, else exponential from 30 seconds. */
+export function submitRetryDelay(attempt: number, error: Error): number {
   const retryAfter = RETRY_AFTER.exec(error.message)?.[1];
   const seconds = retryAfter
     ? Number(retryAfter)
-    : 30 * 2 ** Math.max(0, ctx.attempt - 1);
-  return `${Math.min(seconds, MAX_DELAY_SECONDS)} seconds`;
+    : 30 * 2 ** Math.max(0, attempt - 1);
+  return Math.min(seconds, MAX_DELAY_SECONDS);
+}
+
+/** Runs `callback`, retrying on throw up to RETRIES times with `delay(attempt, error)` seconds between. */
+async function retry<T>(
+  deps: SubmissionDeps,
+  delay: (attempt: number, error: Error) => number,
+  callback: () => Promise<T>,
+): Promise<T> {
+  for (let attempt = 1; ; attempt++) {
+    try {
+      return await callback();
+    } catch (error) {
+      if (attempt > RETRIES) throw error;
+      await deps.sleep(
+        delay(attempt, error as Error),
+        (error as Error).message,
+      );
+    }
+  }
 }
 
 /**
- * The submission Workflow's steps: wait for the key file to be live, then
- * POST to IndexNow. Failures that can pass (the deploy still going live,
- * outages) throw inside a step so the Workflow retries it; rate limits and
- * rejections end the run with the classified error, since retrying a throttled
- * host only prolongs the throttle.
+ * Waits for the key file to be live, then POSTs to IndexNow. Failures that
+ * can pass (the deploy still going live, outages) are retried; rate limits
+ * and rejections end the submission with the classified error, since
+ * retrying a throttled request only prolongs the throttle.
  */
 export async function runSubmission(
   request: SubmitRequest,
-  step: SubmissionStep,
   deps: SubmissionDeps,
 ): Promise<SubmissionOutput> {
   const { host, key, keyLocation, urlList } = request;
   const location = keyFileUrl(urlList[0] as string, key, keyLocation);
 
   // 15s, 30s, … 8 minutes: about 16 minutes for a deploy to go live.
-  await step.do(
-    "check key file",
-    {
-      retries: { limit: 6, delay: "15 seconds", backoff: "exponential" },
-      timeout: "1 minute",
-    },
+  await retry(
+    deps,
+    (attempt) => 15 * 2 ** (attempt - 1),
     async () => {
       const failure = await checkKeyFile(deps, location, key);
       if (failure) throw new Error(`[not_found] ${failure}`);
     },
   );
 
-  const outcome = await step.do(
-    "submit to IndexNow",
-    {
-      retries: { limit: 6, delay: submitRetryDelay },
-      timeout: "1 minute",
-    },
-    async () => {
-      try {
-        return { status: await deps.submit(request) };
-      } catch (error) {
-        const { kind, message } = classifyError(error);
-        if (kind === "unavailable" || kind === "network") {
-          const retryAfter =
-            error instanceof IndexNowApiError && error.retryAfter
-              ? ` retry after ${error.retryAfter}s`
-              : "";
-          throw new Error(`[${kind}] ${message}${retryAfter}`);
-        }
-        // Retrying cannot help; end the run outside the step.
-        return { rejected: `[${kind}] ${message}` };
+  const outcome = await retry(deps, submitRetryDelay, async () => {
+    try {
+      return { status: await deps.submit(request) };
+    } catch (error) {
+      const { kind, message } = classifyError(error);
+      if (kind === "unavailable" || kind === "network") {
+        const retryAfter =
+          error instanceof IndexNowApiError && error.retryAfter
+            ? ` retry after ${error.retryAfter}s`
+            : "";
+        throw new Error(`[${kind}] ${message}${retryAfter}`);
       }
-    },
-  );
+      // Retrying cannot help.
+      return { rejected: `[${kind}] ${message}` };
+    }
+  });
 
   if ("rejected" in outcome) throw new Error(outcome.rejected);
   return { host, submitted: urlList.length, status: outcome.status };
