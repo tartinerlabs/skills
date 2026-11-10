@@ -1,0 +1,23 @@
+{
+  "name": "cache-clock",
+  "displayName": "Cache Clock",
+  "version": "0.18.0",
+  "description": "Counts down to the prompt cache going cold, with the last request's hit rate, above the prompt.",
+  "author": {
+    "name": "Tartiner Labs",
+    "url": "https://tartinerlabs.com"
+  },
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "ttl": {
+      "type": "string",
+      "title": "Prompt cache TTL",
+      "description": "How long the API keeps the cache after its last use: 5m by default, 1h when extended caching is on.",
+      "options": [
+        "5m",
+        "1h"
+      ],
+      "default": "5m"
+    }
+  }
+}

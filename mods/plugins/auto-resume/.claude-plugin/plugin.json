@@ -1,0 +1,11 @@
+{
+  "name": "auto-resume",
+  "displayName": "Auto Resume",
+  "version": "0.18.0",
+  "description": "Sends \"continue\" once a usage limit resets, so a turn cut off by the limit picks up where it stopped.",
+  "author": {
+    "name": "Tartiner Labs",
+    "url": "https://tartinerlabs.com"
+  },
+  "types": "./types/index.d.ts"
+}

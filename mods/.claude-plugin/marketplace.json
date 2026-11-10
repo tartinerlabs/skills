@@ -1,0 +1,60 @@
+{
+  "name": "tartinerlabs-mods",
+  "description": "Claude Code mods \u2014 live panes, prompt bands, status line entries, toasts, and tool-call hooks",
+  "owner": {
+    "name": "Tartiner Labs",
+    "url": "https://tartinerlabs.com"
+  },
+  "plugins": [
+    {
+      "name": "token-weather",
+      "source": "./plugins/token-weather",
+      "description": "A live forecast of the context window, drawn above the prompt."
+    },
+    {
+      "name": "auto-session-name",
+      "source": "./plugins/auto-session-name",
+      "description": "Names each session from its first prompt, so it is easy to find in /resume."
+    },
+    {
+      "name": "cache-clock",
+      "source": "./plugins/cache-clock",
+      "description": "A countdown to the prompt cache going cold, drawn above the prompt."
+    },
+    {
+      "name": "auto-resume",
+      "source": "./plugins/auto-resume",
+      "description": "Sends \"continue\" once a usage limit resets, so a cut-off turn picks up where it stopped."
+    },
+    {
+      "name": "limit-watch",
+      "source": "./plugins/limit-watch",
+      "description": "The 5-hour and weekly usage limits above the prompt, coloured by use, with reset countdowns and toasts at 80% and 95%."
+    },
+    {
+      "name": "smart-compact",
+      "source": "./plugins/smart-compact",
+      "description": "Compacts between turns when the context is full enough, sooner after a commit, PR, approved plan or finished todo list, or when the prompt cache is about to go cold or the 5-hour limit runs low."
+    },
+    {
+      "name": "release-notes",
+      "source": "./plugins/release-notes",
+      "description": "Drafts App Store release notes for Xcode projects when the version is bumped, into fastlane metadata or CHANGELOG.md."
+    },
+    {
+      "name": "resource-watch",
+      "source": "./plugins/resource-watch",
+      "description": "Which session is using each booted Apple simulator, Claude Design project and the Xcode app, above the prompt, messaging the other session when two want the same one."
+    },
+    {
+      "name": "git-status",
+      "source": "./plugins/git-status",
+      "description": "The branch, working tree and pull request above the prompt, toasts when checks finish, and /merge for single PRs and gh-stack stacks."
+    },
+    {
+      "name": "youtube",
+      "source": "./plugins/youtube",
+      "description": "Reads the YouTube links in a prompt with yt-dlp and hands Claude each video's title, channel, description, chapters and transcript."
+    }
+  ]
+}

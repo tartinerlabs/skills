@@ -1,0 +1,11 @@
+{
+  "name": "release-notes",
+  "displayName": "Release Notes",
+  "version": "0.18.0",
+  "description": "Drafts App Store release notes for Xcode projects when the version is bumped, into fastlane metadata or CHANGELOG.md, and shows the version above the prompt.",
+  "author": {
+    "name": "Tartiner Labs",
+    "url": "https://tartinerlabs.com"
+  },
+  "types": "./types/index.d.ts"
+}

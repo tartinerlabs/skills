@@ -1,0 +1,17 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Claude Code
+.claude/
+
+# Engine-generated mod types
+plugins/*/.claude-plugin/types/
+plugins/*/tsconfig.json

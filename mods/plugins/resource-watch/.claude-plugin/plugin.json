@@ -1,0 +1,19 @@
+{
+  "name": "resource-watch",
+  "displayName": "Resource Watch",
+  "version": "0.18.0",
+  "description": "Shows which Claude Code session is using each booted Apple simulator, Claude Design project and the Xcode app, above the prompt, and when another session already holds one this session picks up, toasts, messages that session and tells this session's agent.",
+  "author": {
+    "name": "Tartiner Labs",
+    "url": "https://tartinerlabs.com"
+  },
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "hold": {
+      "type": "number",
+      "title": "Hold (minutes)",
+      "description": "How long a session keeps a simulator, Claude Design project, or the Xcode app after its last tool call on it.",
+      "default": 10
+    }
+  }
+}
