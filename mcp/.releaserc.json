@@ -1,0 +1,27 @@
+{
+  "branches": ["main"],
+  "plugins": [
+    "@semantic-release/commit-analyzer",
+    "@semantic-release/release-notes-generator",
+    "@semantic-release/changelog",
+    [
+      "@semantic-release/exec",
+      {
+        "prepareCmd": "pnpm -r version ${nextRelease.version} --no-git-tag-version --no-git-checks",
+        "publishCmd": "pnpm --filter @tartinerlabs/index-now-mcp build && pnpm --filter @tartinerlabs/index-now-mcp publish --no-git-checks"
+      }
+    ],
+    [
+      "@semantic-release/git",
+      {
+        "assets": [
+          "CHANGELOG.md",
+          "package.json",
+          "apps/*/package.json",
+          "packages/*/package.json"
+        ]
+      }
+    ],
+    "@semantic-release/github"
+  ]
+}

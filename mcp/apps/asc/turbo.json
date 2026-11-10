@@ -1,0 +1,29 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "extends": ["//"],
+  "tasks": {
+    "build": {
+      "env": [
+        "BETTER_AUTH_SECRET",
+        "BETTER_AUTH_URL",
+        "GOOGLE_CLIENT_ID",
+        "GOOGLE_CLIENT_SECRET",
+        "LOG_LEVEL"
+      ]
+    },
+    "db:migrate": {
+      "passThroughEnv": [
+        "CLOUDFLARE_ACCOUNT_ID",
+        "CLOUDFLARE_D1_DATABASE_ID",
+        "CLOUDFLARE_API_TOKEN"
+      ]
+    },
+    "db:push": {
+      "passThroughEnv": [
+        "CLOUDFLARE_ACCOUNT_ID",
+        "CLOUDFLARE_D1_DATABASE_ID",
+        "CLOUDFLARE_API_TOKEN"
+      ]
+    }
+  }
+}

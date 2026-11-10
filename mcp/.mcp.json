@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "gsc": {
+      "type": "http",
+      "url": "https://google-search-console-mcp-pi.vercel.app/mcp"
+    }
+  }
+}
