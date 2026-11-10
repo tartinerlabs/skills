@@ -1,0 +1,9 @@
+{
+  "name": "@repo/validate-skills",
+  "private": true,
+  "scripts": {
+    "lint": "go vet .",
+    "test": "go test .",
+    "validate": "go run . ../.."
+  }
+}

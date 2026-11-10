@@ -1,9 +1,18 @@
 {
   "$schema": "https://turborepo.dev/schema.json",
   "tasks": {
-    "typecheck": {},
+    "lint": {
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/go.mod"]
+    },
     "test": {
-      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/release-please-config.json"]
+      "inputs": [
+        "$TURBO_DEFAULT$",
+        "$TURBO_ROOT$/go.mod",
+        "$TURBO_ROOT$/release-please-config.json"
+      ]
+    },
+    "validate": {
+      "cache": false
     }
   }
 }

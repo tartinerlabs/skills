@@ -34,25 +34,8 @@ jobs:
             exit 1
           fi
 
-      - run: go vet ./...
-
-      - run: go run ./scripts/validate-skills
-
-      - run: go test ./...
-
-      # The TypeScript port runs beside the Go validator until Go is removed.
       # pnpm and Node come from devEngines in package.json, and the action
-      # installs the locked dependencies.
+      # installs the locked dependencies. Turborepo runs the Go tasks.
       - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4  # v3.1.1
 
-      - run: pnpm turbo run typecheck test
-
-      - name: Go and TypeScript validators agree
-        run: |
-          go build -o "$RUNNER_TEMP/validate-skills" ./scripts/validate-skills
-          go_status=0
-          ts_status=0
-          "$RUNNER_TEMP/validate-skills" > "$RUNNER_TEMP/go.txt" 2>&1 || go_status=$?
-          pnpm exec node packages/validate-skills/src/main.ts > "$RUNNER_TEMP/ts.txt" 2>&1 || ts_status=$?
-          diff "$RUNNER_TEMP/go.txt" "$RUNNER_TEMP/ts.txt"
-          test "$go_status" -eq "$ts_status"
+      - run: pnpm turbo run lint test validate
