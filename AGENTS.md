@@ -11,9 +11,9 @@ A collection of agent skills distributed via Claude Code, Codex, Cursor, Antigra
 
 ## Development
 
-- **Tooling:** stdlib-only Go plus plain shell git hooks — the repo deliberately avoids npm dependencies to keep the supply-chain surface minimal
+- **Tooling:** a pnpm workspace run by Turborepo, plus plain shell git hooks. Dev dependencies are pinned exactly and nothing has a runtime dependency, which keeps the supply-chain surface minimal. The validator is Go (standard library only) in `scripts/validate-skills`, a workspace package whose `package.json` scripts let Turborepo run it
 - **Git hooks:** plain shell hooks in `.githooks/` (enable with `git config core.hooksPath .githooks`) — `commit-msg` enforces conventional commits (no scope, max 50-char header), `pre-commit` runs GitLeaks secrets detection
-- **Checks:** `go run ./scripts/validate-skills` and `go test ./...`
+- **Checks:** `pnpm turbo run lint test validate` — `go vet`, `go test`, and the validator itself (`go run ./scripts/validate-skills` runs it directly) — plus `gofmt -l .`
 - **Releases:** Automated via release-please on push to `main` — maintains a release PR from conventional commits; merging it bumps versions, updates `CHANGELOG.md`, and creates the GitHub release
 
 ## Skill Format
@@ -97,5 +97,5 @@ All plugin metadata for this collection belongs in `plugins/xcode-skills/`, whos
 - PR and issue titles use natural language, NOT conventional commit prefixes
 - GitHub-related skills auto-assign to the current user via `@me` or `get_me`
 - Skills can use both CLI tools (`gh`, `git`) and MCP tools (`mcp__github__*`) depending on the operation
-- Use `pnpm dlx` in documentation, not `pnx` — readers do not share this repo's tooling, and the repo has no root `package.json` (the per-collection ones exist only for OpenCode's git install)
+- Use `pnpm dlx` in documentation, not `pnx` — readers do not share this repo's tooling (the per-collection `package.json` files exist only for OpenCode's git install)
 - Grant the minimum `allowed-tools` a skill needs; prefer specific commands (`Bash(git status)`) over blanket tool access

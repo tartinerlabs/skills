@@ -14,3 +14,7 @@ Thumbs.db
 
 # eve
 .eve/
+
+# Dependencies and task cache
+node_modules/
+.turbo/

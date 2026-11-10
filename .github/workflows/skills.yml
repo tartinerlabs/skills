@@ -28,14 +28,9 @@ jobs:
     steps:
       - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6
 
-      # The repo has no root package.json, so there is no devEngines to read:
-      # pnpm and Node are given explicitly. No install runs and no cache is
-      # kept — the commands below exercise consumer-side `pnpm dlx` tools,
-      # not repo dependencies.
+      # Defaults: pnpm and Node come from `devEngines` in the root package.json.
+      # The commands below exercise consumer-side `pnpm dlx` tools.
       - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4  # v3.1.1
-        with:
-          version: 12.14.0
-          runtime: node@lts
 
       - name: Install
         run: ${{ matrix.command }}
