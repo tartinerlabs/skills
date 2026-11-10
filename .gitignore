@@ -18,3 +18,15 @@ Thumbs.db
 # Dependencies and task cache
 node_modules/
 .turbo/
+
+# MCP servers: build output, deploy state and secrets
+dist/
+.vercel/
+.neon
+.env*
+credentials.json
+client_secret*.json
+*.pem
+*.key
+.agents/skills/
+.grok/
