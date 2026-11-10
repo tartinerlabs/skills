@@ -1,0 +1,11 @@
+{
+  "name": "token-weather",
+  "displayName": "Token Weather",
+  "version": "0.18.0",
+  "description": "A live forecast of the context window, drawn above the prompt.",
+  "author": {
+    "name": "Tartiner Labs",
+    "url": "https://tartinerlabs.com"
+  },
+  "types": "./types/index.d.ts"
+}

@@ -1,0 +1,24 @@
+{
+  "name": "git-status",
+  "displayName": "Git Status",
+  "version": "0.18.0",
+  "description": "Shows the branch, working tree and the branch's pull request above the prompt, toasts when checks finish or a rebase stops on conflicts, and merges the PR, or its whole gh-stack stack, with /merge.",
+  "author": {
+    "name": "Tartiner Labs",
+    "url": "https://tartinerlabs.com"
+  },
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "method": {
+      "type": "string",
+      "title": "Merge method",
+      "description": "How /merge merges the pull request.",
+      "options": [
+        "merge",
+        "squash",
+        "rebase"
+      ],
+      "default": "merge"
+    }
+  }
+}

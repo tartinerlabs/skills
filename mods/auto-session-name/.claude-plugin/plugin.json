@@ -1,0 +1,30 @@
+{
+  "name": "auto-session-name",
+  "displayName": "Auto Session Name",
+  "version": "0.18.0",
+  "description": "Names each session from its first prompt and re-checks the name every few prompts as the work moves on, so it is easy to find in /resume.",
+  "author": {
+    "name": "Tartiner Labs",
+    "url": "https://tartinerlabs.com"
+  },
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "color": {
+      "type": "string",
+      "title": "Prompt bar colour",
+      "description": "Prompt bar colour given to each newly named session; default leaves it unchanged.",
+      "options": [
+        "default",
+        "red",
+        "blue",
+        "green",
+        "yellow",
+        "purple",
+        "orange",
+        "pink",
+        "cyan"
+      ],
+      "default": "default"
+    }
+  }
+}

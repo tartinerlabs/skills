@@ -1,0 +1,66 @@
+{
+  "name": "smart-compact",
+  "displayName": "Smart Compact",
+  "version": "0.18.0",
+  "description": "Compacts between turns when the context is full enough, sooner after a commit, PR, approved plan or finished todo list, or when the prompt cache is about to go cold or the 5-hour limit runs low.",
+  "author": {
+    "name": "Tartiner Labs",
+    "url": "https://tartinerlabs.com"
+  },
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "threshold": {
+      "type": "string",
+      "title": "Compact at",
+      "description": "Context fill that compacts on its own, as soon as a turn ends.",
+      "options": [
+        "60",
+        "70",
+        "80"
+      ],
+      "default": "70"
+    },
+    "floor": {
+      "type": "string",
+      "title": "Never below",
+      "description": "Context fill under which nothing lowers the threshold far enough to compact.",
+      "options": [
+        "30",
+        "40",
+        "50"
+      ],
+      "default": "40"
+    },
+    "ttl": {
+      "type": "string",
+      "title": "Prompt cache TTL",
+      "description": "How long the API keeps the cache after its last use. Auto takes 1h on a subscription and 5m on an API key or cloud provider; pick 5m while a subscription draws on usage credits.",
+      "options": [
+        "auto",
+        "5m",
+        "1h"
+      ],
+      "default": "auto"
+    },
+    "checkpoints": {
+      "type": "string",
+      "title": "Checkpoints",
+      "description": "Compact sooner after a commit, a PR opened or merged, an approved plan, a finished todo list or a branch switch, with a summary shaped for it.",
+      "options": [
+        "on",
+        "off"
+      ],
+      "default": "on"
+    },
+    "continue": {
+      "type": "string",
+      "title": "Continue after",
+      "description": "Send a prompt to carry on after compacting while todos or tasks are still open, unless the turn was interrupted or ended on a question.",
+      "options": [
+        "off",
+        "tasks"
+      ],
+      "default": "off"
+    }
+  }
+}
