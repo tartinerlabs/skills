@@ -1,0 +1,51 @@
+name: Mods
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  discover:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    outputs:
+      mods: ${{ steps.list.outputs.mods }}
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6
+        with:
+          persist-credentials: false
+      - name: List mods
+        id: list
+        run: echo "mods=$(printf '%s\n' mods/*/ | sed 's#^mods/##; s#/$##' | jq -R . | jq -cs .)" >> "$GITHUB_OUTPUT"
+
+  mods:
+    name: ${{ matrix.mod }} (${{ matrix.claude-code }})
+    needs: discover
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    strategy:
+      fail-fast: false
+      matrix:
+        claude-code: [stable, latest]
+        mod: ${{ fromJSON(needs.discover.outputs.mods) }}
+    env:
+      CLAUDE_CODE_VERSION: ${{ matrix.claude-code }}
+      MOD_DIR: mods/${{ matrix.mod }}
+    steps:
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6
+        with:
+          persist-credentials: false
+      - uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4  # v3.1.1
+      - name: Validate mod
+        run: pnpm dlx @anthropic-ai/claude-code@$CLAUDE_CODE_VERSION plugin validate --strict "$MOD_DIR"
+      - name: Test mod
+        run: pnpm dlx @anthropic-ai/claude-code@$CLAUDE_CODE_VERSION plugin test "$MOD_DIR"
