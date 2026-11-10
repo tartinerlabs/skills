@@ -1,0 +1,9 @@
+{
+  "$schema": "https://turborepo.dev/schema.json",
+  "tasks": {
+    "typecheck": {},
+    "test": {
+      "inputs": ["$TURBO_DEFAULT$", "$TURBO_ROOT$/release-please-config.json"]
+    }
+  }
+}

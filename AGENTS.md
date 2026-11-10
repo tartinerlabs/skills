@@ -11,9 +11,9 @@ A collection of agent skills distributed via Claude Code, Codex, Cursor, Antigra
 
 ## Development
 
-- **Tooling:** stdlib-only Go plus plain shell git hooks — the repo deliberately avoids npm dependencies to keep the supply-chain surface minimal
+- **Tooling:** a pnpm workspace run by Turborepo, plus plain shell git hooks. Dev dependencies are pinned exactly and nothing has a runtime dependency, which keeps the supply-chain surface minimal. The validator is TypeScript in `packages/validate-skills`, tested with Vitest; its Go original in `scripts/validate-skills` runs beside it until it is removed, and CI fails when the two disagree
 - **Git hooks:** plain shell hooks in `.githooks/` (enable with `git config core.hooksPath .githooks`) — `commit-msg` enforces conventional commits (no scope, max 50-char header), `pre-commit` runs GitLeaks secrets detection
-- **Checks:** `go run ./scripts/validate-skills` and `go test ./...`
+- **Checks:** `pnpm turbo run typecheck test` and `node packages/validate-skills/src/main.ts`, plus `go run ./scripts/validate-skills` and `go test ./...` while the Go validator remains
 - **Releases:** Automated via release-please on push to `main` — maintains a release PR from conventional commits; merging it bumps versions, updates `CHANGELOG.md`, and creates the GitHub release
 
 ## Skill Format
@@ -68,7 +68,7 @@ Skills are lightweight guides, not procedures. State a preference and its reason
 
 ## Distribution
 
-The skills ship as five themed **collection plugins** — `workflow`, `quality`, `security`, `tooling`, and `design`. The original all-in-one `tartinerlabs` plugin has been removed. The `collections` table in `scripts/validate-skills/main.go` is the source of truth for membership — every skill must belong to exactly one collection (validated in CI).
+The skills ship as five themed **collection plugins** — `workflow`, `quality`, `security`, `tooling`, and `design`. The original all-in-one `tartinerlabs` plugin has been removed. The `collections` table in `scripts/validate-skills/main.go` is the source of truth for membership, mirrored in `packages/validate-skills/src/main.ts` — change both together — every skill must belong to exactly one collection (validated in CI).
 
 Six channels: Claude Code, Codex, Cursor, and Antigravity plugins (each reading `plugins/<collection>/.<channel>-plugin/plugin.json`), an OpenCode v2 plugin per collection (`plugins/<collection>/opencode.js`, installed from git), plus [skills.sh](https://skills.sh), which discovers the skills through the marketplace manifests. **Claude Code takes precedence** — a change that helps another channel must not regress Claude Code; install-test it there first. Once a collection plugin is installed there, its skills are invoked as `/<collection>:<skill>` — e.g. `/workflow:commit`, `/quality:refactor`. `README.md` has the install commands. The `Skills` CI workflow validates skills.sh distribution on push to `main`. Context7 was also a channel until `ctx7 skills install` was deprecated upstream with no successor; Context7 remains a documentation source, not a distribution target.
 
@@ -97,5 +97,5 @@ All plugin metadata for this collection belongs in `plugins/xcode-skills/`, whos
 - PR and issue titles use natural language, NOT conventional commit prefixes
 - GitHub-related skills auto-assign to the current user via `@me` or `get_me`
 - Skills can use both CLI tools (`gh`, `git`) and MCP tools (`mcp__github__*`) depending on the operation
-- Use `pnpm dlx` in documentation, not `pnx` — readers do not share this repo's tooling, and the repo has no root `package.json` (the per-collection ones exist only for OpenCode's git install)
+- Use `pnpm dlx` in documentation, not `pnx` — readers do not share this repo's tooling (the per-collection `package.json` files exist only for OpenCode's git install)
 - Grant the minimum `allowed-tools` a skill needs; prefer specific commands (`Bash(git status)`) over blanket tool access
