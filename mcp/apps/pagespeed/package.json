@@ -1,0 +1,40 @@
+{
+  "name": "@tartinerlabs/pagespeed-mcp",
+  "version": "1.0.0",
+  "description": "Unofficial Model Context Protocol server for PageSpeed Insights and the Chrome UX Report, with Sign in with Google (OAuth 2.1 via Better Auth) on Vercel.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "vercel-build": "turbo run build && pnpm db:migrate",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "auth:generate": "auth generate --output src/db/schema/auth.ts --yes",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:push": "drizzle-kit push"
+  },
+  "dependencies": {
+    "@better-auth/cimd": "catalog:",
+    "@modelcontextprotocol/server": "catalog:",
+    "@neon/config": "catalog:",
+    "@repo/core": "workspace:*",
+    "@vercel/functions": "catalog:",
+    "better-auth": "catalog:",
+    "drizzle-orm": "catalog:",
+    "hono": "catalog:",
+    "pg": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@types/pg": "catalog:",
+    "@vercel/config": "catalog:",
+    "auth": "catalog:",
+    "drizzle-kit": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  }
+}

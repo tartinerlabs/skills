@@ -1,0 +1,12 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+  "extends": "//",
+  "files": {
+    "includes": [
+      "**",
+      "!drizzle",
+      "!src/db/schema/auth.ts",
+      "!worker-configuration.d.ts"
+    ]
+  }
+}

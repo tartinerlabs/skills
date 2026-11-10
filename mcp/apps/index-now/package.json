@@ -1,0 +1,37 @@
+{
+  "name": "@tartinerlabs/index-now-mcp",
+  "version": "1.0.0",
+  "description": "Unofficial Model Context Protocol server for IndexNow URL submission, run locally over stdio.",
+  "license": "MIT",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tartinerlabs/mcp.git",
+    "directory": "apps/index-now"
+  },
+  "bin": {
+    "index-now-mcp": "dist/index.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/server": "catalog:",
+    "zod": "catalog:"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
+  }
+}

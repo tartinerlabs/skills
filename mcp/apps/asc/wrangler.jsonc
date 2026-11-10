@@ -1,0 +1,66 @@
+// Read by Cloudflare Workers Builds (git deployment); locally Wrangler only runs `wrangler types`.
+{
+  "name": "app-store-connect-mcp",
+  "main": "src/index.ts",
+  // nodejs_compat (on by default from 2026-08-04) populates process.env from vars and secrets.
+  "compatibility_date": "2026-10-01",
+  "compatibility_flags": ["nodejs_compat"],
+  // @repo/core is consumed from its compiled dist/, so build it before the Worker is bundled.
+  "build": { "command": "pnpm --filter @repo/core build" },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+    "redact_query_string": false,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "invocation_logs": true,
+      "persist": true
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 1,
+      "persist": true
+    },
+    "issue_detection": {
+      "enabled": true
+    }
+  },
+  // Non-production branch builds run `wrangler preview`, which requires this block.
+  // Previews get no D1 binding, so sign-in and /keys only work in production.
+  "previews": {
+    "observability": {
+      "logs": {
+        "enabled": true,
+        "head_sampling_rate": 1,
+        "invocation_logs": true,
+        "persist": true
+      },
+      "traces": {
+        "enabled": true,
+        "head_sampling_rate": 1,
+        "persist": true
+      },
+      "issue_detection": {
+        "enabled": true
+      }
+    }
+  },
+  // Custom Domain: Cloudflare creates the DNS record and certificate. BETTER_AUTH_URL must match it.
+  "routes": [{ "pattern": "asc.mcp.tartinerlabs.com", "custom_domain": true }],
+  // BETTER_AUTH_URL and LOG_LEVEL are plain vars set in the dashboard, so deploys must keep them.
+  "keep_vars": true,
+  // No database_id: the first deploy provisions the database (automatic provisioning)
+  // and its id stays in the dashboard, so nothing account-specific is committed.
+  // database_name lets later deploys bind the existing database by name instead of
+  // trying to create it again when the deployed Worker has no DB binding yet.
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "app-store-connect-mcp-db",
+      // Drizzle Kit writes one folder per migration (drizzle/<name>/migration.sql).
+      "migrations_dir": "drizzle",
+      "migrations_pattern": "drizzle/*/migration.sql"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+node_modules/
+dist/
+.turbo/
+.vercel/
+.env*
+credentials.json
+client_secret*.json
+*.pem
+*.key
+.neon
+.vercel
+.claude/
+.agents/
+.grok/
