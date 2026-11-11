@@ -1,0 +1,5 @@
+schema_version: "1.1"
+name: commit-secret
+tags: [commit]
+context:
+  scaffold_script: fixture.sh

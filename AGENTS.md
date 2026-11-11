@@ -14,6 +14,7 @@ A collection of agent skills distributed via Claude Code, Codex, Cursor, Antigra
 - **Tooling:** stdlib-only Go plus plain shell git hooks — the repo deliberately avoids npm dependencies to keep the supply-chain surface minimal
 - **Git hooks:** plain shell hooks in `.githooks/` (enable with `git config core.hooksPath .githooks`) — `commit-msg` enforces conventional commits (no scope, max 50-char header), `pre-commit` runs GitLeaks secrets detection; CI runs TruffleHog on each pull request and push, failing on verified credentials
 - **Checks:** `go run ./scripts/validate-skills` and `go test ./...`
+- **Evals:** behavioural cases for `commit` and `create-pr` live in `plugins/workflow/evals/`. Run them locally before a release with `claude plugin eval plugins/workflow --scaffold --allow-tools Bash`; each case builds a throwaway git repo, and every run is a full agent session on your own Claude usage
 - **Releases:** Automated via release-please on push to `main` — maintains a release PR from conventional commits; merging it bumps versions, updates `CHANGELOG.md`, and creates the GitHub release
 
 ## Skill Format
