@@ -39,3 +39,22 @@ jobs:
       - run: go run ./scripts/validate-skills
 
       - run: go test ./...
+
+  secrets:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      # Full history, so the commits in the pull request or push are present.
+      - uses: actions/checkout@df4cb1c069e1874edd31b4311f1884172cec0e10  # v6
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      # Fails only on credentials a provider confirms are live. The local
+      # pre-commit hook (GitLeaks) covers anything that merely looks like one;
+      # the security skill's example connection strings would otherwise count
+      # as `unknown` here.
+      - uses: trufflesecurity/trufflehog@ea68ca03c865c5f324e86e849ced20ed3cf9dbbb  # v3.99.8
+        with:
+          version: 3.99.8
+          extra_args: --results=verified
