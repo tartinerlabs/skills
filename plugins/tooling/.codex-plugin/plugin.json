@@ -1,6 +1,6 @@
 {
   "name": "tooling",
-  "version": "2.10.1",
+  "version": "2.11.0",
   "description": "Project tooling skills — linting/formatting setup, testing, and documentation sync",
   "author": {
     "name": "Tartiner Labs",
