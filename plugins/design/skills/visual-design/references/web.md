@@ -31,6 +31,8 @@ The web has no system design to fall back on, so the token layer is the design s
 
 - `backdrop-filter: blur()` only on sticky headers, floating bars, and overlays above scrolling content. Give it a translucent background fallback where it is unsupported.
 - One `--shadow` token (two at most), built from low-opacity, tinted shadows rather than `rgb(0 0 0 / .25)`
+- Elevation comes from the surface tokens first: `--surface-raised` for interactive and selected elements, a step nearer the canvas for secondary blocks, in every direction
+- **Product showcase only**: a two-part `--shadow` (`inset 0 1px 0 oklch(100% 0 0 / .4), 0 2px 6px oklch(20% 0.02 <accent hue> / .12)`), a stronger `--shadow-lg` on hover, and a `--shadow-inset` for sunk tracks and wells (`inset 0 2px 3px oklch(20% 0.02 <accent hue> / .12), inset 0 -1px 0 oklch(100% 0 0 / .5)`). In dark mode keep only a faint top highlight and let the lightness steps carry the rest.
 - Radii from `--radius-sm/md/lg/full`. For nested corners, set the inner radius to `calc(var(--radius-lg) - var(--pad))`.
 
 ## Layout
