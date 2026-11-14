@@ -26,6 +26,8 @@ The web has no system design to fall back on, so the token layer is the design s
 - `text-wrap: balance` on headlines, `text-wrap: pretty` on short paragraphs
 - Fluid display sizes with `clamp()`, body in `rem` so browser zoom works
 - Body line length `max-width: 65ch` or similar
+- Heading level (`h1`–`h6`) follows document structure; size and weight follow visual hierarchy. Style headings with classes or tokens, not by picking a tag for its default size.
+- `font: inherit` on `button`, `input`, `select`, and `textarea`, which otherwise keep the browser's own font and size
 
 ## Surfaces and Depth
 
