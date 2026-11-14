@@ -14,6 +14,14 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.10.0](https://github.com/tartinerlabs/skills/compare/v2.9.0...v2.10.0) (2026-11-14)
+
+
+### Features
+
+* add dashboards reference to ux-psychology ([784aa62](https://github.com/tartinerlabs/skills/commit/784aa622f18bf00b5f0be8101598cd0ea6f3f735))
+* check installed @expo/ui exports first ([798bc5a](https://github.com/tartinerlabs/skills/commit/798bc5ace2e305a2107a969ac0b4f6a4df1a1b64))
+
 ## [2.9.0](https://github.com/tartinerlabs/skills/compare/v2.8.0...v2.9.0) (2026-11-06)
 
 
