@@ -14,6 +14,13 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.10.1](https://github.com/tartinerlabs/skills/compare/v2.10.0...v2.10.1) (2026-11-14)
+
+
+### Bug Fixes
+
+* load page-type guides in ux audits ([cf60955](https://github.com/tartinerlabs/skills/commit/cf60955774f4632bbc4179fac51d869dc041e6e8))
+
 ## [2.10.0](https://github.com/tartinerlabs/skills/compare/v2.9.0...v2.10.0) (2026-11-14)
 
 
