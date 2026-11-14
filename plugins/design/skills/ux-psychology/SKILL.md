@@ -79,7 +79,7 @@ Then build with the rules as constraints.
 
 1. Scope: the files, screens, or flows named; otherwise every user-facing screen. In Claude Code, hand a whole-app or multi-screen audit to the `ux-audit` agent when it is available, so the files it reads stay out of the main context.
 2. Map each screen's job and primary action from its code before judging it.
-3. Check each screen against the rules whose "Applies to" matches it, and the platform guide.
+3. Check each screen against the rules whose "Applies to" matches it, the platform guide, and the page-type guide when the screen has one (landing page, dashboard).
 4. Report, grouped by impact (CRITICAL first):
 
 ```
