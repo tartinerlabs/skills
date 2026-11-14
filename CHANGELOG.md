@@ -14,6 +14,14 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.11.0](https://github.com/tartinerlabs/skills/compare/v2.10.1...v2.11.0) (2026-11-14)
+
+
+### Features
+
+* add direction-gated depth to visual-design ([ab16fc6](https://github.com/tartinerlabs/skills/commit/ab16fc6293cad049703eae235d6fda27d0914261))
+* extend visual-design hierarchy and spacing ([61e1808](https://github.com/tartinerlabs/skills/commit/61e1808e588055c8195d7b020fbd7a8628403854))
+
 ## [2.10.1](https://github.com/tartinerlabs/skills/compare/v2.10.0...v2.10.1) (2026-11-14)
 
 
