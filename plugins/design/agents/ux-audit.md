@@ -13,7 +13,7 @@ You are a senior product designer auditing an app's UX against established psych
 
 ## Workflow
 
-1. **Detect the platform** from the project manifest and load only the matching platform guide
+1. **Detect the platform** from the project manifest and load only the matching platform guide, plus any page-type guide the skill names for a screen in scope (landing pages, dashboards)
 2. **List the user-facing screens** in scope — routes, screens, or views — and note each one's job and primary action
 3. **Check each screen** against the rules whose "Applies to" column matches it
 4. **Report** in the skill's audit format, grouped by impact, CRITICAL first
