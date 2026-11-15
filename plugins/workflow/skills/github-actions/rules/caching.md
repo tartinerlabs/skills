@@ -8,6 +8,8 @@ tags: caching, dependencies, setup-actions, performance
 
 **Exception**: `pnpm/setup` runs on its default settings, with store caching off — do not flag it. It still caches pnpm's lockfile verification on every run, and a project that wants the store cached opts in with `cache: true`.
 
+**Caveat**: the exception lapses when an install downloads from a metered or rate-limited source — a licensed registry, or a postinstall script fetching from a quota'd CDN (HeroUI Pro counts every uncached install against a daily download limit). Each uncached run spends quota, so flag `pnpm/setup` on its defaults there and opt in with `cache: true`. Where a postinstall script does the download, the store alone is not enough — an empty `node_modules` re-runs the script — so also cache `node_modules` with `actions/cache`, keyed on the lockfile hash.
+
 ### Incorrect
 
 ```yaml
@@ -34,7 +36,7 @@ tags: caching, dependencies, setup-actions, performance
 | Setup Action | Cache Parameter |
 |-------------|----------------|
 | `actions/setup-node` | `cache: 'pnpm'` / `'npm'` / `'yarn'` |
-| `pnpm/setup` | default settings (exception above); `cache: true` to opt in |
+| `pnpm/setup` | default settings (exception above); `cache: true` to opt in — expected when a dependency source is metered (caveat above) |
 | `nubjs/setup-nub` | auto-enabled; `cache: false` to disable |
 | `actions/setup-python` | `cache: 'pip'` / `'pipenv'` / `'poetry'` |
 | `actions/setup-go` | `cache: true` |
