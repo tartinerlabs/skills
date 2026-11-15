@@ -14,6 +14,13 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.12.0](https://github.com/tartinerlabs/skills/compare/v2.11.0...v2.12.0) (2026-11-15)
+
+
+### Features
+
+* add metered-registry caching caveat ([87abf8c](https://github.com/tartinerlabs/skills/commit/87abf8cf58ee779f541b5beb29ace422ac5ba7c1))
+
 ## [2.11.0](https://github.com/tartinerlabs/skills/compare/v2.10.1...v2.11.0) (2026-11-14)
 
 
