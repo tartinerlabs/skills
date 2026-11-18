@@ -1,0 +1,64 @@
+{
+  "$schema": "https://skills.sh/schemas/skills.sh.schema.json",
+  "notGrouped": "bottom",
+  "groupings": [
+    {
+      "title": "Workflow",
+      "description": "Git and GitHub workflow skills — commits, branches, pull requests, issues, and CI actions.",
+      "skills": [
+        "commit",
+        "create-branch",
+        "create-pr",
+        "github-issues",
+        "github-actions",
+        "clean-branches"
+      ]
+    },
+    {
+      "title": "Quality",
+      "description": "Code quality skills — refactoring, naming conventions, project structure, and internationalisation.",
+      "skills": ["refactor", "naming-format", "project-structure", "i18n"]
+    },
+    {
+      "title": "Security",
+      "description": "Security skills — OWASP audits, secret scanning, and dependency supply-chain hardening.",
+      "skills": ["security", "deps"]
+    },
+    {
+      "title": "Tooling",
+      "description": "Project tooling skills — linting/formatting setup, testing, and documentation sync.",
+      "skills": ["setup", "testing", "update-project"]
+    },
+    {
+      "title": "Design",
+      "description": "Design skills — UX psychology, visual design, accessibility, and Apple featuring readiness.",
+      "skills": [
+        "ux-psychology",
+        "visual-design",
+        "accessibility",
+        "apple-featuring"
+      ]
+    },
+    {
+      "title": "Xcode",
+      "description": "Apple-authored skills exported from Xcode, redistributed unmodified.",
+      "skills": [
+        "swiftui-specialist",
+        "swiftui-whats-new-27",
+        "uikit-app-modernization",
+        "app-intents-specialist",
+        "app-intents-whats-new-27",
+        "building-document-based-swiftui-applications",
+        "app-resizability",
+        "macos-touch-gestures",
+        "siri-app-integration",
+        "siri-evaluations",
+        "modernize-tests",
+        "device-interaction",
+        "xctrace",
+        "adopt-c-bounds-safety",
+        "audit-xcode-security-settings"
+      ]
+    }
+  ]
+}
