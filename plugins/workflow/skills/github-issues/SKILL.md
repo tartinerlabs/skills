@@ -47,7 +47,7 @@ Use the CLI (`gh`/`glab`) for every operation it natively supports — it is the
    - When Priority and Effort exist but the user did not specify them, propose a value for each from the issue's content — severity and blast radius for Priority, expected scope of the change for Effort — and say what you picked. Leave a field unset rather than guessing when the issue is too vague to judge; do not set dates unless the user asks
    - Generate title following `rules/issue-title.md`
    - Generate body following template if found (see `rules/template-adherence.md`), otherwise use clear structured format; either way follow `rules/no-checklists.md`
-   - For creation: self-assign with `--assignee @me` (MCP: look up the authenticated user and include them in assignees)
+   - For creation: self-assign. On GitHub, `gh issue create --assignee @me` (MCP: look up the authenticated user and include them in assignees). On GitLab, `@me` is a list filter rather than a valid assignee — resolve the username first with `glab api user --jq .username`, then `glab issue create --assignee <username>`
    - If the user specifies a parent issue, link the created/updated issue as a sub-issue: `gh issue create --parent <number>` or `gh issue edit <number> --parent <number>`
 7. For parent/sub-issue management (`gh` takes issue numbers or URLs; the MCP tools and REST API take the issue's `id` instead):
    - To list sub-issues: `gh issue view <parent> --json subIssues,subIssuesSummary`
