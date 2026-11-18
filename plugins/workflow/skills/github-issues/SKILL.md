@@ -19,6 +19,7 @@ You create, update, query, and comment on GitHub (or GitLab) issues.
 | Issue title | HIGH | `rules/issue-title.md` |
 | Template adherence | MEDIUM | `rules/template-adherence.md` |
 | No checklists | MEDIUM | `rules/no-checklists.md` |
+| Agent brief | MEDIUM | `rules/agent-brief.md` |
 
 ## CLI vs MCP Precedence
 
@@ -47,13 +48,14 @@ Use the CLI (`gh`/`glab`) for every operation it natively supports — it is the
    - When Priority and Effort exist but the user did not specify them, propose a value for each from the issue's content — severity and blast radius for Priority, expected scope of the change for Effort — and say what you picked. Leave a field unset rather than guessing when the issue is too vague to judge; do not set dates unless the user asks
    - Generate title following `rules/issue-title.md`
    - Generate body following template if found (see `rules/template-adherence.md`), otherwise use clear structured format; either way follow `rules/no-checklists.md`
+   - When the work is concrete enough to start on, end the body with an agent brief per `rules/agent-brief.md`; skip it when the starting point or verification is not known
    - For creation: self-assign. On GitHub, `gh issue create --assignee @me` (MCP: look up the authenticated user and include them in assignees). On GitLab, `@me` is a list filter rather than a valid assignee — resolve the username first with `glab api user --jq .username`, then `glab issue create --assignee <username>`
    - If the user specifies a parent issue, link the created/updated issue as a sub-issue: `gh issue create --parent <number>` or `gh issue edit <number> --parent <number>`
-7. For parent/sub-issue management (`gh` takes issue numbers or URLs; the MCP tools and REST API take the issue's `id` instead):
+7. For parent/sub-issue management (`gh` takes issue numbers or URLs; the MCP tools and REST API address the parent by issue **number** but take the child's numeric `id`):
    - To list sub-issues: `gh issue view <parent> --json subIssues,subIssuesSummary`
    - To add a sub-issue: `gh issue edit <parent> --add-sub-issue <child>[,<child>]`
    - To remove a sub-issue: `gh issue edit <parent> --remove-sub-issue <child>`, or `gh issue edit <child> --remove-parent`
-   - To reorder sub-issues (no CLI flag): `gh api -X PATCH repos/{owner}/{repo}/issues/{parent}/sub_issues/priority` with `sub_issue_id` plus `after_id` or `before_id` — all issue `id`s, not numbers
+   - To reorder sub-issues (no CLI flag): `gh api -X PATCH repos/{owner}/{repo}/issues/{parent_number}/sub_issues/priority` with `sub_issue_id` plus `after_id` or `before_id` — the URL takes the parent's issue number, while those three body fields take issue `id`s, not numbers
    - When creating multiple related issues, prefer structuring them as a parent with sub-issues rather than flat independent issues
 8. For queries:
    - Fetch a specific issue by number
@@ -71,6 +73,7 @@ Use the CLI (`gh`/`glab`) for every operation it natively supports — it is the
 - For titles: follow `rules/issue-title.md`
 - For body with template: follow `rules/template-adherence.md`
 - For body lists: follow `rules/no-checklists.md`
+- For an agent brief: follow `rules/agent-brief.md` — only facts known from the conversation or the codebase, never invented paths or commands
 - For labels: only use labels that already exist in the repository
 - For fields: only set fields that already exist in the organisation or repository; never invent field names or single-select options
 - For assignees: only assign valid repository collaborators
