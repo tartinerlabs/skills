@@ -2,7 +2,7 @@
 name: github-issues
 description: Use when filing a bug, requesting a feature, creating an issue, or updating issue details. Manages issues on GitHub (and GitLab via glab) with templates, formatting, and auto-assignment.
 license: MIT
-allowed-tools: Read Bash(gh:*) Bash(glab:*)
+allowed-tools: Read Bash(git remote get-url origin) Bash(gh:*) Bash(glab:*)
 model: haiku
 effort: medium
 compatibility: Requires a GitHub (gh) or GitLab (glab) remote; GitHub is best-supported (issue types, sub-issues, templates); a GitHub MCP server is optional and unlocks typed issue-field support
@@ -22,7 +22,7 @@ You create, update, query, and comment on GitHub (or GitLab) issues.
 
 ## CLI vs MCP Precedence
 
-Use the CLI (`gh`/`glab`) for every operation it natively supports — it is the default interface throughout this skill. For operations with **no native CLI subcommand** (currently: issue fields — structured priority/effort/date/custom metadata on issues), fall back in this order:
+Use the CLI (`gh`/`glab`) for every operation it natively supports — it is the default interface throughout this skill. For operations with **no native CLI subcommand** (currently: issue fields — structured priority/effort/date/custom metadata on issues — and sub-issue reordering, covered in the workflow below), fall back in this order:
 
 1. **GitHub MCP server tools**, if such a server is connected. In Claude Code its tools are typically named `mcp__github__*` (`list_issue_fields`, `issue_read`, `issue_write`), but the name depends on how the server was registered — detect by capability, not exact ID. Never assume the server is available. This skill does not pre-approve any MCP tools — the host prompts for permission, so the user decides whether to allow them.
 2. **`gh api`** against the REST API, sending `-H "X-GitHub-Api-Version: 2026-03-10"`:
@@ -36,7 +36,7 @@ Use the CLI (`gh`/`glab`) for every operation it natively supports — it is the
 ## Workflow
 
 1. Determine action: create, update, query, or comment
-2. Detect the remote host from `git remote get-url origin` (github.com → gh, gitlab.com → glab; default GitHub) and use that CLI throughout. Get owner/repo (or group/project) info. **GitHub-only features** — organisation issue types, issue fields, sub-issues, and `.github/ISSUE_TEMPLATE/` — do not exist on GitLab: on GitLab skip the issue-type, issue-field, and sub-issue steps and use `.gitlab/issue_templates/` plus description checklists instead
+2. Detect the remote host from `git remote get-url origin` (github.com → gh, gitlab.com → glab; default GitHub) and use that CLI throughout. Get owner/repo (or group/project) info. **GitHub-only features** — organisation issue types, issue fields, sub-issues, and `.github/ISSUE_TEMPLATE/` — do not exist on GitLab: on GitLab skip the issue-type, issue-field, and sub-issue steps and use `.gitlab/issue_templates/` instead, with a description task list standing in for sub-issues when the user wants child work tracked (the exception `rules/no-checklists.md` allows)
 3. Check for issue templates in the host's conventional location: on GitHub `.github/ISSUE_TEMPLATE/` or `.github/`; on GitLab `.gitlab/issue_templates/`
 4. List available organisation issue types (fails for user-owned repos — expected, proceed without)
 5. List available issue fields (organisation-level, inherited by repositories) via the CLI vs MCP precedence above — no native CLI subcommand exists, so use the MCP server or `gh api` (fails for user-owned repos — expected, proceed without). Organisations get four defaults: **Priority** (single-select: Urgent, High, Medium, Low), **Effort** (single-select: High, Medium, Low), **Start date**, and **Target date**. Treat them as likely-present but still discover them at runtime — an organisation may have renamed, removed, or added options
@@ -46,14 +46,14 @@ Use the CLI (`gh`/`glab`) for every operation it natively supports — it is the
    - When the user specifies field values (priority, effort, dates, custom), set them via the CLI vs MCP precedence above — values must match the field's declared type (single-select option name, text, number, `YYYY-MM-DD` date)
    - When Priority and Effort exist but the user did not specify them, propose a value for each from the issue's content — severity and blast radius for Priority, expected scope of the change for Effort — and say what you picked. Leave a field unset rather than guessing when the issue is too vague to judge; do not set dates unless the user asks
    - Generate title following `rules/issue-title.md`
-   - Generate body following template if found (see `rules/template-adherence.md`), otherwise use clear structured format
-   - For creation: get the current authenticated user and include in assignees
-   - If the user specifies a parent issue, link the created/updated issue as a sub-issue (use the issue's **node ID**, not its number)
-7. For parent/sub-issue management:
-   - To list sub-issues: get the parent issue's sub-issues
-   - To add a sub-issue: pass the parent issue number and the child's node ID
-   - To remove a sub-issue: unlink the child from the parent
-   - To reorder sub-issues: reprioritise with `after_id` or `before_id`
+   - Generate body following template if found (see `rules/template-adherence.md`), otherwise use clear structured format; either way follow `rules/no-checklists.md`
+   - For creation: self-assign. On GitHub, `gh issue create --assignee @me` (MCP: look up the authenticated user and include them in assignees). On GitLab, `@me` is a list filter rather than a valid assignee — resolve the username first with `glab api user --jq .username`, then `glab issue create --assignee <username>`
+   - If the user specifies a parent issue, link the created/updated issue as a sub-issue: `gh issue create --parent <number>` or `gh issue edit <number> --parent <number>`
+7. For parent/sub-issue management (`gh` takes issue numbers or URLs; the MCP tools and REST API take the issue's `id` instead):
+   - To list sub-issues: `gh issue view <parent> --json subIssues,subIssuesSummary`
+   - To add a sub-issue: `gh issue edit <parent> --add-sub-issue <child>[,<child>]`
+   - To remove a sub-issue: `gh issue edit <parent> --remove-sub-issue <child>`, or `gh issue edit <child> --remove-parent`
+   - To reorder sub-issues (no CLI flag): `gh api -X PATCH repos/{owner}/{repo}/issues/{parent}/sub_issues/priority` with `sub_issue_id` plus `after_id` or `before_id` — all issue `id`s, not numbers
    - When creating multiple related issues, prefer structuring them as a parent with sub-issues rather than flat independent issues
 8. For queries:
    - Fetch a specific issue by number
@@ -70,6 +70,7 @@ Use the CLI (`gh`/`glab`) for every operation it natively supports — it is the
 
 - For titles: follow `rules/issue-title.md`
 - For body with template: follow `rules/template-adherence.md`
+- For body lists: follow `rules/no-checklists.md`
 - For labels: only use labels that already exist in the repository
 - For fields: only set fields that already exist in the organisation or repository; never invent field names or single-select options
 - For assignees: only assign valid repository collaborators
