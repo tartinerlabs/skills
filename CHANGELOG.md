@@ -14,6 +14,20 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.13.0](https://github.com/tartinerlabs/skills/compare/v2.12.0...v2.13.0) (2026-11-18)
+
+
+### Features
+
+* add agent brief to github-issues ([42721f7](https://github.com/tartinerlabs/skills/commit/42721f7e68e625d41b5cf4d87f5ef74726d06903))
+
+
+### Bug Fixes
+
+* clarify sub-issue parent number ([b7383ea](https://github.com/tartinerlabs/skills/commit/b7383ea5e4e261bc7509b6e5746ab4a56d1feb49))
+* correct github-issues skill commands ([25379da](https://github.com/tartinerlabs/skills/commit/25379da2c9d86cde7db1511d72e45461cfcccc4d))
+* resolve GitLab username for assignee ([08f83dd](https://github.com/tartinerlabs/skills/commit/08f83dd878576a25fb87150c6a4c475ae00e3a11))
+
 ## [2.12.0](https://github.com/tartinerlabs/skills/compare/v2.11.0...v2.12.0) (2026-11-15)
 
 
