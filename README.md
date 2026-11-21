@@ -4,6 +4,7 @@
 [![Skills](https://img.shields.io/github/actions/workflow/status/tartinerlabs/skills/skills.yml?style=for-the-badge&logo=github&label=skills)](https://github.com/tartinerlabs/skills/actions/workflows/skills.yml)
 [![Version](https://img.shields.io/github/v/release/tartinerlabs/skills?style=for-the-badge)](https://github.com/tartinerlabs/skills/releases)
 [![License](https://img.shields.io/github/license/tartinerlabs/skills?style=for-the-badge)](LICENSE)
+[![skills.sh](https://skills.sh/b/tartinerlabs/skills?style=for-the-badge)](https://skills.sh/tartinerlabs/skills)
 
 Language-agnostic agent skills for git/GitHub workflows, code quality, and project tooling &mdash; with first-class JS/TS support. Each skill ships with modular, independently editable rules for deep, opinionated guidance.
 
