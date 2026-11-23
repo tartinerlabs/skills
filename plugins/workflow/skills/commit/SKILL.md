@@ -2,7 +2,7 @@
 name: commit
 description: Use when committing changes, staging files, saving work, or making a git commit. Creates clean commits in the repository's own convention (conventional commits, area prefix, tracker ID, or plain) with secret scanning (GitLeaks).
 license: MIT
-allowed-tools: Read Bash(git:*) Bash(gitleaks:*) Bash(trufflehog:*)
+allowed-tools: Read Skill Bash(git:*) Bash(gitleaks:*) Bash(trufflehog:*)
 model: sonnet
 effort: high
 compatibility: Requires git and a secret scanner (GitLeaks default; TruffleHog accepted); detects the repository's commit convention from tooling, history, and ecosystem
@@ -39,6 +39,7 @@ Never edit `.husky/`, `commitlint`, or other project tooling as part of a commit
 A commit request stages and commits only — it must never pull, stash, restore stashes, or rewrite project tooling.
 
 1. Show current `git status` and analyse all changes
+   - If the current branch is the default branch (`git symbolic-ref --short refs/remotes/origin/HEAD`, falling back to `main` → `master`) and the repo has a remote, branch first with the `create-branch` skill (`workflow:create-branch` in Claude Code) — work committed to the default branch has to be moved off it later to open a PR. Commit directly only when the user asked for that, the repo has no remote, or its history shows it takes direct commits to the default branch (no merge commits or PR references); when unsure, ask
 2. Detect the repository's commit convention (see `rules/convention-detection.md`)
 3. Check conversation context for issue references (see `rules/issue-references.md`)
 4. Assess scope of changes (see `rules/change-scope.md`)
