@@ -14,6 +14,19 @@
 
 * add commit type selection rule ([88356f7](https://github.com/tartinerlabs/skills/commit/88356f7c4175f95dcdabbb03ba95b46e917d19ca))
 
+## [2.14.0](https://github.com/tartinerlabs/skills/compare/v2.13.0...v2.14.0) (2026-11-24)
+
+
+### Features
+
+* add visual-audit agent and audit triggers ([297c531](https://github.com/tartinerlabs/skills/commit/297c531360413d8aa225fcd54bdd5bfeb145f7d8))
+* link new branches to a matching issue ([81db76a](https://github.com/tartinerlabs/skills/commit/81db76a0f5e7d1300c73c29529d82d13c7cb99f6))
+
+
+### Bug Fixes
+
+* branch off main before commit or PR ([afc7896](https://github.com/tartinerlabs/skills/commit/afc78967ea3ccc79a5819fd78d13cdf6ef7b1252))
+
 ## [2.13.0](https://github.com/tartinerlabs/skills/compare/v2.12.0...v2.13.0) (2026-11-18)
 
 
